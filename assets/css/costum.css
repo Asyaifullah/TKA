@@ -1,0 +1,23 @@
+/* Pastikan body dan html memiliki tinggi penuh */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Jadikan body sebagai flex container */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Konten utama (div dengan class="content") akan memenuhi ruang yang tersisa */
+.content {
+    flex: 1;
+}
+
+/* Footer tetap di bawah, tidak mengecil */
+.app-footer {
+    flex-shrink: 0;
+}

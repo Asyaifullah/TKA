@@ -1,0 +1,1798 @@
+<!--<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Kirim Surat & Notifikasi - Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-soft: #f8fafc;
+            --white: #ffffff;
+            --text-dark: #1e293b;
+            --primary: #1e6f5c;
+            --border-light: #e9ecef;
+            --card-shadow: 0 8px 30px rgba(0,0,0,0.04);
+        }
+        body {
+            background: var(--bg-soft);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+        }
+        .content {
+            margin-left: 260px;
+            padding: 28px 32px;
+            transition: margin-left 0.3s ease;
+        }
+        .sidebar.collapsed ~ .content {
+            margin-left: 70px;
+        }
+        .card {
+            background: var(--white);
+            border-radius: 24px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 24px;
+        }
+        .card-header {
+            background: transparent;
+            border-bottom: 1px solid var(--border-light);
+            font-weight: 600;
+            padding: 18px 24px;
+        }
+        .card-body {
+            padding: 24px;
+        }
+        .form-label {
+            font-weight: 500;
+        }
+        .form-control, .form-select {
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            padding: 10px 15px;
+        }
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            border-radius: 40px;
+            padding: 8px 24px;
+        }
+        .table thead th {
+            background: #fafcff;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-light);
+            padding: 14px 16px;
+        }
+        .table tbody td {
+            padding: 12px 16px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.85rem;
+        }
+        @media (max-width: 768px) {
+            .content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<?php $this->load->view('admin/sidebar'); ?>
+<div class="content">
+    <h3 class="fw-semibold mb-4"><i class="fas fa-envelope me-2"></i> Kirim Surat & Notifikasi</h3>
+
+    <!-- ========== FORM KIRIM NOTIFIKASI MANUAL ========== -->
+    <!-- <div class="card">
+        <div class="card-header">
+            <i class="fas fa-paper-plane me-2"></i> Kirim Notifikasi Manual ke Perusahaan
+        </div>
+        <div class="card-body">
+            <?php if($this->session->flashdata('success')): ?>
+                <div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
+            <?php endif; ?>
+            <?php if($this->session->flashdata('error')): ?>
+                <div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
+            <?php endif; ?>
+            <form action="<?= base_url('admin/kirim_notifikasi_action') ?>" method="post">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Pilih Perusahaan</label>
+                            <select name="user_id" class="form-select" required>
+                                <option value="">-- Pilih Perusahaan --</option>
+                                <?php 
+                                $perusahaan_list = $this->db->where('role', 'user')->get('users')->result();
+                                foreach($perusahaan_list as $u): ?>
+                                <option value="<?= $u->id ?>"><?= htmlspecialchars($u->perusahaan) ?> (<?= $u->email ?>)</option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Judul Notifikasi</label>
+                            <input type="text" name="title" class="form-control" required placeholder="Contoh: Surat Keterangan TKA Telah Siap">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Pesan Notifikasi</label>
+                            <textarea name="message" class="form-control" rows="4" required placeholder="Tulis pesan notifikasi di sini..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Link Tujuan (opsional)</label>
+                            <input type="text" name="link" class="form-control" placeholder="https://... atau /user/data_tka">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Template Cepat</label>
+                            <div class="d-grid gap-2">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="fillTemplate(1)">📄 Template 1: Surat Selesai</button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="fillTemplate(2)">✅ Template 2: Verifikasi Berhasil</button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="fillTemplate(3)">⚠️ Template 3: Data Perlu Dilengkapi</button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="fillTemplate(4)">📢 Template 4: Pengumuman Umum</button>
+                            </div>
+                            <div class="form-text mt-2">Klik template untuk mengisi judul dan pesan secara otomatis.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Kirim Notifikasi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== DAFTAR TKA SELESAI (BELUM DIKIRIM SURAT) ========== -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <i class="fas fa-file-alt me-2"></i> Daftar Pengajuan Selesai (Belum Dikirim Surat)
+        </div>
+        <div class="card-body p-0">
+            <?php if(empty($list)): ?>
+                <div class="alert alert-info text-center m-4">Tidak ada TKA dengan status SELESAI yang belum dikirim surat.</div>
+            <?php else: ?>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Perusahaan</th>
+                                <th>Nama TKA</th>
+                                <th>Tanggal Selesai</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($list as $t): $user = $this->User_model->get_by_id($t->user_id); ?>
+                            <tr>
+                                <td><?= htmlspecialchars($user->perusahaan) ?></td>
+                                <td><?= htmlspecialchars($t->nama_tka) ?></td>
+                                <td><?= date('d-m-Y', strtotime($t->created_at)) ?></td>
+                                <td>
+                                    <a href="<?= base_url('admin/kirim_surat/'.$t->id) ?>" class="btn btn-sm btn-primary" onclick="return confirm('Kirim email notifikasi ke perusahaan?')">
+                                        <i class="fas fa-paper-plane"></i> Kirim Surat & Notifikasi
+                                    </a>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+<?php $this->load->view('footer'); ?>
+<script>
+    function fillTemplate(templateId) {
+        var titleField = document.querySelector('input[name="title"]');
+        var msgField = document.querySelector('textarea[name="message"]');
+        if (templateId === 1) {
+            titleField.value = 'Surat Keterangan TKA Siap';
+            msgField.value = 'Surat keterangan untuk TKA atas nama [Nama TKA] telah selesai. Silakan download di menu Data TKA.';
+        } else if (templateId === 2) {
+            titleField.value = 'Verifikasi TKA Berhasil';
+            msgField.value = 'Pengajuan TKA Anda telah diverifikasi dan disetujui. Status dapat dilihat di dashboard.';
+        } else if (templateId === 3) {
+            titleField.value = 'Data TKA Perlu Dilengkapi';
+            msgField.value = 'Data detail TKA Anda belum lengkap. Silakan lengkapi di menu Data TKA.';
+        } else if (templateId === 4) {
+            titleField.value = 'Pengumuman Penting';
+            msgField.value = 'Ada pembaruan sistem. Mohon perhatikan informasi terbaru di website.';
+        }
+    }
+</script>
+</body>
+</html>
+
+// ==================== TEMPLATE SURAT ====================
+
+    public function edit_template() {
+        $this->load->model('Surat_template_model');
+        $data['template'] = $this->Surat_template_model->get();
+        $this->load->view('admin/edit_template', $data);
+    }
+
+    public function update_template() {
+        $this->load->model('Surat_template_model');
+        $this->Surat_template_model->update_template([
+            'header'               => $this->input->post('header'),
+            'footer'               => $this->input->post('footer'),
+            'kepala_dinas'         => $this->input->post('kepala_dinas'),
+            'nip_kepala_dinas'     => $this->input->post('nip_kepala_dinas'),
+            'nomor_surat_format'   => $this->input->post('nomor_surat_format'),
+        ]);
+        $this->log('EDIT_TEMPLATE', 'template', 1, 'Mengedit template surat');
+        $this->session->set_flashdata('success', 'Template surat berhasil diupdate.');
+        redirect('admin/edit_template');
+    }
+
+    // ==================== FOOTER WEBSITE ====================
+
+    public function edit_footer() {
+        $this->load->model('Site_settings_model');
+        $data['settings'] = $this->Site_settings_model->get();
+        $this->load->view('admin/edit_footer', $data);
+    }
+
+    public function update_footer() {
+        $this->load->model('Site_settings_model');
+        $this->Site_settings_model->update_footer($this->input->post('footer_text'));
+        $this->log('EDIT_FOOTER', 'settings', 1, 'Mengedit footer website');
+        $this->session->set_flashdata('success', 'Footer berhasil diupdate.');
+        redirect('admin/edit_footer');
+    }
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin — SITLAKEB TKA</title>
+    <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <style>
+    /* ════════════════════════════════════════════
+       TOKENS
+    ════════════════════════════════════════════ */
+    :root {
+        --bg:          #f4f6f9;
+        --surface:     #ffffff;
+        --surface-2:   #f8fafc;
+        --border:      #e8ecf0;
+        --border-2:    #d0d7e0;
+
+        --ink:         #0f1923;
+        --ink-2:       #3d4f60;
+        --ink-3:       #7a8fa6;
+
+        --green:       #1a6b52;
+        --green-mid:   #22896a;
+        --green-light: #e8f5f0;
+        --green-glow:  rgba(26,107,82,0.12);
+
+        --amber:       #c06500;
+        --amber-light: #fff4e6;
+        --blue:        #1557a5;
+        --blue-light:  #e8f0fb;
+        --red:         #b81c1c;
+        --red-light:   #fef0f0;
+        --violet:      #5b21b6;
+        --violet-light:#f1edff;
+        --teal:        #0e7490;
+        --teal-light:  #e0f6fb;
+
+        --r-sm:  8px;
+        --r-md:  12px;
+        --r-lg:  18px;
+        --r-xl:  24px;
+
+        --shadow-card: 0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.05);
+        --shadow-lift: 0 4px 20px rgba(0,0,0,0.10);
+
+        --font: 'Sora', sans-serif;
+        --mono: 'DM Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        background: var(--bg);
+        font-family: var(--font);
+        font-size: 14px;
+        color: var(--ink);
+        line-height: 1.6;
+    }
+
+    /* ── Layout ── */
+    .content {
+        margin-left: 260px;
+        padding: 0;
+        min-height: 100vh;
+        transition: margin-left 0.3s ease;
+    }
+    .sidebar.collapsed ~ .content { margin-left: 70px; }
+    .dash-inner { padding: 28px 32px 48px; }
+
+    /* ── Top bar ── */
+    .topbar {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 0 32px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 200;
+    }
+    .topbar-breadcrumb {
+        display: flex; align-items: center; gap: 8px;
+        font-size: 0.78rem; color: var(--ink-3); font-weight: 500;
+    }
+    .topbar-breadcrumb strong { color: var(--ink); font-weight: 700; }
+    .topbar-breadcrumb i.sep { font-size: 7px; color: var(--border-2); }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .topbar-date {
+        font-size: 0.75rem; color: var(--ink-3); font-weight: 500;
+        background: var(--surface-2); border: 1px solid var(--border);
+        border-radius: var(--r-sm); padding: 5px 12px;
+    }
+
+    /* ── Notification Bell ── */
+    .notif-btn {
+        position: relative;
+        width: 36px; height: 36px;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: var(--r-sm);
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        color: var(--ink-2);
+        font-size: 0.85rem;
+        transition: all 0.15s;
+        text-decoration: none;
+    }
+    .notif-btn:hover  { background: var(--green-light); border-color: var(--green); color: var(--green); }
+    .notif-btn.active { background: var(--green-light); border-color: var(--green); color: var(--green); }
+
+    /* Animated badge */
+    .notif-badge {
+        position: absolute; top: -5px; right: -5px;
+        background: var(--red);
+        color: #fff;
+        font-size: 9px; font-weight: 700;
+        min-width: 17px; height: 17px;
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        padding: 0 4px;
+        border: 2px solid var(--surface);
+        animation: pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes pop {
+        from { transform: scale(0); }
+        to   { transform: scale(1); }
+    }
+
+    /* Bell ring animation when new notif arrives */
+    .notif-btn.ringing i {
+        animation: ring 0.6s ease;
+    }
+    @keyframes ring {
+        0%,100% { transform: rotate(0deg); }
+        20%      { transform: rotate(20deg); }
+        40%      { transform: rotate(-18deg); }
+        60%      { transform: rotate(14deg); }
+        80%      { transform: rotate(-10deg); }
+    }
+
+    /* ── Notification Dropdown ── */
+    .notif-dropdown {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        width: 340px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        box-shadow: var(--shadow-lift);
+        z-index: 1050;
+        overflow: hidden;
+        animation: dropIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-origin: top right;
+    }
+    @keyframes dropIn {
+        from { opacity: 0; transform: scale(0.95) translateY(-6px); }
+        to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* Dropdown header */
+    .nd-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 13px 16px;
+        border-bottom: 1px solid var(--border);
+        background: var(--surface-2);
+    }
+    .nd-header-left {
+        display: flex; align-items: center; gap: 8px;
+        font-size: 0.8rem; font-weight: 700; color: var(--ink);
+    }
+    .nd-header-left .nd-icon {
+        width: 26px; height: 26px;
+        background: var(--green-light); color: var(--green);
+        border-radius: 7px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 11px;
+    }
+    .nd-mark-all {
+        font-size: 0.68rem; font-weight: 600;
+        color: var(--green);
+        text-decoration: none;
+        padding: 3px 9px;
+        border-radius: 20px;
+        border: 1px solid rgba(26,107,82,0.2);
+        background: var(--green-light);
+        transition: background 0.15s;
+        white-space: nowrap;
+    }
+    .nd-mark-all:hover { background: #c5e8e1; color: var(--green); text-decoration: none; }
+
+    /* Tab bar */
+    .nd-tabs {
+        display: flex;
+        border-bottom: 1px solid var(--border);
+        background: var(--surface);
+    }
+    .nd-tab {
+        flex: 1;
+        padding: 9px 0;
+        text-align: center;
+        font-size: 0.72rem; font-weight: 600;
+        color: var(--ink-3);
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: color 0.15s, border-color 0.15s;
+        user-select: none;
+    }
+    .nd-tab:hover { color: var(--ink); }
+    .nd-tab.active { color: var(--green); border-bottom-color: var(--green); }
+    .nd-tab .nd-tab-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 16px; height: 16px;
+        background: var(--red);
+        color: white;
+        font-size: 9px; font-weight: 700;
+        border-radius: 10px;
+        padding: 0 4px;
+        margin-left: 5px;
+        vertical-align: middle;
+    }
+
+    /* Notif list */
+    .nd-list {
+        max-height: 320px;
+        overflow-y: auto;
+    }
+    .nd-list::-webkit-scrollbar { width: 3px; }
+    .nd-list::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 4px; }
+
+    .nd-item {
+        display: flex;
+        gap: 11px;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        text-decoration: none;
+        transition: background 0.12s;
+        cursor: pointer;
+        align-items: flex-start;
+    }
+    .nd-item:last-child { border-bottom: none; }
+    .nd-item:hover { background: var(--surface-2); }
+    .nd-item.unread { background: #f0faf6; }
+    .nd-item.unread:hover { background: #e6f5ef; }
+
+    .nd-item-icon {
+        width: 34px; height: 34px;
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 12px;
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+    .nd-item-icon.chat   { background: var(--blue-light);  color: var(--blue); }
+    .nd-item-icon.system { background: var(--green-light); color: var(--green); }
+    .nd-item-icon.warn   { background: var(--amber-light); color: var(--amber); }
+    .nd-item-icon.reject { background: var(--red-light);   color: var(--red); }
+
+    .nd-item-body { flex: 1; min-width: 0; }
+    .nd-item-title {
+        font-size: 0.78rem; font-weight: 600; color: var(--ink);
+        margin-bottom: 2px;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .nd-item.unread .nd-item-title { color: var(--green); }
+    .nd-item-msg {
+        font-size: 0.72rem; color: var(--ink-3);
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .nd-item-meta {
+        display: flex; align-items: center; gap: 6px;
+        margin-top: 4px;
+    }
+    .nd-item-time {
+        font-size: 0.65rem; color: var(--ink-3);
+        font-family: var(--mono);
+    }
+    .nd-item-type {
+        font-size: 0.62rem; font-weight: 700;
+        padding: 1px 6px; border-radius: 4px;
+        text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .nd-item-type.chat   { background: var(--blue-light);  color: var(--blue); }
+    .nd-item-type.system { background: var(--green-light); color: var(--green); }
+    .nd-item-unread-dot {
+        width: 7px; height: 7px;
+        background: var(--green);
+        border-radius: 50%;
+        flex-shrink: 0;
+        margin-top: 6px;
+    }
+
+    /* Empty notif */
+    .nd-empty {
+        padding: 36px 16px;
+        text-align: center;
+        color: var(--ink-3);
+    }
+    .nd-empty i { font-size: 2rem; opacity: 0.25; margin-bottom: 10px; display: block; }
+    .nd-empty p { font-size: 0.78rem; }
+
+    /* Dropdown footer */
+    .nd-footer {
+        padding: 10px 16px;
+        border-top: 1px solid var(--border);
+        background: var(--surface-2);
+        text-align: center;
+    }
+    .nd-footer a {
+        font-size: 0.73rem; font-weight: 600;
+        color: var(--green); text-decoration: none;
+        display: inline-flex; align-items: center; gap: 5px;
+    }
+    .nd-footer a:hover { text-decoration: underline; }
+
+    /* ── Admin chip ── */
+    .admin-chip {
+        display: flex; align-items: center; gap: 8px;
+        background: var(--green-light);
+        border: 1px solid rgba(26,107,82,0.2);
+        border-radius: var(--r-sm);
+        padding: 5px 12px;
+        font-size: 0.75rem; font-weight: 600; color: var(--green);
+    }
+    .admin-chip-avatar {
+        width: 22px; height: 22px;
+        background: var(--green); color: #fff;
+        border-radius: 6px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 10px;
+    }
+
+    /* ══ REST OF DASHBOARD STYLES (unchanged) ══ */
+    .page-head {
+        display: flex; align-items: flex-end; justify-content: space-between;
+        margin-bottom: 24px; padding-top: 4px;
+    }
+    .page-head-title { font-size: 1.45rem; font-weight: 800; color: var(--ink); letter-spacing: -0.5px; line-height: 1.2; }
+    .page-head-sub { font-size: 0.82rem; color: var(--ink-3); margin-top: 4px; font-weight: 400; }
+    .page-head-meta {
+        font-size: 0.75rem; color: var(--ink-3); background: var(--surface);
+        border: 1px solid var(--border); border-radius: var(--r-sm);
+        padding: 6px 14px; font-weight: 500;
+    }
+    .page-head-meta span { color: var(--green); font-weight: 700; }
+
+    .stat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+        background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg);
+        padding: 20px; position: relative; overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+        animation: fadeUp 0.4s ease both; box-shadow: var(--shadow-card);
+    }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+    .stat-card:nth-child(1){animation-delay:0.05s;} .stat-card:nth-child(2){animation-delay:0.10s;}
+    .stat-card:nth-child(3){animation-delay:0.15s;} .stat-card:nth-child(4){animation-delay:0.20s;}
+    .stat-card::after {
+        content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
+        border-radius: 0 0 var(--r-lg) var(--r-lg);
+    }
+    .stat-card.c-total::after  { background: var(--green); }
+    .stat-card.c-proses::after { background: var(--amber); }
+    .stat-card.c-selesai::after{ background: var(--blue); }
+    .stat-card.c-ditolak::after{ background: var(--red); }
+    .stat-icon { width:40px; height:40px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:0.9rem; margin-bottom:14px; }
+    .stat-icon.total   { background:var(--green-light); color:var(--green); }
+    .stat-icon.proses  { background:var(--amber-light); color:var(--amber); }
+    .stat-icon.selesai { background:var(--blue-light);  color:var(--blue); }
+    .stat-icon.ditolak { background:var(--red-light);   color:var(--red); }
+    .stat-label { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; color:var(--ink-3); margin-bottom:6px; }
+    .stat-value { font-size:2.2rem; font-weight:800; letter-spacing:-1px; line-height:1; font-family:var(--mono); }
+    .stat-value.total   { color:var(--green); } .stat-value.proses  { color:var(--amber); }
+    .stat-value.selesai { color:var(--blue); }  .stat-value.ditolak { color:var(--red); }
+    .stat-footer { font-size:0.72rem; color:var(--ink-3); margin-top:10px; display:flex; align-items:center; gap:5px; }
+    .stat-footer i { font-size:9px; }
+
+    .surface { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow-card); overflow:hidden; animation:fadeUp 0.4s ease both; }
+    .surface-head { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+    .surface-title { font-size:0.82rem; font-weight:700; color:var(--ink); display:flex; align-items:center; gap:8px; }
+    .surface-title-icon { width:28px; height:28px; background:var(--green-light); color:var(--green); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:0.7rem; }
+    .surface-badge { font-size:0.68rem; font-weight:700; padding:3px 10px; border-radius:20px; background:var(--green-light); color:var(--green); border:1px solid rgba(26,107,82,0.15); letter-spacing:0.3px; }
+
+    .funnel-table { width:100%; border-collapse:collapse; }
+    .funnel-table th { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; color:var(--ink-3); padding:10px 20px; background:var(--surface-2); border-bottom:1px solid var(--border); text-align:left; }
+    .funnel-table td { padding:13px 20px; border-bottom:1px solid var(--border); vertical-align:middle; font-size:0.82rem; }
+    .funnel-table tbody tr:last-child td { border-bottom:none; }
+    .funnel-table tbody tr { transition:background 0.12s; }
+    .funnel-table tbody tr:hover { background:var(--surface-2); }
+    .stage-pill { display:inline-flex; align-items:center; gap:6px; font-size:0.75rem; font-weight:600; padding:4px 10px; border-radius:20px; }
+    .stage-pill .dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+    .funnel-bar-wrap { background:var(--bg); border-radius:20px; height:8px; overflow:hidden; width:100%; }
+    .funnel-bar { height:100%; border-radius:20px; transition:width 0.8s cubic-bezier(0.4,0,0.2,1); }
+    .count-chip { font-family:var(--mono); font-size:0.85rem; font-weight:500; color:var(--ink); }
+    .count-unit { font-size:0.7rem; color:var(--ink-3); margin-left:2px; }
+    .avg-time { display:inline-flex; align-items:center; gap:4px; font-size:0.75rem; color:var(--ink-3); font-family:var(--mono); }
+
+    .chart-wrap { padding:20px; position:relative; }
+    .chart-legend { display:flex; gap:16px; justify-content:center; padding:0 20px 16px; flex-wrap:wrap; }
+    .legend-item { display:flex; align-items:center; gap:6px; font-size:0.75rem; color:var(--ink-3); font-weight:500; }
+    .legend-dot { width:8px; height:8px; border-radius:50%; }
+
+    .kpi-row { display:flex; flex-direction:column; gap:0; }
+    .kpi-item { display:flex; align-items:center; justify-content:space-between; padding:14px 20px; border-bottom:1px solid var(--border); transition:background 0.12s; }
+    .kpi-item:last-child { border-bottom:none; }
+    .kpi-item:hover { background:var(--surface-2); }
+    .kpi-label { font-size:0.78rem; color:var(--ink-3); font-weight:500; }
+    .kpi-value { font-family:var(--mono); font-size:1.1rem; font-weight:500; color:var(--ink); }
+    .kpi-value.green { color:var(--green); } .kpi-value.red { color:var(--red); } .kpi-value.amber { color:var(--amber); }
+
+    .reject-item { padding:12px 20px; border-bottom:1px solid var(--border); transition:background 0.12s; }
+    .reject-item:last-child { border-bottom:none; }
+    .reject-item:hover { background:var(--surface-2); }
+    .reject-meta { display:flex; align-items:center; justify-content:space-between; margin-bottom:5px; }
+    .reject-role { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; padding:2px 8px; border-radius:4px; background:var(--red-light); color:var(--red); }
+    .reject-date { font-size:0.68rem; color:var(--ink-3); font-family:var(--mono); }
+    .reject-text { font-size:0.79rem; color:var(--ink-2); line-height:1.5; }
+    .reject-quote { color:var(--green); margin-right:4px; font-size:0.85rem; }
+
+    .data-table { width:100%; border-collapse:collapse; }
+    .data-table th { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; color:var(--ink-3); padding:10px 16px; background:var(--surface-2); border-bottom:1px solid var(--border); text-align:left; white-space:nowrap; }
+    .data-table td { padding:12px 16px; border-bottom:1px solid var(--border); vertical-align:middle; font-size:0.8rem; color:var(--ink-2); }
+    .data-table tbody tr:last-child td { border-bottom:none; }
+    .data-table tbody tr { transition:background 0.12s; }
+    .data-table tbody tr:hover { background:var(--surface-2); }
+    .company-cell { display:flex; align-items:center; gap:9px; }
+    .company-icon { width:30px; height:30px; background:var(--green-light); color:var(--green); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:0.7rem; flex-shrink:0; font-weight:700; }
+    .company-name { font-weight:600; color:var(--ink); font-size:0.8rem; }
+    .spill { display:inline-flex; align-items:center; gap:5px; padding:3px 9px; border-radius:20px; font-size:0.68rem; font-weight:700; letter-spacing:0.2px; white-space:nowrap; }
+    .spill-dot { width:5px; height:5px; border-radius:50%; }
+    .spill.draft   { background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; }
+    .spill.proses  { background:#fff7ed; color:#9a3412; border:1px solid #fde8c8; }
+    .spill.selesai { background:#dcfce7; color:#14532d; border:1px solid #bbf7d0; }
+    .spill.ditolak { background:#fff1f2; color:#9f1239; border:1px solid #ffd6d9; }
+    .ppill { display:inline-flex; align-items:center; gap:5px; padding:3px 9px; border-radius:6px; font-size:0.71rem; font-weight:600; white-space:nowrap; }
+    .ppill::before { content:''; width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+    .ppill-draft::before{background:#94a3b8;} .ppill-draft{background:#f1f5f9;color:#475569;}
+    .ppill-kasi::before{background:#f97316;} .ppill-kasi{background:#fff7ed;color:#9a3412;}
+    .ppill-kabid::before{background:#3b82f6;} .ppill-kabid{background:#eff6ff;color:#1e40af;}
+    .ppill-sekdis::before{background:#8b5cf6;} .ppill-sekdis{background:#f5f3ff;color:#5b21b6;}
+    .ppill-kadis::before{background:#10b981;} .ppill-kadis{background:#ecfdf5;color:#065f46;}
+    .ppill-selesai::before{background:#16a34a;} .ppill-selesai{background:#dcfce7;color:#14532d;}
+    .ppill-ditolak::before{background:#f43f5e;} .ppill-ditolak{background:#fff1f2;color:#9f1239;}
+    .date-cell { font-family:var(--mono); font-size:0.73rem; color:var(--ink-3); }
+    .btn-view { display:inline-flex; align-items:center; gap:5px; font-size:0.72rem; font-weight:600; color:var(--green); background:var(--green-light); border:1px solid rgba(26,107,82,0.15); border-radius:var(--r-sm); padding:5px 12px; text-decoration:none; transition:all 0.15s; }
+    .btn-view:hover { background:var(--green); color:#fff; border-color:var(--green); }
+    .empty-state { text-align:center; padding:48px 24px; color:var(--ink-3); }
+    .empty-state i { font-size:2rem; margin-bottom:12px; opacity:0.4; }
+    .empty-state p { font-size:0.82rem; }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(12px);}  to{opacity:1;transform:translateY(0);} }
+    @media (max-width:1100px) { .stat-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width:768px) { .content{margin-left:0;} .stat-grid{grid-template-columns:1fr;} .dash-inner{padding:16px;} .topbar{padding:0 16px;} }
+    .gap-section { margin-bottom: 20px; }
+
+    /* ── Pagination (same as user dashboard) ── */
+    .paging-wrap {
+        padding: 14px 20px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        background: var(--surface-2);
+    }
+    .paging-info { font-size: 0.72rem; color: var(--ink-3); }
+    .paging-controls { display: flex; align-items: center; gap: 4px; }
+    .page-btn {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-width: 30px; height: 30px; padding: 0 8px;
+        border: 1px solid var(--border-2);
+        border-radius: var(--r-sm);
+        background: var(--surface);
+        font-family: var(--font);
+        font-size: 0.75rem; font-weight: 500;
+        color: var(--ink-2);
+        cursor: pointer;
+        transition: background 0.12s, border-color 0.12s, color 0.12s;
+        user-select: none;
+    }
+    .page-btn:hover:not(:disabled):not(.active) {
+        background: var(--green-light);
+        border-color: var(--green);
+        color: var(--green);
+    }
+    .page-btn.active {
+        background: var(--green); border-color: var(--green);
+        color: white; font-weight: 700;
+    }
+    .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .per-page-wrap { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: var(--ink-3); }
+    .per-page-select {
+        padding: 3px 22px 3px 8px;
+        border: 1px solid var(--border-2);
+        border-radius: var(--r-sm);
+        background: var(--surface);
+        font-size: 0.72rem; color: var(--ink);
+        outline: none; appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 7px center; cursor: pointer;
+    }
+    </style>
+</head>
+<body>
+
+<?php $this->load->view('admin/sidebar'); ?>
+
+<div class="content">
+
+    <!-- ══ TOP BAR ══ -->
+    <div class="topbar">
+        <div class="topbar-breadcrumb">
+            <i class="fas fa-home"></i>
+            <i class="fas fa-chevron-right sep"></i>
+            <strong>Dashboard</strong>
+        </div>
+        <div class="topbar-right">
+            <div class="topbar-date">
+                <i class="far fa-calendar-alt me-1"></i>
+                <span id="liveDate"></span>
+            </div>
+
+            <!-- ══ NOTIFICATION BELL ══ -->
+            <div style="position:relative;" id="notifWrapper">
+                <button class="notif-btn" id="notifBell" title="Notifikasi" type="button">
+                    <i class="fas fa-bell"></i>
+                    <span class="notif-badge" id="notifBadge" style="display:none;"></span>
+                </button>
+
+                <!-- Dropdown -->
+                <div class="notif-dropdown" id="notifDropdown" style="display:none;">
+                    <div class="nd-header">
+                        <div class="nd-header-left">
+                            <div class="nd-icon"><i class="fas fa-bell"></i></div>
+                            Notifikasi
+                        </div>
+                        <a href="<?= base_url('admin/mark_all_notif_read') ?>" class="nd-mark-all" id="markAllBtn">
+                            <i class="fas fa-check-double" style="font-size:9px;"></i> Tandai Semua
+                        </a>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="nd-tabs">
+                        <div class="nd-tab active" data-tab="all">
+                            Semua <span class="nd-tab-badge" id="tabBadgeAll" style="display:none;"></span>
+                        </div>
+                        <div class="nd-tab" data-tab="chat">
+                            <i class="fas fa-comment-dots" style="font-size:10px; margin-right:4px;"></i>Chat
+                            <span class="nd-tab-badge" id="tabBadgeChat" style="display:none;"></span>
+                        </div>
+                        <div class="nd-tab" data-tab="system">
+                            <i class="fas fa-cog" style="font-size:10px; margin-right:4px;"></i>Sistem
+                            <span class="nd-tab-badge" id="tabBadgeSystem" style="display:none;"></span>
+                        </div>
+                    </div>
+
+                    <!-- List -->
+                    <div class="nd-list" id="notifList">
+                        <div class="nd-empty">
+                            <i class="fas fa-bell-slash"></i>
+                            <p>Belum ada notifikasi</p>
+                        </div>
+                    </div>
+
+                    <div class="nd-footer">
+                        <a href="<?= base_url('admin/notifications') ?>">
+                            Lihat Semua Notifikasi <i class="fas fa-arrow-right" style="font-size:9px;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-chip">
+                <div class="admin-chip-avatar"><i class="fas fa-user-shield"></i></div>
+                <?= htmlspecialchars($this->session->userdata('nama')) ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="dash-inner">
+
+        <!-- ══ PAGE HEADER ══ -->
+        <div class="page-head">
+            <div>
+                <div class="page-head-title">Dashboard Admin</div>
+                <div class="page-head-sub">Monitoring pengajuan notifikasi TKA secara real-time</div>
+            </div>
+            <div class="page-head-meta">
+                Total aktif: <span><?= ($total_tka_all ?? 0) - ($stage_counts['DITOLAK'] ?? 0) ?></span> pengajuan berjalan
+            </div>
+        </div>
+
+        <!-- ══ STAT CARDS ══ -->
+        <div class="stat-grid">
+            <div class="stat-card c-total">
+                <div class="stat-icon total"><i class="fas fa-layer-group"></i></div>
+                <div class="stat-label">Total Pengajuan</div>
+                <div class="stat-value total"><?= $total_tka_all ?? 0 ?></div>
+                <div class="stat-footer"><i class="fas fa-database"></i> Semua periode</div>
+            </div>
+            <div class="stat-card c-proses">
+                <div class="stat-icon proses"><i class="fas fa-spinner"></i></div>
+                <div class="stat-label">Sedang Diproses</div>
+                <div class="stat-value proses"><?=
+                    ($stage_counts['MENUNGGU_KASI'] ?? 0) +
+                    ($stage_counts['MENUNGGU_KABID'] ?? 0) +
+                    ($stage_counts['MENUNGGU_SEKDIS'] ?? 0) +
+                    ($stage_counts['MENUNGGU_KADIS'] ?? 0)
+                ?></div>
+                <div class="stat-footer"><i class="fas fa-hourglass-half"></i> Menunggu verifikasi</div>
+            </div>
+            <div class="stat-card c-selesai">
+                <div class="stat-icon selesai"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-label">Selesai </div>
+                <div class="stat-value selesai"><?= $stage_counts['SELESAI'] ?? 0 ?></div>
+                <div class="stat-footer"><i class="fas fa-file-certificate"></i> Surat terbit</div>
+            </div>
+            <div class="stat-card c-ditolak">
+                <div class="stat-icon ditolak"><i class="fas fa-times-circle"></i></div>
+                <div class="stat-label">Ditolak </div>
+                <div class="stat-value ditolak"><?= $stage_counts['DITOLAK'] ?? 0 ?></div>
+                <div class="stat-footer"><i class="fas fa-ban"></i> Perlu tindak lanjut</div>
+            </div>
+        </div>
+
+        <!-- ══ FUNNEL + KPI ══ -->
+        <div class="row g-4 gap-section">
+            <div class="col-lg-7">
+                <div class="surface h-100" style="animation-delay:0.25s;">
+                    <div class="surface-head">
+                        <div class="surface-title">
+                            <div class="surface-title-icon"><i class="fas fa-filter"></i></div>
+                            Tahapan Approval
+                        </div>
+                        <div class="surface-badge">Pipeline Aktif</div>
+                    </div>
+                    <table class="funnel-table">
+                        <thead>
+                            <tr>
+                                <th>Tahap</th><th>Jumlah</th><th>Avg. Waktu</th><th>Proporsi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        $stages_order = [
+                            'MENUNGGU_KASI'   => ['label'=>'Menunggu Kasi',   'color'=>'#f97316'],
+                            'MENUNGGU_KABID'  => ['label'=>'Menunggu Kabid',  'color'=>'#3b82f6'],
+                            'MENUNGGU_SEKDIS' => ['label'=>'Menunggu Sekdis', 'color'=>'#8b5cf6'],
+                            'MENUNGGU_KADIS'  => ['label'=>'Menunggu Kadis',  'color'=>'#10b981'],
+                            'SELESAI'         => ['label'=>'Selesai',         'color'=>'#16a34a'],
+                            'DITOLAK'         => ['label'=>'Ditolak',         'color'=>'#f43f5e'],
+                        ];
+                        $max_count = !empty($stage_counts) ? max(array_values($stage_counts) ?: [1]) : 1;
+                        if ($max_count == 0) $max_count = 1;
+                        foreach($stages_order as $key => $s):
+                            $count   = $stage_counts[$key] ?? 0;
+                            $percent = round(($count / $max_count) * 100);
+                        ?>
+                        <tr>
+                            <td>
+                                <span class="stage-pill" style="background:<?= $s['color'] ?>18; color:<?= $s['color'] ?>;">
+                                    <span class="dot" style="background:<?= $s['color'] ?>;"></span>
+                                    <?= $s['label'] ?>
+                                </span>
+                            </td>
+                            <td><span class="count-chip"><?= $count ?></span><span class="count-unit"> pengajuan</span></td>
+                            <td><span class="avg-time"><i class="far fa-clock"></i> <?= $avg_time_stage[$key] ?? 0 ?> hari</span></td>
+                            <td style="width:38%;">
+                                <div class="funnel-bar-wrap">
+                                    <div class="funnel-bar" style="width:<?= $percent ?>%; background:<?= $s['color'] ?>;"></div>
+                                </div>
+                                <div style="font-size:0.68rem; color:var(--ink-3); margin-top:3px; font-family:var(--mono);"><?= $percent ?>%</div>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="surface" style="animation-delay:0.3s;">
+                    <div class="surface-head">
+                        <div class="surface-title">
+                            <div class="surface-title-icon"><i class="fas fa-chart-pie"></i></div>
+                            Metrik Utama
+                        </div>
+                    </div>
+                    <div class="kpi-row">
+                        <div class="kpi-item">
+                            <div class="kpi-label"><i class="fas fa-layer-group me-2" style="color:var(--green);"></i>Total leads count</div>
+                            <div class="kpi-value green"><?= $total_tka_all ?? 0 ?></div>
+                        </div>
+                        <div class="kpi-item">
+                            <div class="kpi-label"><i class="fas fa-clock me-2" style="color:var(--amber);"></i>Rata-rata konversi</div>
+                            <div class="kpi-value amber"><?= $avg_convert_days ?? 0 ?> hr</div>
+                        </div>
+                        <div class="kpi-item">
+                            <div class="kpi-label"><i class="fas fa-ban me-2" style="color:var(--red);"></i>Inactive leads (Ditolak)</div>
+                            <div class="kpi-value red"><?= $inactive_leads ?? 0 ?></div>
+                        </div>
+                        <?php
+                        $total = $total_tka_all ?? 0;
+                        $selesai = $stage_counts['SELESAI'] ?? 0;
+                        $conv_rate = $total > 0 ? round(($selesai / $total) * 100, 1) : 0;
+                        ?>
+                        <div class="kpi-item">
+                            <div class="kpi-label"><i class="fas fa-percentage me-2" style="color:var(--blue);"></i>Conversion rate</div>
+                            <div class="kpi-value" style="color:var(--blue);"><?= $conv_rate ?>%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ CHART ══ -->
+        <div class="surface gap-section" style="animation-delay:0.35s;">
+            <div class="surface-head">
+                <div class="surface-title">
+                    <div class="surface-title-icon"><i class="fas fa-chart-line"></i></div>
+                    Leads Tracking — 6 Bulan Terakhir
+                </div>
+                <div class="surface-badge">Tren</div>
+            </div>
+            <div class="chart-wrap" style="height:260px;">
+                <canvas id="leadsChart"></canvas>
+            </div>
+            <div class="chart-legend">
+                <div class="legend-item"><span class="legend-dot" style="background:#16a34a;"></span> Selesai</div>
+                <div class="legend-item"><span class="legend-dot" style="background:#f43f5e;"></span> Ditolak</div>
+                <div class="legend-item"><span class="legend-dot" style="background:#3b82f6;"></span> Dalam Proses</div>
+            </div>
+        </div>
+
+        <!-- ══ REASONS + TABLE ══ -->
+        <div class="row g-4 gap-section">
+            <div class="col-lg-5">
+                <div class="surface h-100" style="animation-delay:0.4s;">
+                    <div class="surface-head">
+                        <div class="surface-title">
+                            <div class="surface-title-icon" style="background:var(--red-light);color:var(--red);"><i class="fas fa-comment-slash"></i></div>
+                            Reasons of Leads Lost
+                        </div>
+                    </div>
+                    <?php if(empty($recent_rejects)): ?>
+                        <div class="empty-state"><i class="fas fa-inbox d-block"></i><p>Belum ada data penolakan.</p></div>
+                    <?php else: ?>
+                        <div style="max-height:320px; overflow-y:auto;">
+                        <?php foreach($recent_rejects as $reject): ?>
+                            <div class="reject-item">
+                                <div class="reject-meta">
+                                    <span class="reject-role"><?= ucfirst($reject->role) ?></span>
+                                    <span class="reject-date"><?= date('d/m/Y H:i', strtotime($reject->created_at)) ?></span>
+                                </div>
+                                <div class="reject-text">
+                                    <span class="reject-quote"><i class="fas fa-quote-left"></i></span>
+                                    <?= htmlspecialchars($reject->catatan) ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="surface h-100" style="animation-delay:0.45s;">
+                    <div class="surface-head">
+                        <div class="surface-title">
+                            <div class="surface-title-icon"><i class="fas fa-history"></i></div>
+                            Pengajuan Terbaru
+                        </div>
+                        <a href="<?= base_url('admin/semua_tka') ?>" style="font-size:0.73rem; color:var(--green); font-weight:600; text-decoration:none;">
+                            Lihat Semua <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                    <?php
+                    function getProgressPill($status) {
+                        $map = [
+                            'DRAFT'=>['Belum Lengkap','ppill-draft'],
+                            'MENUNGGU_KASI'=>['Verif. Kasi','ppill-kasi'],
+                            'MENUNGGU_KABID'=>['Verif. Kabid','ppill-kabid'],
+                            'MENUNGGU_SEKDIS'=>['Verif. Sekdis','ppill-sekdis'],
+                            'MENUNGGU_KADIS'=>['Verif. Kadis','ppill-kadis'],
+                            'SELESAI'=>['Surat Terbit','ppill-selesai'],
+                            'DITOLAK'=>['Ditolak','ppill-ditolak'],
+                        ];
+                        return isset($map[$status]) ? $map[$status] : [$status,'ppill-draft'];
+                    }
+                    $recent = $all_tka ?? [];
+                    ?>
+                    <?php if(empty($recent)): ?>
+                        <div class="empty-state"><i class="fas fa-inbox d-block"></i><p>Belum ada pengajuan.</p></div>
+                    <?php else: ?>
+                    <div class="table-responsive">
+                        <table class="data-table" id="adminRecentTable">
+                            <thead>
+                                <tr><th>Perusahaan</th><th>Nama TKA</th><th>Progress</th><th>Tanggal</th><th></th></tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach($recent as $r):
+                                list($pillLabel, $pillClass) = getProgressPill($r->status);
+                                $initials = strtoupper(substr($r->perusahaan, 0, 2));
+                            ?>
+                                <tr>
+                                    <td>
+                                        <div class="company-cell">
+                                            <div class="company-icon"><?= $initials ?></div>
+                                            <div class="company-name"><?= htmlspecialchars($r->perusahaan) ?></div>
+                                        </div>
+                                    </td>
+                                    <td style="color:var(--ink); font-weight:500;"><?= htmlspecialchars($r->nama_tka) ?></td>
+                                    <td><span class="ppill <?= $pillClass ?>"><?= $pillLabel ?></span></td>
+                                    <td><span class="date-cell"><?= date('d/m/y', strtotime($r->created_at)) ?></span></td>
+                                    <td><a href="<?= base_url('admin/semua_tka/'.$r->id) ?>" class="btn-view"><i class="fas fa-eye"></i> Detail</a></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                        <div class="paging-wrap" id="adminPagingWrap">
+                            <div class="paging-info" id="adminPagingInfo">—</div>
+                            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                                <div class="per-page-wrap">
+                                    <span>Tampilkan</span>
+                                    <select class="per-page-select" id="adminPerPage">
+                                        <option value="10" selected>10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                    <span>per halaman</span>
+                                </div>
+                                <div class="paging-controls" id="adminPagingControls"></div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /dash-inner -->
+</div><!-- /content -->
+
+<?php $this->load->view('footer'); ?>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+/* ── Live date ── */
+(function(){
+    var d = new Date();
+    var opts = { weekday:'short', day:'numeric', month:'short', year:'numeric' };
+    document.getElementById('liveDate').textContent = d.toLocaleDateString('id-ID', opts);
+})();
+
+/* ── Chart.js ── */
+(function(){
+    var ctx = document.getElementById('leadsChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: <?= $months ?? '[]' ?>,
+            datasets: [
+                { label:'Closed Won',  data:<?= $closed_won  ?? '[]' ?>, borderColor:'#16a34a', backgroundColor:'rgba(22,163,74,0.07)',  fill:true, tension:0.4, borderWidth:2, pointRadius:4, pointBackgroundColor:'#16a34a', pointBorderColor:'#fff', pointBorderWidth:2 },
+                { label:'Closed Lost', data:<?= $closed_lost ?? '[]' ?>, borderColor:'#f43f5e', backgroundColor:'rgba(244,63,94,0.06)',  fill:true, tension:0.4, borderWidth:2, pointRadius:4, pointBackgroundColor:'#f43f5e', pointBorderColor:'#fff', pointBorderWidth:2 },
+                { label:'Dalam Proses',data:<?= $in_progress ?? '[]' ?>, borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,0.06)', fill:true, tension:0.4, borderWidth:2, pointRadius:4, pointBackgroundColor:'#3b82f6', pointBorderColor:'#fff', pointBorderWidth:2 }
+            ]
+        },
+        options: {
+            responsive:true, maintainAspectRatio:false,
+            interaction:{ mode:'index', intersect:false },
+            plugins: {
+                legend:{ display:false },
+                tooltip:{ backgroundColor:'#0f1923', titleColor:'#fff', bodyColor:'#94a3b8', padding:12, cornerRadius:10 }
+            },
+            scales: {
+                y:{ beginAtZero:true, grid:{ color:'#f0f2f5', drawBorder:false }, ticks:{ font:{family:"'DM Mono',monospace",size:10}, color:'#94a3b8', precision:0 }, border:{display:false} },
+                x:{ grid:{ display:false }, ticks:{ font:{family:"'Sora',sans-serif",size:10}, color:'#94a3b8' }, border:{display:false} }
+            }
+        }
+    });
+})();
+
+/* ════════════════════════════════════════
+   NOTIFICATION SYSTEM
+════════════════════════════════════════ */
+var _notifData = { all: [], chat: [], system: [] };
+var _activeTab = 'all';
+var _prevUnread = 0;
+var _dropOpen   = false;
+
+/* Format relative time */
+function relTime(dateStr) {
+    var d = new Date(dateStr);
+    var now = new Date();
+    var diff = Math.floor((now - d) / 1000);
+    if (diff < 60)   return 'Baru saja';
+    if (diff < 3600) return Math.floor(diff/60) + ' mnt lalu';
+    if (diff < 86400)return Math.floor(diff/3600) + ' jam lalu';
+    return d.toLocaleDateString('id-ID', {day:'numeric', month:'short'});
+}
+
+/* Icon & type per notif */
+function getNotifMeta(n) {
+    var type = n.type || 'system'; // 'chat' or 'system'
+    if (type === 'chat') {
+        return { iconClass: 'chat', icon: 'fa-comment-dots', typeLabel: 'Chat', tabKey: 'chat' };
+    }
+    // classify system notifs by keyword
+    var title = (n.title || '').toLowerCase();
+    if (title.indexOf('tolak') !== -1 || title.indexOf('reject') !== -1) {
+        return { iconClass: 'reject', icon: 'fa-times-circle', typeLabel: 'Sistem', tabKey: 'system' };
+    }
+    if (title.indexOf('peringatan') !== -1 || title.indexOf('sla') !== -1 || title.indexOf('terlambat') !== -1) {
+        return { iconClass: 'warn', icon: 'fa-exclamation-triangle', typeLabel: 'Sistem', tabKey: 'system' };
+    }
+    return { iconClass: 'system', icon: 'fa-bell', typeLabel: 'Sistem', tabKey: 'system' };
+}
+
+/* Render notif list */
+function renderNotifList(tab) {
+    _activeTab = tab;
+    var list = _notifData[tab] || [];
+    var el = document.getElementById('notifList');
+
+    // Update tab active state
+    document.querySelectorAll('.nd-tab').forEach(function(t) {
+        t.classList.toggle('active', t.dataset.tab === tab);
+    });
+
+    if (!list.length) {
+        el.innerHTML = '<div class="nd-empty"><i class="fas fa-bell-slash"></i><p>Tidak ada notifikasi di sini</p></div>';
+        return;
+    }
+
+    var html = '';
+    list.forEach(function(n) {
+        var meta   = getNotifMeta(n);
+        var unread = (n.is_read == 0);
+        var url    = '<?= base_url("admin/mark_notif_read/") ?>' + n.id;
+        html += '<div class="nd-item ' + (unread ? 'unread' : '') + '" data-id="' + n.id + '" data-url="' + url + '" style="cursor:pointer;">';
+        html += '  <div class="nd-item-icon ' + meta.iconClass + '"><i class="fas ' + meta.icon + '"></i></div>';
+        html += '  <div class="nd-item-body">';
+        html += '    <div class="nd-item-title">' + escHtml(n.title) + '</div>';
+        html += '    <div class="nd-item-msg">'   + escHtml(n.message) + '</div>';
+        html += '    <div class="nd-item-meta">';
+        html += '      <span class="nd-item-time"><i class="far fa-clock" style="font-size:8px;"></i> ' + relTime(n.created_at) + '</span>';
+        html += '      <span class="nd-item-type ' + meta.iconClass + '">' + meta.typeLabel + '</span>';
+        html += '    </div>';
+        html += '  </div>';
+        if (unread) html += '  <div class="nd-item-unread-dot"></div>';
+        html += '</div>';
+    });
+    el.innerHTML = html;
+
+    // Click to mark read
+    el.querySelectorAll('.nd-item').forEach(function(item) {
+        item.addEventListener('click', function() {
+            var id  = this.dataset.id;
+            var url = this.dataset.url;
+            $.post(url, { '<?= $this->security->get_csrf_token_name() ?>': '<?= $this->security->get_csrf_hash() ?>' });
+            this.classList.remove('unread');
+            var dot = this.querySelector('.nd-item-unread-dot');
+            if (dot) dot.remove();
+            fetchNotifications();
+        });
+    });
+}
+
+/* Escape HTML helper */
+function escHtml(str) {
+    return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* Fetch from admin endpoint */
+function fetchNotifications() {
+    $.ajax({
+        url: '<?= base_url("admin/get_notifications") ?>',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            var notifs = data.notifications || [];
+            var unread = data.unread_count  || 0;
+
+            // Split into tabs
+            _notifData.all    = notifs;
+            _notifData.chat   = notifs.filter(function(n){ return (n.type||'system') === 'chat'; });
+            _notifData.system = notifs.filter(function(n){ return (n.type||'system') !== 'chat'; });
+
+            var unreadChat   = _notifData.chat.filter(function(n){return n.is_read==0;}).length;
+            var unreadSystem = _notifData.system.filter(function(n){return n.is_read==0;}).length;
+
+            /* Badge on bell */
+            var badge = document.getElementById('notifBadge');
+            if (unread > 0) {
+                badge.textContent = unread > 99 ? '99+' : unread;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+
+            /* Tab badges */
+            setBadge('tabBadgeAll',    unread);
+            setBadge('tabBadgeChat',   unreadChat);
+            setBadge('tabBadgeSystem', unreadSystem);
+
+            /* Ring bell if new notif arrived */
+            if (unread > _prevUnread && _prevUnread !== -1) {
+                var bell = document.getElementById('notifBell');
+                bell.classList.remove('ringing');
+                void bell.offsetWidth; // reflow
+                bell.classList.add('ringing');
+                setTimeout(function(){ bell.classList.remove('ringing'); }, 700);
+            }
+            _prevUnread = unread;
+
+            /* Re-render if dropdown open */
+            if (_dropOpen) renderNotifList(_activeTab);
+        },
+        error: function(){}
+    });
+}
+
+function setBadge(id, count) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (count > 0) { el.textContent = count > 99 ? '99+' : count; el.style.display = 'inline-flex'; }
+    else           { el.style.display = 'none'; }
+}
+
+/* Toggle dropdown */
+document.getElementById('notifBell').addEventListener('click', function(e) {
+    e.stopPropagation();
+    var dd = document.getElementById('notifDropdown');
+    _dropOpen = !_dropOpen;
+    dd.style.display = _dropOpen ? 'block' : 'none';
+    this.classList.toggle('active', _dropOpen);
+    if (_dropOpen) renderNotifList(_activeTab);
+});
+
+/* Tab clicks */
+document.querySelectorAll('.nd-tab').forEach(function(tab) {
+    tab.addEventListener('click', function(e) {
+        e.stopPropagation();
+        renderNotifList(this.dataset.tab);
+    });
+});
+
+/* Mark all read */
+document.getElementById('markAllBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $.post('<?= base_url("admin/mark_all_notif_read") ?>', { '<?= $this->security->get_csrf_token_name() ?>': '<?= $this->security->get_csrf_hash() ?>' }, function() {
+        fetchNotifications();
+    });
+});
+
+/* Close on outside click */
+document.addEventListener('click', function(e) {
+    if (!document.getElementById('notifWrapper').contains(e.target)) {
+        document.getElementById('notifDropdown').style.display = 'none';
+        document.getElementById('notifBell').classList.remove('active');
+        _dropOpen = false;
+    }
+});
+
+/* Init — fetch immediately then poll every 8s */
+_prevUnread = -1; // suppress ring on first load
+fetchNotifications();
+setInterval(fetchNotifications, 8000);
+/* ════════════════════════════════════════
+   PAGINATION — Tabel Pengajuan Terbaru
+════════════════════════════════════════ */
+(function(){
+    var tableBody = document.querySelector('#adminRecentTable tbody');
+    if (!tableBody) return;
+
+    var allRows     = Array.from(tableBody.querySelectorAll('tr'));
+    var perPage     = 10;
+    var currentPage = 1;
+
+    var pagingInfo     = document.getElementById('adminPagingInfo');
+    var pagingControls = document.getElementById('adminPagingControls');
+    var perPageSelect  = document.getElementById('adminPerPage');
+
+    function goToPage(page) {
+        var totalPages = Math.ceil(allRows.length / perPage) || 1;
+        if (page < 1) page = 1;
+        if (page > totalPages) page = totalPages;
+        currentPage = page;
+
+        allRows.forEach(function(row, idx) {
+            row.style.display = (idx >= (currentPage - 1) * perPage && idx < currentPage * perPage)
+                ? '' : 'none';
+        });
+        renderPaging();
+    }
+
+    function renderPaging() {
+        var total      = allRows.length;
+        var totalPages = Math.ceil(total / perPage) || 1;
+        var start      = (currentPage - 1) * perPage + 1;
+        var end        = Math.min(currentPage * perPage, total);
+
+        pagingInfo.innerHTML = total > 0
+            ? 'Menampilkan <strong>' + start + '–' + end + '</strong> dari <strong>' + total + '</strong> pengajuan'
+            : '0 pengajuan';
+
+        pagingControls.innerHTML = '';
+
+        /* Prev */
+        var prevBtn = document.createElement('button');
+        prevBtn.className = 'page-btn';
+        prevBtn.innerHTML = '<i class="fas fa-chevron-left" style="font-size:10px;"></i>';
+        prevBtn.disabled  = (currentPage <= 1);
+        prevBtn.addEventListener('click', function(){ goToPage(currentPage - 1); });
+        pagingControls.appendChild(prevBtn);
+
+        /* Angka halaman */
+        var maxBtns = 5;
+        var startP  = Math.max(1, currentPage - 2);
+        var endP    = Math.min(totalPages, startP + maxBtns - 1);
+        if (endP - startP < maxBtns - 1) startP = Math.max(1, endP - maxBtns + 1);
+
+        if (startP > 1) {
+            pagingControls.appendChild(makePageBtn(1));
+            if (startP > 2) pagingControls.appendChild(makeDots());
+        }
+        for (var i = startP; i <= endP; i++) {
+            pagingControls.appendChild(makePageBtn(i));
+        }
+        if (endP < totalPages) {
+            if (endP < totalPages - 1) pagingControls.appendChild(makeDots());
+            pagingControls.appendChild(makePageBtn(totalPages));
+        }
+
+        /* Next */
+        var nextBtn = document.createElement('button');
+        nextBtn.className = 'page-btn';
+        nextBtn.innerHTML = '<i class="fas fa-chevron-right" style="font-size:10px;"></i>';
+        nextBtn.disabled  = (currentPage >= totalPages);
+        nextBtn.addEventListener('click', function(){ goToPage(currentPage + 1); });
+        pagingControls.appendChild(nextBtn);
+    }
+
+    function makePageBtn(num) {
+        var btn = document.createElement('button');
+        btn.className = 'page-btn' + (num === currentPage ? ' active' : '');
+        btn.textContent = num;
+        btn.addEventListener('click', function(){ goToPage(num); });
+        return btn;
+    }
+
+    function makeDots() {
+        var span = document.createElement('span');
+        span.className   = 'page-btn';
+        span.style.cursor = 'default';
+        span.textContent = '…';
+        return span;
+    }
+
+    perPageSelect.addEventListener('change', function() {
+        perPage = parseInt(this.value);
+        goToPage(1);
+    });
+
+    /* Init */
+    if (allRows.length > 0) goToPage(1);
+})();
+</script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Laporan Bulanan TKA — <?= $bulan_nama ?> <?= $tahun ?></title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 10pt;
+            color: #1a1a2e;
+            background: #fff;
+            line-height: 1.4;
+        }
+
+        /* ══════════════════════════════════════
+           HALAMAN F4 Landscape 330 × 210 mm
+           ══════════════════════════════════════ */
+        .page {
+            width: 330mm;
+            min-height: 210mm;
+            margin: 0 auto;
+            padding: 9mm 15mm 9mm 15mm;
+            background: #fff;
+        }
+
+        /* ══════════════════════════════════════
+           KOP SURAT
+           ══════════════════════════════════════ */
+        .kop-wrap { width:100%; border-collapse:collapse; }
+        .kop-wrap td { padding:0; vertical-align:middle; }
+
+        .kop-td-logo   { width:80px; text-align:center; }
+        .kop-td-logo img { width:115px; height:auto; display:block; margin:0 auto; }
+        .kop-td-text   { text-align:center; padding:0 6px; }
+        .kop-td-filler { width:80px; }
+
+        .k-prov     { font-size:8pt; letter-spacing:.05em; text-transform:uppercase; color:#555; margin-bottom:1px; }
+        .k-instansi { font-size:17pt; font-weight:bold; letter-spacing:.02em; text-transform:uppercase; color:#1B3A6B; line-height:1.05; margin-bottom:1px; }
+        .k-kota     { font-size:9pt; font-weight:bold; letter-spacing:.16em; text-transform:uppercase; color:#333; margin-bottom:3px; }
+        .k-alamat   { font-size:7.5pt; color:#555; line-height:1.5; }
+
+        .kop-line-navy { border:none; border-top:3px solid #1B3A6B; margin:7px 0 2px; }
+        .kop-line-gold { border:none; border-top:1px solid #C9A84C; margin:0 0 8px; }
+
+        /* ══════════════════════════════════════
+           JUDUL
+           ══════════════════════════════════════ */
+        .judul-wrap  { text-align:center; margin-bottom:7px; }
+        .judul-utama { font-size:11.5pt; font-weight:bold; text-transform:uppercase;
+                       letter-spacing:.05em; color:#1B3A6B; text-decoration:underline; margin-bottom:1px; }
+        .judul-sub   { font-size:8.5pt; color:#555; margin-bottom:1px; }
+        .judul-period{ font-size:9.5pt; font-weight:bold; color:#1a1a2e; }
+
+        /* ══════════════════════════════════════
+           META STRIP
+           ══════════════════════════════════════ */
+        .meta-table {
+            width:100%; border-collapse:collapse;
+            border:1px solid #C9A84C; margin-bottom:7px;
+        }
+        .meta-head-row td {
+            background:#1B3A6B; color:#fff;
+            font-size:7pt; font-weight:bold;
+            letter-spacing:.07em; text-transform:uppercase;
+            padding:3px 8px; border-right:1px solid #2d4f8a;
+        }
+        .meta-head-row td:last-child { border-right:none; }
+        .meta-data-row td {
+            padding:4px 8px; border-right:1px solid #e8e8e8;
+            font-size:8.5pt; font-weight:bold; color:#1a1a2e; width:25%;
+        }
+        .meta-data-row td:last-child { border-right:none; }
+
+        /* ══════════════════════════════════════
+           TABEL DATA
+           ══════════════════════════════════════ */
+        .data-table {
+            width:100%; border-collapse:collapse;
+            font-size:7.6pt; table-layout:fixed;
+        }
+        .data-table thead tr { background:#1B3A6B; }
+        .data-table thead th {
+            color:#fff; font-size:7.4pt; font-weight:bold;
+            letter-spacing:.02em; padding:5px 4px;
+            border:1px solid #2d4f8a; text-align:center;
+        }
+        .data-table thead th.th-left { text-align:left; padding-left:6px; }
+
+        .data-table tbody td {
+            border:1px solid #ddd; padding:2.8px 4px;
+            vertical-align:middle; line-height:1.25;
+            color:#1a1a2e; overflow:hidden;
+        }
+        .data-table tbody tr.row-even td { background:#F0F4FA; }
+        .data-table tbody tr.row-odd  td { background:#fff; }
+        .data-table tbody tr:last-child td { border-bottom:2px solid #1B3A6B; }
+
+        .col-no   { text-align:center; color:#888; font-size:7pt; padding:2.8px 2px !important; white-space:nowrap; }
+        .col-mono { text-align:center; font-family:'Courier New',monospace; font-size:7pt; }
+        .col-ctr  { text-align:center; }
+
+        /* Pills */
+        .pill {
+            display:inline-block; padding:1.5px 6px;
+            border-radius:20px; font-size:6.5pt;
+            font-weight:bold; white-space:nowrap;
+            border:1px solid transparent;
+        }
+        .pill-selesai { background:#ECFDF5; color:#065F46; border-color:#6EE7B7; }
+        .pill-proses  { background:#EFF6FF; color:#1E40AF; border-color:#93C5FD; }
+        .pill-draft   { background:#F3F4F6; color:#374151; border-color:#9CA3AF; }
+        .pill-ditolak { background:#FEF2F2; color:#991B1B; border-color:#FCA5A5; }
+
+        /* ══════════════════════════════════════
+           BAGIAN BAWAH: RINGKASAN + TTD
+           ══════════════════════════════════════ */
+        .bottom-table {
+            width:100%; border-collapse:collapse; margin-top:9px;
+        }
+        .bottom-table > tbody > tr > td {
+            vertical-align:bottom; border:none; padding:0;
+        }
+        .bottom-td-summary { width:220px; }
+        .bottom-td-sig     { width:325px; text-align:center; }
+
+        /* Ringkasan */
+        .summary-outer { border:1px solid #ddd; }
+        .summary-head  {
+            background:#1B3A6B; color:#fff;
+            font-weight:bold; font-size:7.5pt;
+            letter-spacing:.07em; text-transform:uppercase;
+            text-align:center; padding:4px 8px;
+        }
+        .summary-inner { width:100%; border-collapse:collapse; font-size:7.8pt; }
+        .summary-inner td { padding:3px 8px; border-bottom:1px solid #eee; color:#333; }
+        .summary-inner tr:last-child td { border-bottom:none; }
+        .summary-inner td.s-num {
+            text-align:right; font-weight:bold; color:#1B3A6B; width:28px;
+        }
+        .summary-inner tr.s-total td { background:#1B3A6B; color:#fff; font-weight:bold; }
+        .summary-inner tr.s-total td.s-num { color:#C9A84C; }
+
+        /* TTD */
+        .sig-wrap   { display:inline-block; width:180px; }
+        .sig-date   { font-size:8.8pt; color:#444; margin-bottom:2px; }
+        .sig-role   { font-size:8.8pt; font-weight:bold; text-transform:uppercase;
+                      letter-spacing:.02em; line-height:1.45; color:#1a1a2e; margin-bottom:2px; }
+        .sig-gap    { height:46px; }
+        .sig-line   { border-top:1.5px solid #1a1a2e; padding-top:3px; margin-top:0; }
+        .sig-name   { font-size:9.5pt; font-weight:bold; color:#1B3A6B; }
+        .sig-nip    { font-size:7.8pt; color:#666; margin-top:2px; }
+
+        /* Kosong */
+        .empty-notice {
+            text-align:center; padding:24px 20px;
+            border:1.5px dashed #aaa; color:#777;
+            font-style:italic; font-size:9pt;
+        }
+
+        /* ══════════════════════════════════════
+           FOOTER
+           ══════════════════════════════════════ */
+        .footer-wrap { margin-top:8px; }
+        .footer-inner {
+            width:100%; border-collapse:collapse;
+            border-top:1px solid #bbb;
+        }
+        .footer-inner td {
+            padding-top:3px; font-size:6.8pt;
+            color:#888; border:none;
+        }
+        .footer-inner td.f-left  { text-align:left; font-weight:bold; color:#555; }
+        .footer-inner td.f-mid   { text-align:center; }
+        .footer-inner td.f-right { text-align:right; }
+
+        /* ══════════════════════════════════════
+           PRINT / SCREEN
+           ══════════════════════════════════════ */
+        @media print {
+            @page { size:330mm 210mm landscape; margin:0; }
+            body  { background:#fff; margin:0; }
+            .page { padding:8mm 14mm 8mm 14mm; box-shadow:none; margin:0; }
+        }
+        @media screen {
+            body { background:#B0B7C3; padding:24px 0 48px; }
+            .page {
+                margin:24px auto;
+                box-shadow:0 2px 6px rgba(0,0,0,.1), 0 14px 44px rgba(0,0,0,.2);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- ══ KOP SURAT ══ -->
+    <table class="kop-wrap">
+        <tr>
+            <td class="kop-td-logo">
+                <img src="<?= base_url('assets/images/logo_kota_bekasi.png') ?>" alt="Logo">
+            </td>
+            <td class="kop-td-text">
+                <div class="k-prov">Pemerintah Kota Bekasi</div>
+                <div class="k-instansi">Dinas Tenaga Kerja</div>
+                <div class="k-kota">Kota Bekasi</div>
+                <div class="k-alamat">
+                    Jl. Jend. Ahmad Yani No.1, Bekasi Selatan, Kota Bekasi, Jawa Barat 17141<br>
+                    Telp. (021) 8841023 &nbsp;&bull;&nbsp; disnaker@bekasikota.go.id &nbsp;&bull;&nbsp; www.bekasikota.go.id
+                </div>
+            </td>
+            <td class="kop-td-filler"></td>
+        </tr>
+    </table>
+    <hr class="kop-line-navy">
+    <hr class="kop-line-gold">
+
+    <!-- ══ JUDUL ══ -->
+    <div class="judul-wrap">
+        <div class="judul-utama">Laporan Bulanan Tenaga Kerja Asing (TKA)</div>
+        <div class="judul-sub">Dinas Tenaga Kerja Kota Bekasi</div>
+        <div class="judul-period">Periode: <?= $bulan_nama ?> <?= $tahun ?></div>
+    </div>
+
+    <!-- ══ META STRIP ══ -->
+    <table class="meta-table">
+        <tr class="meta-head-row">
+            <td>Periode Laporan</td>
+            <td>Total Pengajuan</td>
+            <td>Tanggal Cetak</td>
+            <td>Dicetak Oleh</td>
+        </tr>
+        <tr class="meta-data-row">
+            <td><?= $bulan_nama ?> <?= $tahun ?></td>
+            <td><?= count($tka) ?> Data TKA</td>
+            <td><?= date('d F Y') ?></td>
+            <td><?= htmlspecialchars($this->session->userdata('nama') ?: 'Sistem') ?></td>
+        </tr>
+    </table>
+
+    <!-- ══ TABEL DATA ══ -->
+    <?php if (empty($tka)): ?>
+        <div class="empty-notice">
+            Tidak ada data TKA pada periode <strong><?= $bulan_nama ?> <?= $tahun ?></strong>.
+        </div>
+    <?php else: ?>
+
+    <?php
+        $cnt_selesai = $cnt_proses = $cnt_draft = $cnt_ditolak = 0;
+        $proses_statuses = ['MENUNGGU_KASI','MENUNGGU_KABID','MENUNGGU_SEKDIS','MENUNGGU_KADIS'];
+        foreach ($tka as $t) {
+            if ($t->status === 'SELESAI')                    $cnt_selesai++;
+            elseif (in_array($t->status, $proses_statuses)) $cnt_proses++;
+            elseif ($t->status === 'DITOLAK')               $cnt_ditolak++;
+            else                                             $cnt_draft++;
+        }
+    ?>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th style="width:3%; white-space:nowrap; padding:5px 5px;">No</th>
+                <th class="th-left" style="width:135px;">Nama Perusahaan</th>
+                <th class="th-left" style="width:110px;">Nama TKA</th>
+                <th style="width:66px;">Tgl Pengajuan</th>
+                <th style="width:100px;">No. Paspor</th>
+                <th style="width:108px;">No. KITAS</th>
+                <th style="width:68px;">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php $no = 1; foreach ($tka as $t):
+            $row_class = ($no % 2 === 0) ? 'row-even' : 'row-odd';
+            if ($t->status === 'SELESAI') {
+                $pc = 'pill-selesai'; $pl = '&#10003; Selesai';
+            } elseif (in_array($t->status, $proses_statuses)) {
+                $pc = 'pill-proses';  $pl = '&#8635; Proses';
+            } elseif ($t->status === 'DITOLAK') {
+                $pc = 'pill-ditolak'; $pl = '&#10005; Ditolak';
+            } else {
+                $pc = 'pill-draft';   $pl = '&bull; Draft';
+            }
+        ?>
+            <tr class="<?= $row_class ?>">
+                <td class="col-no"><?= $no++ ?></td>
+                <td style="padding-left:6px;"><?= htmlspecialchars($t->perusahaan) ?></td>
+                <td style="padding-left:6px;"><?= htmlspecialchars($t->nama_tka) ?></td>
+                <td class="col-ctr" style="white-space:nowrap;"><?= date('d/m/Y', strtotime($t->created_at)) ?></td>
+                <td class="col-mono"><?= htmlspecialchars($t->passport_no ?? '') ?: '&mdash;' ?></td>
+                <td class="col-mono"><?= htmlspecialchars($t->kitas_no ?? '') ?: '&mdash;' ?></td>
+                <td class="col-ctr"><span class="pill <?= $pc ?>"><?= $pl ?></span></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <!-- ══ RINGKASAN + TTD (sejajar, tidak pernah terpotong) ══ -->
+    <table class="bottom-table">
+        <tr>
+            <!-- Ringkasan -->
+            <td class="bottom-td-summary">
+                <div class="summary-outer">
+                    <div class="summary-head">Ringkasan Status Pengajuan</div>
+                    <table class="summary-inner">
+                        <tr class="s-total">
+                            <td>Total Pengajuan</td>
+                            <td class="s-num"><?= count($tka) ?></td>
+                        </tr>
+                        <tr>
+                            <td>&#10003;&nbsp; Selesai / Surat Terbit</td>
+                            <td class="s-num"><?= $cnt_selesai ?></td>
+                        </tr>
+                        <tr>
+                            <td>&#8635;&nbsp; Dalam Proses</td>
+                            <td class="s-num"><?= $cnt_proses ?></td>
+                        </tr>
+                        <tr>
+                            <td>&bull;&nbsp; Draft / Belum Lengkap</td>
+                            <td class="s-num"><?= $cnt_draft ?></td>
+                        </tr>
+                        <tr>
+                            <td>&#10005;&nbsp; Ditolak</td>
+                            <td class="s-num"><?= $cnt_ditolak ?></td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+
+            <!-- Spacer -->
+            <td>&nbsp;</td>
+
+            <!-- TTD — selalu utuh -->
+            <td class="bottom-td-sig">
+                <div class="sig-date">Bekasi, <?= date('d F Y') ?></div>
+                <div class="sig-role">Kepala Dinas Tenaga Kerja<br>Kota Bekasi</div>
+                <div class="sig-gap"></div>
+                <div class="sig-line">
+                    <div class="sig-name"><?= htmlspecialchars($this->session->userdata('nama') ?: '________________________________') ?></div>
+                    <?php if ($nip = $this->session->userdata('nip')): ?>
+                    <div class="sig-nip">NIP. <?= htmlspecialchars($nip) ?></div>
+                    <?php endif; ?>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <?php endif; ?>
+
+    <!-- ══ FOOTER ══ -->
+    <div class="footer-wrap">
+        <table class="footer-inner">
+            <tr>
+                <td class="f-left">Dinas Tenaga Kerja &mdash; Kota Bekasi</td>
+                <td class="f-mid">Dokumen resmi &bull; Dicetak <?= date('d/m/Y H:i') ?></td>
+                <td class="f-right">Laporan Bulanan TKA &bull; <?= $bulan_nama ?> <?= $tahun ?></td>
+            </tr>
+        </table>
+    </div>
+
+</div><!-- /page -->
+</body>
+</html>

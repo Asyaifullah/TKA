@@ -1,0 +1,190 @@
+/* assets/css/dashboard.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap');
+
+:root {
+    --primary: #0a2b4e;
+    --primary-light: #1e5a8a;
+    --secondary: #2c7da0;
+    --accent: #61b0d4;
+    --gray-bg: #f4f7fc;
+    --card-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    --transition: all 0.2s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--gray-bg);
+    color: #1e2a3a;
+}
+
+/* Sidebar (sudah ada, hanya perbaikan minor) */
+.sidebar {
+    background: var(--primary);
+    box-shadow: 2px 0 12px rgba(0,0,0,0.08);
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    transition: var(--transition);
+}
+
+.sidebar .nav-link.active {
+    background: var(--secondary);
+    color: white;
+    border-radius: 12px;
+    margin: 0 10px;
+}
+
+/* Welcome Card */
+.welcome-card {
+    background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+    border-radius: 24px;
+    padding: 28px 32px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 32px;
+}
+
+.welcome-card h2 {
+    font-weight: 600;
+    font-size: 1.8rem;
+    letter-spacing: -0.3px;
+}
+
+/* Stat Cards */
+.stat-card {
+    background: white;
+    border-radius: 24px;
+    padding: 24px 16px;
+    text-align: center;
+    transition: var(--transition);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    border: 1px solid #eef2f6;
+}
+
+.stat-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 28px rgba(0,0,0,0.08);
+}
+
+.stat-icon {
+    width: 64px;
+    height: 64px;
+    background: #eef2ff;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+}
+
+.stat-icon i {
+    font-size: 28px;
+    color: var(--secondary);
+}
+
+.stat-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: #5a6e85;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1.2;
+}
+
+/* Table Card */
+.card-table {
+    background: white;
+    border-radius: 24px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    border: 1px solid #eef2f6;
+}
+
+.card-table .card-header {
+    background: white;
+    border-bottom: 1px solid #eef2f6;
+    padding: 20px 24px;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    background: #f9fafb;
+    color: #4a5b6e;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 16px 20px;
+    border-bottom: 1px solid #eef2f6;
+}
+
+.table tbody td {
+    padding: 14px 20px;
+    vertical-align: middle;
+    border-bottom: 1px solid #f0f2f5;
+    font-size: 0.9rem;
+}
+
+.table tbody tr:hover {
+    background: #fafcff;
+}
+
+/* Badges */
+.badge-status {
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+.badge-proses { background: #e0f2fe; color: #0369a1; }
+.badge-selesai { background: #dcfce7; color: #15803d; }
+.badge-ditolak { background: #fee2e2; color: #b91c1c; }
+
+/* Buttons */
+.btn-sm {
+    border-radius: 10px;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background: var(--secondary);
+    border: none;
+}
+.btn-primary:hover {
+    background: var(--primary-light);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .content {
+        padding: 16px;
+    }
+    .stat-card {
+        margin-bottom: 16px;
+    }
+    .table thead th, .table tbody td {
+        padding: 10px 12px;
+    }
+}

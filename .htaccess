@@ -1,0 +1,32 @@
+RewriteEngine On
+
+# ⭐ PENTING: Ini perintah untuk mengabaikan folder assets & uploads
+RewriteCond $1 !^(index\.php|assets|uploads|robots\.txt)
+
+# Aturan standar CodeIgniter 3
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L]
+
+RewriteRule ^(assets|uploads)/ - [L,NC]
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Disable directory listing
+Options -Indexes
+
+# Block access to sensitive files
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql|bak|md|env)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>

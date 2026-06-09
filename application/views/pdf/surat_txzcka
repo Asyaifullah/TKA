@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Surat Keterangan TKA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.4;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h2, .header h3 {
+            margin: 5px 0;
+        }
+        .header p {
+            margin: 2px 0;
+        }
+        .header hr {
+            margin: 20px 0;
+        }
+        .title {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        td {
+            padding: 6px 8px;
+            vertical-align: top;
+            border: none;
+        }
+        .label {
+            font-weight: bold;
+            width: 35%;
+        }
+        .ttd {
+            margin-top: 50px;
+            text-align: right;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h2>PEMERINTAH KOTA BEKASI</h2>
+    <h3>DINAS TENAGA KERJA</h3>
+    <p>Jalan Rawa Tembaga I No. 1 Margajaya, Bekasi Selatan 17141</p>
+    <p>Email: disnaker@kotabekasi.go.id | Website: www.kotabekasi.go.id</p>
+    <hr>
+</div>
+
+<div class="title">
+    SURAT KETERANGAN LAPORAN KEBERADAAN TENAGA KERJA ASING
+</div>
+<p style="text-align:center">Nomor: <?= $nomor_surat ?></p>
+
+<p>Berdasarkan surat dari perusahaan <strong><?= htmlspecialchars($user->perusahaan) ?></strong>, tanggal <?= date('d-m-Y', strtotime($tka->created_at)) ?> perihal permohonan Surat Keterangan Pelaporan, menerangkan bahwa:</p>
+
+<!-- ================= TABEL DATA ================= -->
+<table>
+    <tbody>
+        <tr><td class="label">1. Nama lengkap TKA</td><td>: <?= htmlspecialchars($tka->nama_tka) ?></td></tr>
+        <tr><td class="label">2. Jenis Kelamin</td><td>: <?= $tka->jenis_kelamin ?? '-' ?></td></tr>
+        <tr><td class="label">3. Tempat, Tanggal Lahir</td><td>: <?= $tka->tempat_lahir ?>, <?= $tka->tanggal_lahir ? date('d-m-Y', strtotime($tka->tanggal_lahir)) : '-' ?></td></tr>
+        <tr><td class="label">4. Kebangsaan</td><td>: <?= $tka->negara_asal ?? '-' ?></td></tr>
+        <tr><td class="label">5. Jabatan</td><td>: <?= $tka->jabatan ?? '-' ?></td></tr>
+        <tr><td class="label">6. Passport nomor & berlaku s.d tanggal</td><td>: <?= $tka->passport_no ?> s/d <?= $tka->passport_expiry ? date('d-m-Y', strtotime($tka->passport_expiry)) : '-' ?></td></tr>
+        <tr><td class="label">7. KITAS/NIORA</td><td>: <?= $tka->kitas_no ?? '-' ?></td></tr>
+        <tr><td class="label">8. Nomor dan Tanggal RPTKA</td><td>: <?= $tka->rptka_no ?> <?= $tka->rptka_date ? date('d-m-Y', strtotime($tka->rptka_date)) : '' ?></td></tr>
+        <tr><td class="label">9. Nomor dan Tanggal Notifikasi</td><td>: <?= $tka->notifikasi_no ?> <?= $tka->notifikasi_date ? date('d-m-Y', strtotime($tka->notifikasi_date)) : '' ?></td></tr>
+        <tr><td class="label">10. Jenis Notifikasi</td><td>: <?= $tka->jenis_notifikasi ?? '-' ?></td></tr>
+        <tr><td class="label">11. Masa Berlaku Notifikasi</td><td>: <?= $tka->masa_berlaku_notifikasi ?? '-' ?></td></tr>
+        <tr><td class="label">12. Lunas DKP - TKA</td><td>: <?= $tka->lunas_dkp ?? '-' ?></td></tr>
+        <tr><td class="label">13. Lokasi Kerja</td><td>: <?= $tka->lokasi_kerja ?? '-' ?></td></tr>
+        <tr><td class="label">14. Alamat Sekarang (Tinggal)</td><td>: <?= nl2br(htmlspecialchars($tka->alamat_tinggal ?? '-')) ?></td></tr>
+        <tr><td class="label">15. Nama Perusahaan</td><td>: <?= htmlspecialchars($user->perusahaan) ?></td></tr>
+        <tr><td class="label">16. Bidang Usaha/Industri</td><td>: <?= $tka->bidang_usaha ?? '-' ?></td></tr>
+        <tr><td class="label">17. Alamat Perusahaan</td><td>: <?= nl2br(htmlspecialchars($user->alamat)) ?></td></tr>
+    </tbody>
+</table>
+<!-- ============================================= -->
+
+<p>Bahwa yang bersangkutan telah melaporkan keberadaannya pada Dinas Tenaga Kerja Kota Bekasi sesuai dengan Peraturan Daerah Kota Bekasi Nomor 11 Tahun 2024 tentang Penyelenggaraan Ketenagakerjaan Pasal 55 ayat (2) "Pengguna TKA wajib melaporkan keberadaannya kepada Dinas".</p>
+<p>Demikian Surat Keterangan ini dibuat untuk dipergunakan sebagaimana mestinya.</p>
+
+<div class="ttd">
+    <p>Bekasi, <?= $tanggal_surat ?></p>
+    <p>Pit. Kepala Dinas Tenaga Kerja,</p>
+    <br><br>
+    <p><strong>Dr. Ika Indah Yarti, M.Si.</strong><br>Pembina Utama Muda / IV.c<br>NIP. 19670114 198610 2001</p>
+</div>
+
+<div class="footer">
+    Tembusan:<br>
+    1. Wali Kota Bekasi<br>
+    2. Wakil Wali Kota Bekasi<br>
+    3. Sekretaris Daerah Kota Bekasi<br>
+    4. Pit. Inspektur Kota Bekasi<br>
+    5. Kepala Badan Kesatuan Bangsa dan Politik Kota Bekasi
+</div>
+</body>
+</html>
