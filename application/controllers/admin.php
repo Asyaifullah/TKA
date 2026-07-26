@@ -943,8 +943,8 @@ class Admin extends CI_Controller
     if (!$tka) show_404();
 
     // Validasi input
-    $this->form_validation->set_rules('passport_no', 'Nomor Passport', 'required|numeric');
-    $this->form_validation->set_rules('kitas_no', 'Nomor KITAS', 'required|numeric');
+    $this->form_validation->set_rules('passport_no', 'Nomor Passport', 'required');
+    $this->form_validation->set_rules('kitas_no', 'Nomor KITAS', 'required');
     $this->form_validation->set_rules('negara_asal', 'Kebangsaan', 'required');
     $this->form_validation->set_rules('jabatan', 'Jabatan', 'required');
     $this->form_validation->set_rules('tempat_lahir', 'Tempat Lahir', 'required');

@@ -319,12 +319,12 @@
 
             <?php if(empty($tka)): ?>
                 <div class="empty-state">
-                    <div class="empty-state-icon"><i class="fas fa-file-circle-plus"></i></div>
+                    <!--<div class="empty-state-icon"><i class="fas fa-file-circle-plus"></i></div>-->
                     <h4>Belum Ada Data TKA</h4>
                     <p>Mulai dengan mengupload data TKA baru untuk memulai proses pengajuan.</p>
-                    <a href="<?= base_url('user/upload') ?>" class="btn-primary" style="margin-top:12px;">
+                    <!--<a href="<?= base_url('user/upload') ?>" class="btn-primary" style="margin-top:12px;">
                         <i class="fas fa-plus"></i> Upload Sekarang
-                    </a>
+                    </a>-->
                 </div>
             <?php else: ?>
 

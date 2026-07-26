@@ -9,6 +9,10 @@ class Admin_log_model extends CI_Model {
     }
 
     public function add_log($data) {
+        // Kolom target_type & target_id NOT NULL di DB — beri default kalau kosong
+        $data['target_type'] = $data['target_type'] ?? 'system';
+        $data['target_id']   = $data['target_id'] ?? 0;
+
         $this->db->insert('admin_logs', $data);
         return $this->db->insert_id();
     }
@@ -23,4 +27,3 @@ class Admin_log_model extends CI_Model {
         return $this->db->count_all('admin_logs');
     }
 }
-?>

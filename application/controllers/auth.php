@@ -129,7 +129,7 @@ class Auth extends CI_Controller {
 
         $this->form_validation->set_rules('nama', 'Nama', 'required|trim');
         $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[users.email]|trim');
-        $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]|callback_password_check');
+        $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
         $this->form_validation->set_rules('perusahaan', 'Perusahaan', 'required|trim');
         $this->form_validation->set_rules('alamat', 'Alamat', 'required|trim');
         $this->form_validation->set_rules('no_hp', 'No HP', 'required|numeric|trim');
@@ -171,14 +171,6 @@ class Auth extends CI_Controller {
         redirect('auth/otp_form');
     }
 
-    public function password_check($str) {
-        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $str)) {
-            $this->form_validation->set_message('password_check', 'Password harus minimal 8 karakter, mengandung huruf besar, huruf kecil, angka, dan simbol (@$!%*?&).');
-            return FALSE;
-        }
-
-        return TRUE;
-    }
 
     public function otp_form() {
         if (!$this->session->userdata('temp_registration')) {
@@ -374,7 +366,7 @@ class Auth extends CI_Controller {
             redirect('auth/forgot_password');
         }
 
-        $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]|callback_password_check');
+        $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
         $this->form_validation->set_rules('confirm_password', 'Konfirmasi Password', 'required|matches[password]');
 
         if ($this->form_validation->run() == FALSE) {

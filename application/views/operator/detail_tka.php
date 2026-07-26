@@ -524,18 +524,18 @@
                     </a>
 
                     <!-- Tombol Edit Data TKA -->
-                    <a href="<?= base_url('operator/edit_tka/'.$tka->id) ?>" class="btn-secondary" style="justify-content:center;">
+                    <!--<a href="<?= base_url('operator/edit_tka/'.$tka->id) ?>" class="btn-secondary" style="justify-content:center;">
                         <i class="fas fa-pen"></i> Edit Data TKA
-                    </a>
+                    </a>-->
 
                     <!-- Tombol Hapus Pengajuan -->
-                    <div style="margin-top:4px;padding-top:12px;border-top:1px solid var(--c-border);">
+                    <!--<div style="margin-top:4px;padding-top:12px;border-top:1px solid var(--c-border);">
                         <a href="<?= base_url('operator/delete_tka/'.$tka->id) ?>"
                            class="btn-xs bx-delete" style="width:100%;justify-content:center;padding:7px 0;"
                            onclick="return confirm('Yakin hapus data TKA ini? Semua file akan dihapus.')">
                             <i class="fas fa-trash"></i> Hapus Pengajuan
                         </a>
-                    </div>
+                    </div>-->
 
                 </div>
             </div>

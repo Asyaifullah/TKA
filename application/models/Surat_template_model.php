@@ -12,8 +12,18 @@ class Surat_template_model extends CI_Model {
         return $this->db->where('id', 1)->get('surat_template')->row();
     }
 
-    public function update_template($data) {
-        $this->db->where('id', 1)->update('surat_template', $data);
+    public function update_template($data)
+    {
+        // Cek apakah sudah ada baris data di tabel surat_template
+        $cek_data = $this->db->get('surat_template')->num_rows();
+
+        if ($cek_data > 0) {
+            // Jika sudah ada isinya, lakukan UPDATE
+            return $this->db->update('surat_template', $data);
+        } else {
+            // Jika tabel masih benar-benar kosong, lakukan INSERT
+            return $this->db->insert('surat_template', $data);
+        }
     }
 
     // ========== TAMBAHKAN DUA METHOD INI DI SINI ==========
@@ -25,5 +35,6 @@ class Surat_template_model extends CI_Model {
         $row = $this->db->where('id', 1)->get('surat_template')->row();
         return $row ? $row->ttd_path : null;
     }
+    
 }
 ?>

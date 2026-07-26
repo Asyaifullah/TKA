@@ -1,0 +1,267 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Admin extends CI_Controller
+{
+public function edit_nomor_surat(int $tka_id): void
+    {
+        $data['tka'] = $this->_get_tka_or_404($tka_id);
+        $this->load->view('admin/edit_nomor_surat', $data);
+    }
+
+    public function update_nomor_surat(int $tka_id): void
+    {
+        $tka = $this->_get_tka_or_404($tka_id);
+        $this->Tka_model->update($tka_id, [
+            'nomor_surat_keluar'     => $this->input->post('nomor_surat_keluar'),
+            'nomor_surat_permohonan' => $this->input->post('nomor_surat_permohonan'),
+            'surat_teks_approved'    => 1,
+        ]);
+        $this->Notification_model->add($tka->user_id, 'Nomor Surat Telah Ditentukan',
+            "Nomor surat untuk TKA {$tka->nama_tka} telah siap. Silakan download surat.",
+            base_url("user/detail/$tka_id"));
+        $this->session->set_flashdata('success', 'Nomor surat berhasil diupdate. User sekarang bisa download.');
+        redirect('admin/semua_tka');
+    }
+}
+
+
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Admin extends CI_Controller
+{
+public function process($id) {
+        $action  = $this->input->post('action');
+        $catatan = $this->input->post('catatan');
+
+        if(!in_array($action, ['approve', 'reject'])) {
+            show_error('Aksi tidak valid.');
+        }
+
+        $tka = $this->Tka_model->get_by_id($id);
+        if(!$tka) show_404();
+
+        $status_map = [
+            'kasi'   => 'MENUNGGU_KASI',
+            'kabid'  => 'MENUNGGU_KABID',
+            'sekdis' => 'MENUNGGU_SEKDIS',
+            'kadis'  => 'MENUNGGU_KADIS'
+        ];
+
+        if($tka->status != $status_map[$this->role]) {
+            $this->session->set_flashdata('error', 'Status TKA sudah berubah, tidak dapat diproses.');
+            redirect('approval/index');
+        }
+
+        if($action == 'approve') {
+            $role_to_level = ['kasi' => 1, 'kabid' => 2, 'sekdis' => 3, 'kadis' => 4];
+            $current_level = $role_to_level[$this->role] ?? 1;
+
+            switch($this->role) {
+                case 'kasi':   $next_status = 'MENUNGGU_KABID'; break;
+                case 'kabid':  $next_status = 'MENUNGGU_SEKDIS'; break;
+                case 'sekdis': $next_status = 'MENUNGGU_KADIS'; break;
+                case 'kadis':  $next_status = 'SELESAI'; break;
+                default:       $next_status = 'MENUNGGU_KASI'; break;
+            }
+
+            $update = $this->Tka_model->update_status($id, $next_status);
+            if(!$update) {
+                $this->session->set_flashdata('error', 'Gagal mengupdate status TKA (approve). Silakan coba lagi.');
+                redirect('approval/detail/'.$id);
+            }
+
+            if($next_status == 'SELESAI') {
+                $this->Tka_model->reset_estimasi($id);
+            }
+
+            // Catat log approval untuk level saat ini (approve)
+            $log_data = [
+                'tka_id'  => $id,
+                'role'    => $this->role,
+                'status'  => 'approve',
+                'catatan' => $catatan ?: null
+            ];
+            $insert_log = $this->Approval_log_model->insert($log_data);
+            if(!$insert_log) {
+                log_message('error', 'Gagal insert approval_log untuk TKA ID: '.$id);
+                $this->session->set_flashdata('warning', 'Status berhasil diubah, tetapi gagal mencatat log approval.');
+            }
+
+            // Buat log untuk level selanjutnya (jika belum selesai)
+            if($next_status != 'SELESAI') {
+                $next_level = $current_level + 1;
+                $this->Approval_log_model->insert_with_sla(
+                    $id,
+                    $next_level,
+                    $next_status,
+                    null,
+                    "Diteruskan dari " . $this->get_role_display()
+                );
+            }
+
+            $pesan_user = "Pengajuan TKA Anda (ID: {$id}) telah disetujui oleh {$this->get_role_display()} dan "
+                        . ($next_status == 'SELESAI' ? "telah selesai. Surat izin dapat diunduh setelah Nomor Surat Telah Ditentukan" : "diteruskan ke tahap berikutnya.");
+            $this->kirim_notifikasi($tka->user_id, $pesan_user, 'approval');
+
+            if($next_status != 'SELESAI') {
+                $next_role = array_search($next_status, $status_map);
+                $users_next = $this->db->where('role', $next_role)->get('users')->result();
+                foreach($users_next as $u) {
+                    $this->kirim_notifikasi($u->id, "Pengajuan TKA baru (ID: {$id}) menunggu persetujuan Anda.", 'info');
+                }
+            }
+
+            $msg = 'Berhasil approve pengajuan TKA.';
+
+        } else { // REJECT
+            if(trim($catatan) == '') {
+                $this->session->set_flashdata('error', 'Catatan penolakan wajib diisi.');
+                redirect('approval/detail/'.$id);
+            }
+
+            $update = $this->Tka_model->update_status($id, 'DITOLAK');
+            if(!$update) {
+                $this->session->set_flashdata('error', 'Gagal mengupdate status TKA (reject). Silakan coba lagi.');
+                redirect('approval/detail/'.$id);
+            }
+
+            $this->Tka_model->reset_estimasi($id);
+
+            $log_data = [
+                'tka_id'  => $id,
+                'role'    => $this->role,
+                'status'  => 'reject',
+                'catatan' => $catatan
+            ];
+            $insert_log = $this->Approval_log_model->insert($log_data);
+            if(!$insert_log) {
+                log_message('error', 'Gagal insert approval_log untuk TKA ID: '.$id);
+                $this->session->set_flashdata('warning', 'Pemberkasan ditolak, tetapi gagal mencatat log approval.');
+            }
+
+            $pesan_user = "Pengajuan TKA Anda (ID: {$id}) telah ditolak oleh {$this->get_role_display()}.\n"
+                        . "Alasan: " . $catatan . "\n"
+                        . "Silakan perbaiki dan kirim ulang pengajuan revisi.";
+            $this->kirim_notifikasi($tka->user_id, $pesan_user, 'reject');
+
+            $msg = 'Pengajuan TKA ditolak.';
+        }
+
+        // Catat ke admin_log
+        $admin_log = [
+            'admin_id'    => $this->session->userdata('user_id'),
+            'admin_name'  => $this->session->userdata('nama'),
+            'action'      => strtoupper($action),
+            'target_type' => 'tka',
+            'target_id'   => $id,
+            'description' => ucfirst($action) . ' pengajuan TKA ' . $tka->nama_tka . ' oleh ' . $this->role,
+            'ip_address'  => $this->input->ip_address()
+        ];
+        $this->Admin_log_model->add_log($admin_log);
+
+        $this->session->set_flashdata('success', $msg);
+        redirect('approval/index');
+    }
+}
+
+
+//<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Admin extends CI_Controller
+{
+    // ========== UPLOAD AWAL ==========
+    public function upload() {
+        $this->load->view('user/upload_tka');
+    }
+
+    public function do_upload() {
+        $this->form_validation->set_rules('nama_tka', 'Nama TKA', 'required');
+        if($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('error', validation_errors());
+            redirect('user/upload');
+        }
+
+        $tka_data = [
+            'user_id' => $this->session->userdata('user_id'),
+            'nama_tka' => $this->input->post('nama_tka'),
+            'status' => 'DRAFT'
+        ];
+        $tka_id = $this->Tka_model->insert($tka_data);
+        if(!$tka_id) {
+            $this->session->set_flashdata('error', 'Gagal menyimpan data TKA.');
+            redirect('user/upload');
+        }
+
+        $upload_path = './uploads/'.$tka_id.'/';
+        if(!is_dir($upload_path)) mkdir($upload_path, 0777, true);
+
+        $config['upload_path'] = $upload_path;
+        $config['max_size'] = 2048;
+        $config['file_ext_tolower'] = TRUE;
+        $this->load->library('upload');
+
+        $wajib_pdf_fields = ['surat_permohonan', 'passport', 'rptka', 'notifikasi', 'bukti_bayar', 'surat_kuasa', 'surat_wajib_lapor'];
+        $opsional_pdf_fields = ['kitas'];
+        $image_fields = ['ktp', 'foto'];
+        $upload_data = ['tka_id' => $tka_id];
+
+        // Upload PDF wajib
+        foreach($wajib_pdf_fields as $field) {
+            if(!isset($_FILES[$field]) || $_FILES[$field]['error'] != 0) {
+                $this->Tka_model->delete($tka_id);
+                $this->session->set_flashdata('error', "File $field wajib diupload.");
+                redirect('user/upload');
+            }
+            $config['allowed_types'] = 'pdf';
+            $config['file_name'] = $tka_id.'_'.$field.'_'.time();
+            $this->upload->initialize($config);
+            if($this->upload->do_upload($field)) {
+                $upload_data[$field] = $this->upload->data('file_name');
+            } else {
+                $this->Tka_model->delete($tka_id);
+                $this->session->set_flashdata('error', "Gagal upload $field: " . $this->upload->display_errors('', ''));
+                redirect('user/upload');
+            }
+        }
+
+        // Upload PDF opsional (KITAS)
+        foreach($opsional_pdf_fields as $field) {
+            if(isset($_FILES[$field]) && $_FILES[$field]['error'] == 0) {
+                $config['allowed_types'] = 'pdf';
+                $config['file_name'] = $tka_id.'_'.$field.'_'.time();
+                $this->upload->initialize($config);
+                if($this->upload->do_upload($field)) {
+                    $upload_data[$field] = $this->upload->data('file_name');
+                } else {
+                    $this->session->set_flashdata('warning', "Gagal upload $field (opsional): " . $this->upload->display_errors('', ''));
+                }
+            }
+        }
+
+        // Upload gambar wajib
+        foreach($image_fields as $field) {
+            if(!isset($_FILES[$field]) || $_FILES[$field]['error'] != 0) {
+                $this->Tka_model->delete($tka_id);
+                $this->session->set_flashdata('error', "File $field wajib diupload.");
+                redirect('user/upload');
+            }
+            $config['allowed_types'] = 'jpg|jpeg|png';
+            $config['file_name'] = $tka_id.'_'.$field.'_'.time();
+            $this->upload->initialize($config);
+            if($this->upload->do_upload($field)) {
+                $upload_data[$field] = $this->upload->data('file_name');
+            } else {
+                $this->Tka_model->delete($tka_id);
+                $this->session->set_flashdata('error', "Gagal upload $field: " . $this->upload->display_errors('', ''));
+                redirect('user/upload');
+            }
+        }
+
+        $this->Berkas_model->insert($upload_data);
+        $this->session->set_flashdata('success', 'Data TKA berhasil diupload. Silakan lengkapi data detail TKA.');
+        redirect('user/detail_form/'.$tka_id);
+    }
+}

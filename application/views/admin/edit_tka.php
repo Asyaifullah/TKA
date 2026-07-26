@@ -400,47 +400,46 @@
                         </div>
 
                         <!-- Kolom kanan: Dokumen -->
-                        <div>
+                       <div>
                             <div class="form-divider"><span>Dokumen Perjalanan</span></div>
+                            
                             <div class="fgroup">
                                 <label class="fl">Nomor Passport <span class="req">*</span></label>
                                 <input type="text" name="passport_no" class="f-input" required
-                                       value="<?= htmlspecialchars($tka->passport_no ?? '') ?>"
-                                       inputmode="numeric"
-                                       oninput="this.value=this.value.replace(/[^0-9]/g,'')"
-                                       placeholder="Hanya angka">
+                                    value="<?= htmlspecialchars($tka->passport_no ?? '') ?>"
+                                    placeholder="Contoh: A1234567">
                             </div>
+                            
                             <div class="fgroup">
                                 <label class="fl">Masa Berlaku Passport</label>
                                 <input type="date" name="passport_expiry" class="f-input"
-                                       value="<?= $tka->passport_expiry ?? '' ?>">
+                                    value="<?= $tka->passport_expiry ?? '' ?>">
                             </div>
+                            
                             <div class="fgroup">
                                 <label class="fl">Nomor KITAS <span class="req">*</span></label>
                                 <input type="text" name="kitas_no" class="f-input" required
-                                       value="<?= htmlspecialchars($tka->kitas_no ?? '') ?>"
-                                       inputmode="numeric"
-                                       oninput="this.value=this.value.replace(/[^0-9]/g,'')"
-                                       placeholder="Hanya angka">
+                                    value="<?= htmlspecialchars($tka->kitas_no ?? '') ?>"
+                                    placeholder="Masukkan Nomor KITAS (Angka/Huruf)">
                             </div>
+                            
                             <div class="fgroup">
                                 <label class="fl">Nomor STM</label>
                                 <input type="text" name="stm_no" class="f-input"
-                                       value="<?= htmlspecialchars($tka->stm_no ?? '') ?>"
-                                       inputmode="numeric"
-                                       oninput="this.value=this.value.replace(/[^0-9]/g,'')"
-                                       placeholder="Opsional">
+                                    value="<?= htmlspecialchars($tka->stm_no ?? '') ?>"
+                                    placeholder="Masukkan Nomor STM (Opsional)">
                             </div>
+                            
                             <div class="field-grid cols-12">
                                 <div class="fgroup">
                                     <label class="fl">Nomor RPTKA</label>
                                     <input type="text" name="rptka_no" class="f-input"
-                                           value="<?= htmlspecialchars($tka->rptka_no ?? '') ?>">
+                                        value="<?= htmlspecialchars($tka->rptka_no ?? '') ?>">
                                 </div>
                                 <div class="fgroup">
                                     <label class="fl">Tanggal RPTKA</label>
                                     <input type="date" name="rptka_date" class="f-input"
-                                           value="<?= $tka->rptka_date ?? '' ?>">
+                                        value="<?= $tka->rptka_date ?? '' ?>">
                                 </div>
                             </div>
                         </div>

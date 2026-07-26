@@ -649,7 +649,7 @@ select.form-input{
                     </div>
                     <div class="hint">
                         <i class="fas fa-circle-info"></i>
-                        Min. 8 karakter, huruf besar, huruf kecil, angka, dan simbol (@$!%*?&)
+                        Wajib minimal 8 karakter. Disarankan menggunakan kombinasi huruf besar, huruf kecil, angka, dan simbol (@$!%*?&) agar lebih aman.
                     </div>
                 </div>
 

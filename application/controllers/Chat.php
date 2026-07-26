@@ -45,7 +45,6 @@ class Chat extends CI_Controller {
     public function send() {
         if ($this->input->method() !== 'post') show_404();
 
-        $to = $this->input->post('to');
         $message = trim($this->input->post('message'));
 
         if (empty($message)) {
@@ -57,6 +56,30 @@ class Chat extends CI_Controller {
         }
 
         $from = $this->session->userdata('user_id');
+        $role = $this->session->userdata('role');
+        $to = $this->input->post('to');
+
+        // Pengamanan tambahan berdasarkan Role
+        if ($role == 'user') {
+            // Jika User yang chat, PASTIKAN pesan masuk ke Admin (biasanya ID Admin utama = 1)
+            $admin = $this->db->where('role', 'admin')->get('users')->row();
+            if ($admin) {
+                $to = $admin->id;
+            } else {
+                $to = 1; // Fallback jika query admin gagal
+            }
+        } else {
+            // Jika Admin yang chat, pastikan ada nilai "to" (ID perusahaan) yang dikirim dari JS
+            if (empty($to)) {
+                $this->output
+                    ->set_content_type('application/json')
+                    ->set_header('X-CSRF-Token: ' . $this->security->get_csrf_hash())
+                    ->set_output(json_encode(['status' => 'error', 'message' => 'Penerima tidak valid']));
+                return;
+            }
+        }
+
+        // Eksekusi Simpan Pesan
         $this->Chat_model->send_message($from, $to, $message);
 
         $this->output
