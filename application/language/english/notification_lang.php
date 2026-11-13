@@ -1,0 +1,36 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+$lang['notif_page_title'] = 'Notifications — SITLAKEB TKA';
+$lang['notif_breadcrumb'] = 'Notifications';
+$lang['notif_mark_all_confirm'] = 'Mark all notifications as read?';
+$lang['notif_mark_all'] = 'Mark All as Read';
+$lang['notif_heading'] = 'My Notifications';
+$lang['notif_subtitle'] = 'History of all notifications on your account';
+$lang['notif_history'] = 'Notification History';
+$lang['notif_unread_count'] = 'Unread';
+$lang['notif_empty_title'] = 'No Notifications Yet';
+$lang['notif_empty_message'] = 'You don\'t have any notifications yet.';
+$lang['notif_filter_all'] = 'All';
+$lang['notif_filter_unread'] = 'Unread';
+$lang['notif_filter_read'] = 'Read';
+$lang['notif_search_placeholder'] = 'Search notifications…';
+$lang['notif_col_number'] = '#';
+$lang['notif_col_status'] = 'Status';
+$lang['notif_col_title'] = 'Title';
+$lang['notif_col_message'] = 'Message';
+$lang['notif_col_time'] = 'Time';
+$lang['notif_col_action'] = 'Action';
+$lang['notif_status_unread'] = 'Unread';
+$lang['notif_status_read'] = 'Read';
+$lang['notif_mark_read'] = 'Mark as Read';
+$lang['notif_badge_new'] = 'New';
+$lang['notif_badge_read'] = 'Read';
+$lang['notif_show'] = 'Show';
+$lang['notif_per_page'] = 'per page';
+$lang['notif_no_match'] = 'No notifications match the search.';
+$lang['notif_showing'] = 'Showing';
+$lang['notif_of_notifs'] = 'notifications';
+$lang['notif_zero'] = '0 notifications';
+$lang['notif_flash_marked_all'] = 'All notifications have been marked as read.';
+$lang['notif_no_notif'] = 'No notifications';

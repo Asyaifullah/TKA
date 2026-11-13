@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="<?= current_lang() == 'indonesian' ? 'id' : 'en' ?>">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Daftar Perusahaan - SITLAKEB TKA</title>
+<title><?= $this->lang->line('auth_register_title') ?></title>
 
 <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -517,43 +517,53 @@ select.form-input{
         </div>
 
         <h1 class="brand-title">
-            SITLAKEB <span>TKA</span>
+            <?= $this->lang->line('auth_brand_name') ?>
         </h1>
 
         <p class="brand-subtitle">
-            Sistem Informasi Tenaga Kerja Asing<br>
-            Dinas Tenaga Kerja Kota Bekasi
+            <?= $this->lang->line('auth_brand_subtitle') ?><br>
+            <?= $this->lang->line('auth_brand_agency') ?>
         </p>
 
         <div class="feature-grid">
             <div class="feature-card">
                 <i class="fas fa-file-alt"></i>
-                <p>Pengajuan izin TKA online</p>
+                <p><?= $this->lang->line('auth_feature_1') ?></p>
             </div>
 
             <div class="feature-card">
                 <i class="fas fa-tasks"></i>
-                <p>Alur persetujuan terstruktur</p>
+                <p><?= $this->lang->line('auth_feature_2') ?></p>
             </div>
 
             <div class="feature-card">
                 <i class="fas fa-bell"></i>
-                <p>Notifikasi real-time pengajuan</p>
+                <p><?= $this->lang->line('auth_feature_3') ?></p>
             </div>
 
             <div class="feature-card">
                 <i class="fas fa-download"></i>
-                <p>Download surat keterangan digital</p>
+                <p><?= $this->lang->line('auth_feature_4') ?></p>
             </div>
         </div>
     </section>
 
     <section class="right-section">
+        <!-- Language Switcher -->
+        <div class="lang-switcher">
+            <a href="<?= lang_url('indonesian') ?>" class="<?= current_lang() == 'indonesian' ? 'active' : '' ?>">
+                <i class="fas fa-globe"></i> <?= $this->lang->line('lang_indonesian') ?>
+            </a>
+            <a href="<?= lang_url('english') ?>" class="<?= current_lang() == 'english' ? 'active' : '' ?>">
+                <i class="fas fa-globe"></i> <?= $this->lang->line('lang_english') ?>
+            </a>
+        </div>
+
         <div class="register-card">
 
             <div class="form-title">
-                <h2>Buat Akun Perusahaan</h2>
-                <p>Isi formulir di bawah untuk mendaftar</p>
+                <h2><?= $this->lang->line('auth_register_heading') ?></h2>
+                <p><?= $this->lang->line('auth_register_subtitle') ?></p>
             </div>
 
             <?php if($this->session->flashdata('error')): ?>
@@ -574,30 +584,30 @@ select.form-input{
                 <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>"
                        value="<?= $this->security->get_csrf_hash(); ?>">
 
-                <div class="section-title">Data Perusahaan</div>
+                <div class="section-title"><?= $this->lang->line('auth_company_data') ?></div>
 
                 <div class="field">
-                    <label>Nama Perusahaan <span class="req">*</span></label>
+                    <label><?= $this->lang->line('auth_company_name') ?> <span class="req">*</span></label>
                     <div class="input-wrap">
                         <i class="fas fa-building input-icon"></i>
                         <input type="text" name="perusahaan" class="form-input"
-                               placeholder="PT. Contoh Abadi"
+                               placeholder="<?= $this->lang->line('auth_company_placeholder') ?>"
                                value="<?= set_value('perusahaan') ?>" required>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label>Nama PIC (Penanggung Jawab) <span class="req">*</span></label>
+                    <label><?= $this->lang->line('auth_pic_name') ?> <span class="req">*</span></label>
                     <div class="input-wrap">
                         <i class="fas fa-user input-icon"></i>
                         <input type="text" name="nama" class="form-input"
-                               placeholder="Nama lengkap"
+                               placeholder="<?= $this->lang->line('auth_pic_placeholder') ?>"
                                value="<?= set_value('nama') ?>" required>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label>Nomor Handphone <span class="req">*</span></label>
+                    <label><?= $this->lang->line('auth_phone_label') ?> <span class="req">*</span></label>
                     <div class="input-wrap">
                         <i class="fas fa-phone input-icon"></i>
                         <input type="tel" name="no_hp" class="form-input"
@@ -610,38 +620,38 @@ select.form-input{
                     </div>
                     <div class="hint">
                         <i class="fas fa-circle-info"></i>
-                        Hanya angka, maksimal 13 digit
+                        <?= $this->lang->line('auth_phone_hint') ?>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label>Alamat Perusahaan <span class="req">*</span></label>
+                    <label><?= $this->lang->line('auth_address_label') ?> <span class="req">*</span></label>
                     <div class="input-wrap">
                         <i class="fas fa-map-marker-alt input-icon top"></i>
                         <textarea name="alamat" class="form-input"
-                                  placeholder="Jalan, Kelurahan, Kecamatan, Kota"
+                                  placeholder="<?= $this->lang->line('auth_address_placeholder') ?>"
                                   required><?= set_value('alamat') ?></textarea>
                     </div>
                 </div>
 
-                <div class="section-title">Akun Login</div>
+                <div class="section-title"><?= $this->lang->line('auth_account_login') ?></div>
 
                 <div class="field">
-                    <label>Email Perusahaan <span class="req">*</span></label>
+                    <label><?= $this->lang->line('auth_company_email') ?> <span class="req">*</span></label>
                     <div class="input-wrap">
                         <i class="fas fa-envelope input-icon"></i>
                         <input type="email" name="email" class="form-input"
-                               placeholder="email@perusahaan.com"
+                               placeholder="<?= $this->lang->line('auth_company_email_placeholder') ?>"
                                value="<?= set_value('email') ?>" required autocomplete="email">
                     </div>
                 </div>
 
                 <div class="field">
-                    <label>Password <span class="req">*</span></label>
+                    <label><?= $this->lang->line('auth_password') ?> <span class="req">*</span></label>
                     <div class="input-wrap">
                         <i class="fas fa-lock input-icon"></i>
                         <input type="password" name="password" id="password" class="form-input"
-                               placeholder="Minimal 8 karakter"
+                               placeholder="<?= $this->lang->line('auth_password_min') ?>"
                                required style="padding-right:44px;">
                         <button type="button" class="toggle-btn" onclick="togglePass('password', this)">
                             <i class="far fa-eye"></i>
@@ -649,48 +659,48 @@ select.form-input{
                     </div>
                     <div class="hint">
                         <i class="fas fa-circle-info"></i>
-                        Wajib minimal 8 karakter. Disarankan menggunakan kombinasi huruf besar, huruf kecil, angka, dan simbol (@$!%*?&) agar lebih aman.
+                        <?= $this->lang->line('auth_password_hint') ?>
                     </div>
                 </div>
 
-                <div class="section-title">Keamanan Akun</div>
+                <div class="section-title"><?= $this->lang->line('auth_account_security') ?></div>
 
                 <div class="field">
-                    <label>Pertanyaan Keamanan <span class="req">*</span></label>
+                    <label><?= $this->lang->line('auth_security_question') ?> <span class="req">*</span></label>
                     <div class="input-wrap">
                         <i class="fas fa-shield-halved input-icon"></i>
                         <select name="security_question" class="form-input" required>
-                            <option value="">— Pilih Pertanyaan —</option>
-                            <option value="Siapa nama ibu kandung Anda?">Siapa nama ibu kandung Anda?</option>
-                            <option value="Siapa nama hewan peliharaan pertama Anda?">Siapa nama hewan peliharaan pertama Anda?</option>
-                            <option value="Apa nama sekolah dasar Anda?">Apa nama sekolah dasar Anda?</option>
-                            <option value="Di kota mana Anda lahir?">Di kota mana Anda lahir?</option>
-                            <option value="Apa makanan favorit Anda?">Apa makanan favorit Anda?</option>
+                            <option value=""><?= $this->lang->line('auth_select_question') ?></option>
+                            <option value="Siapa nama ibu kandung Anda?"><?= $this->lang->line('auth_sq_mother') ?></option>
+                            <option value="Siapa nama hewan peliharaan pertama Anda?"><?= $this->lang->line('auth_sq_pet') ?></option>
+                            <option value="Apa nama sekolah dasar Anda?"><?= $this->lang->line('auth_sq_school') ?></option>
+                            <option value="Di kota mana Anda lahir?"><?= $this->lang->line('auth_sq_city') ?></option>
+                            <option value="Apa makanan favorit Anda?"><?= $this->lang->line('auth_sq_food') ?></option>
                         </select>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label>Jawaban Keamanan <span class="req">*</span></label>
+                    <label><?= $this->lang->line('auth_security_answer') ?> <span class="req">*</span></label>
                     <div class="input-wrap">
                         <i class="fas fa-key input-icon"></i>
                         <input type="text" name="security_answer" class="form-input"
-                               placeholder="Jawaban pertanyaan di atas" required>
+                               placeholder="<?= $this->lang->line('auth_security_answer_placeholder') ?>" required>
                     </div>
                     <div class="hint">
                         <i class="fas fa-circle-info"></i>
-                        Gunakan huruf kecil saat reset password nanti
+                        <?= $this->lang->line('auth_security_hint') ?>
                     </div>
                 </div>
 
                 <button type="submit" class="btn-submit">
                     <i class="fas fa-user-plus" style="font-size:13px; margin-right:8px;"></i>
-                    Daftar Sekarang
+                    <?= $this->lang->line('auth_btn_register') ?>
                 </button>
             </form>
 
             <div class="form-footer">
-                Sudah punya akun? <a href="<?= base_url('auth/login') ?>">Login di sini</a>
+                <?= $this->lang->line('auth_has_account') ?> <a href="<?= base_url('auth/login') ?>"><?= $this->lang->line('auth_login_link') ?></a>
             </div>
 
         </div>
@@ -735,12 +745,16 @@ function updateAccessInfo(){
         hour12: false
     };
 
-    const dateText = now.toLocaleDateString('id-ID', dateOptions);
-    const dayText = now.toLocaleDateString('id-ID', dayOptions);
-    const timeText = now.toLocaleTimeString('id-ID', timeOptions);
+    const locale = '<?= current_lang() == "english" ? "en-US" : "id-ID" ?>';
 
-    document.getElementById('current-date').innerHTML = dayText + ', ' + dateText;
-    document.getElementById('current-time').innerHTML = timeText + ' WIB';
+    const dateText = now.toLocaleDateString(locale, dateOptions);
+    const dayText = now.toLocaleDateString(locale, dayOptions);
+    const timeText = now.toLocaleTimeString(locale, timeOptions);
+
+    const dateEl = document.getElementById('current-date');
+    const timeEl = document.getElementById('current-time');
+    if(dateEl) dateEl.innerHTML = dayText + ', ' + dateText;
+    if(timeEl) timeEl.innerHTML = timeText + ' <?= $this->lang->line("auth_wib") ?>';
 }
 
 // Eksekusi fungsi waktu

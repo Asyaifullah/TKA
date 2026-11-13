@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="<?= current_lang() == 'indonesian' ? 'id' : 'en' ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard — <?= $role_display ?></title>
+    <title><?= $this->lang->line('dash_appr_title') ?> — <?= $role_display ?></title>
     <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/shared.css') ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -418,9 +418,9 @@
         <div class="topnav-breadcrumb">
             <a href="#" style="color:var(--c-text-muted); text-decoration:none;"><i class="fas fa-home"></i></a>
             <i class="fas fa-chevron-right" style="font-size:8px;"></i>
-            <span style="color:var(--c-text-muted);">Approval</span>
+            <span style="color:var(--c-text-muted);"><?= $this->lang->line('sidebar_approval') ?></span>
             <i class="fas fa-chevron-right" style="font-size:8px;"></i>
-            <strong>Dashboard</strong>
+            <strong><?= $this->lang->line('sidebar_dashboard') ?></strong>
         </div>
         <div class="topnav-actions">
             <div class="role-badge">
@@ -433,10 +433,10 @@
     <main class="page-content">
 
         <div class="page-header" style="margin-bottom:20px;">
-            <div class="page-title">Dashboard <?= $role_display ?></div>
+            <div class="page-title"><?= $this->lang->line('dash_appr_title') ?> <?= $role_display ?></div>
             <div class="page-subtitle">
-                Selamat datang, <strong><?= htmlspecialchars($this->session->userdata('nama')) ?></strong>.
-                Pantau dan proses pengajuan yang masuk ke antrian Anda.
+                <?= $this->lang->line('dash_appr_welcome') ?> <strong><?= htmlspecialchars($this->session->userdata('nama')) ?></strong>.
+                <?= $this->lang->line('dash_appr_subtitle') ?>
             </div>
         </div>
 
@@ -445,21 +445,21 @@
             <div class="astat astat-pending">
                 <div class="astat-icon"><i class="fas fa-hourglass-half"></i></div>
                 <div class="astat-body">
-                    <div class="astat-label">Menunggu Proses</div>
+                    <div class="astat-label"><?= $this->lang->line('dash_appr_pending') ?></div>
                     <div class="astat-value" id="totalPending"><?= $total_pending ?></div>
                 </div>
             </div>
             <div class="astat astat-approve">
                 <div class="astat-icon"><i class="fas fa-check-circle"></i></div>
                 <div class="astat-body">
-                    <div class="astat-label">Disetujui</div>
+                    <div class="astat-label"><?= $this->lang->line('dash_appr_approved') ?></div>
                     <div class="astat-value" id="totalApproved"><?= $total_approved ?></div>
                 </div>
             </div>
             <div class="astat astat-reject">
                 <div class="astat-icon"><i class="fas fa-times-circle"></i></div>
                 <div class="astat-body">
-                    <div class="astat-label">Ditolak</div>
+                    <div class="astat-label"><?= $this->lang->line('dash_appr_rejected') ?></div>
                     <div class="astat-value" id="totalRejected"><?= $total_rejected ?></div>
                 </div>
             </div>
@@ -472,10 +472,10 @@
                 <div class="chart-head">
                     <div class="chart-title">
                         <i class="fas fa-chart-bar"></i>
-                        Tren Pengajuan per Bulan
+                        <?= $this->lang->line('dash_appr_trend') ?>
                     </div>
                     <button class="btn-refresh" id="refreshChartBtn">
-                        <i class="fas fa-sync-alt"></i> Refresh
+                        <i class="fas fa-sync-alt"></i> <?= $this->lang->line('dash_appr_refresh') ?>
                     </button>
                 </div>
                 <div class="chart-body">
@@ -484,7 +484,7 @@
                     </div>
                     <div style="text-align:center; margin-top:10px; font-size:0.68rem; color:var(--c-text-muted);">
                         <i class="fas fa-hand-pointer" style="font-size:9px;"></i>
-                        Klik batang untuk detail bulan
+                        <?= $this->lang->line('dash_appr_click_bar') ?>
                     </div>
                 </div>
             </div>
@@ -493,7 +493,7 @@
                 <div class="chart-head">
                     <div class="chart-title">
                         <i class="fas fa-chart-pie"></i>
-                        Perbandingan Keputusan
+                        <?= $this->lang->line('dash_appr_comparison') ?>
                     </div>
                 </div>
                 <div class="chart-body" style="align-items:center; justify-content:center;">
@@ -503,16 +503,16 @@
                     <div class="donut-legend">
                         <span class="donut-pill donut-pill-approve">
                             <span class="donut-dot" style="background:#10b981;"></span>
-                            Approve <?= $total_approved ?>
+                            <?= $this->lang->line('dash_appr_approved') ?> <?= $total_approved ?>
                         </span>
                         <span class="donut-pill donut-pill-reject">
                             <span class="donut-dot" style="background:#f43f5e;"></span>
-                            Reject <?= $total_rejected ?>
+                            <?= $this->lang->line('dash_appr_rejected') ?> <?= $total_rejected ?>
                         </span>
                     </div>
                     <div style="text-align:center; margin-top:8px; font-size:0.68rem; color:var(--c-text-muted);">
                         <i class="fas fa-hand-pointer" style="font-size:9px;"></i>
-                        Klik potongan untuk daftar
+                        <?= $this->lang->line('dash_appr_click_slice') ?>
                     </div>
                 </div>
             </div>
@@ -524,29 +524,29 @@
             <div class="table-head">
                 <div class="table-title">
                     <i class="fas fa-inbox"></i>
-                    Pengajuan Perlu Diproses
+                    <?= $this->lang->line('dash_appr_need_process') ?>
                 </div>
                 <?php if(!empty($recent_pending)): ?>
-                <span class="table-count"><?= count($recent_pending) ?> item</span>
+                <span class="table-count"><?= count($recent_pending) ?> <?= $this->lang->line('dash_appr_item') ?></span>
                 <?php endif; ?>
             </div>
 
             <?php if(empty($recent_pending)): ?>
                 <div class="empty-block">
                     <div class="empty-block-icon"><i class="fas fa-check-double"></i></div>
-                    <h4>Semua Beres!</h4>
-                    <p>Tidak ada pengajuan yang perlu diproses saat ini.</p>
+                    <h4><?= $this->lang->line('dash_appr_all_clear') ?></h4>
+                    <p><?= $this->lang->line('dash_appr_no_pending') ?></p>
                 </div>
             <?php else: ?>
                 <div class="table-wrap">
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th class="cell-no">#</th>
-                                <th>Perusahaan</th>
-                                <th>Nama TKA</th>
-                                <th>Tanggal Pengajuan</th>
-                                <th style="width:110px; text-align:center;">Aksi</th>
+                                <th class="cell-no"><?= $this->lang->line('tka_col_number') ?></th>
+                                <th><?= $this->lang->line('dash_company') ?></th>
+                                <th><?= $this->lang->line('tka_col_name') ?></th>
+                                <th><?= $this->lang->line('dash_appr_submission_date') ?></th>
+                                <th style="width:110px; text-align:center;"><?= $this->lang->line('tka_col_action') ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -566,7 +566,7 @@
                                 </td>
                                 <td class="cell-action" data-label="Aksi" style="text-align:center;">
                                     <a href="<?= base_url('approval/detail/'.$t->id) ?>" class="btn-proses">
-                                        <i class="fas fa-eye"></i> Proses
+                                        <i class="fas fa-eye"></i> <?= $this->lang->line('dash_appr_btn_process') ?>
                                     </a>
                                 </td>
                             </tr>
@@ -607,7 +607,7 @@ const total     = pieData[0] + pieData[1];
         data: {
             labels: barLabels,
             datasets: [{
-                label: 'Pengajuan',
+                label: '<?= $this->lang->line('dash_appr_chart_label') ?>',
                 data: barData,
                 backgroundColor: grad,
                 borderColor: '#1a6b52',
@@ -700,7 +700,7 @@ const total     = pieData[0] + pieData[1];
     pieChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ['Disetujui', 'Ditolak'],
+            labels: ['<?= $this->lang->line('dash_appr_approved') ?>', '<?= $this->lang->line('dash_appr_rejected') ?>'],
             datasets: [{
                 data: pieData,
                 backgroundColor: ['#10b981', '#f43f5e'],

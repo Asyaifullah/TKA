@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class User extends CI_Controller {
+class User extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -18,7 +18,7 @@ class User extends CI_Controller {
     }
 
     public function do_upload() {
-        $this->form_validation->set_rules('nama_tka', 'Nama TKA', 'required');
+        $this->form_validation->set_rules('nama_tka', $this->lang->line('val_field_nama_tka'), 'required');
         if($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', validation_errors());
             redirect('user/upload');
@@ -31,7 +31,7 @@ class User extends CI_Controller {
         ];
         $tka_id = $this->Tka_model->insert($tka_data);
         if(!$tka_id) {
-            $this->session->set_flashdata('error', 'Gagal menyimpan data TKA.');
+            $this->session->set_flashdata('error', $this->lang->line('common_operation_failed'));
             redirect('user/upload');
         }
 
@@ -52,7 +52,7 @@ class User extends CI_Controller {
         foreach($wajib_pdf_fields as $field) {
             if(!isset($_FILES[$field]) || $_FILES[$field]['error'] != 0) {
                 $this->Tka_model->delete($tka_id);
-                $this->session->set_flashdata('error', "File $field wajib diupload.");
+                $this->session->set_flashdata('error', sprintf($this->lang->line('user_flash_file_required'), $field));
                 redirect('user/upload');
             }
             $config['allowed_types'] = 'pdf';
@@ -62,7 +62,7 @@ class User extends CI_Controller {
                 $upload_data[$field] = $this->upload->data('file_name');
             } else {
                 $this->Tka_model->delete($tka_id);
-                $this->session->set_flashdata('error', "Gagal upload $field: " . $this->upload->display_errors('', ''));
+                $this->session->set_flashdata('error', sprintf($this->lang->line('user_flash_upload_failed_msg'), $field, $this->upload->display_errors('', '')));
                 redirect('user/upload');
             }
         }
@@ -76,7 +76,7 @@ class User extends CI_Controller {
                 if($this->upload->do_upload($field)) {
                     $upload_data[$field] = $this->upload->data('file_name');
                 } else {
-                    $this->session->set_flashdata('warning', "Gagal upload $field (opsional): " . $this->upload->display_errors('', ''));
+                    $this->session->set_flashdata('warning', sprintf($this->lang->line('user_flash_upload_failed_msg'), $field . ' (opsional)', $this->upload->display_errors('', '')));
                 }
             }
         }
@@ -85,7 +85,7 @@ class User extends CI_Controller {
         foreach($image_fields as $field) {
             if(!isset($_FILES[$field]) || $_FILES[$field]['error'] != 0) {
                 $this->Tka_model->delete($tka_id);
-                $this->session->set_flashdata('error', "File $field wajib diupload.");
+                $this->session->set_flashdata('error', sprintf($this->lang->line('user_flash_file_required'), $field));
                 redirect('user/upload');
             }
             $config['allowed_types'] = 'jpg|jpeg|png';
@@ -95,13 +95,13 @@ class User extends CI_Controller {
                 $upload_data[$field] = $this->upload->data('file_name');
             } else {
                 $this->Tka_model->delete($tka_id);
-                $this->session->set_flashdata('error', "Gagal upload $field: " . $this->upload->display_errors('', ''));
+                $this->session->set_flashdata('error', sprintf($this->lang->line('user_flash_upload_failed_msg'), $field, $this->upload->display_errors('', '')));
                 redirect('user/upload');
             }
         }
 
         $this->Berkas_model->insert($upload_data);
-        $this->session->set_flashdata('success', 'Data TKA berhasil diupload. Silakan lengkapi data detail TKA.');
+        $this->session->set_flashdata('success', $this->lang->line('user_flash_upload_success'));
         redirect('user/detail_form/'.$tka_id);
     }
 
@@ -111,7 +111,7 @@ class User extends CI_Controller {
         $list = $this->Tka_model->get_by_user($user_id);
         foreach($list as $t) {
             if ($t->status == 'DRAFT') {
-                $t->stage_label = 'Data Belum Lengkap';
+                $t->stage_label = $this->lang->line('tka_data_incomplete') ?? 'Data Belum Lengkap';
                 $t->stage_color = 'secondary';
             } else {
                 $stage = $this->Tka_model->get_approval_stage($t->status);
@@ -141,7 +141,7 @@ class User extends CI_Controller {
         $tka = $this->Tka_model->get_by_id($id);
         if(!$tka || $tka->user_id != $this->session->userdata('user_id')) show_404();
         if($tka->status != 'DRAFT') {
-            $this->session->set_flashdata('error', 'Data detail sudah diisi atau pengajuan sudah diproses.');
+            $this->session->set_flashdata('error', $this->lang->line('user_flash_detail_filled'));
             redirect('user/data_tka');
         }
         $data['tka'] = $tka;
@@ -153,20 +153,20 @@ class User extends CI_Controller {
         $tka = $this->Tka_model->get_by_id($id);
         if(!$tka || $tka->user_id != $this->session->userdata('user_id')) show_404();
         if($tka->status != 'DRAFT') {
-            $this->session->set_flashdata('error', 'Data detail sudah diisi.');
+            $this->session->set_flashdata('error', $this->lang->line('user_flash_detail_filled'));
             redirect('user/data_tka');
         }
 
-        $this->form_validation->set_rules('passport_no', 'Nomor Passport', 'required');
-        $this->form_validation->set_rules('kitas_no', 'Nomor KITAS', 'required');
-        $this->form_validation->set_rules('negara_asal', 'Kebangsaan', 'required');
-        $this->form_validation->set_rules('jabatan', 'Jabatan', 'required');
-        $this->form_validation->set_rules('tempat_lahir', 'Tempat Lahir', 'required');
-        $this->form_validation->set_rules('tanggal_lahir', 'Tanggal Lahir', 'required');
-        $this->form_validation->set_rules('jenis_kelamin', 'Jenis Kelamin', 'required');
-        $this->form_validation->set_rules('jenis_notifikasi', 'Jenis Notifikasi', 'required');
-        $this->form_validation->set_rules('lunas_dkp', 'Lunas DKP', 'required');
-        $this->form_validation->set_rules('bidang_usaha', 'Bidang Usaha', 'required');
+        $this->form_validation->set_rules('passport_no', $this->lang->line('tka_passport_no') ?? 'Nomor Passport', 'required');
+        $this->form_validation->set_rules('kitas_no', $this->lang->line('tka_kitas_no') ?? 'Nomor KITAS', 'required');
+        $this->form_validation->set_rules('negara_asal', $this->lang->line('tka_negara_asal') ?? 'Kebangsaan', 'required');
+        $this->form_validation->set_rules('jabatan', $this->lang->line('tka_jabatan') ?? 'Jabatan', 'required');
+        $this->form_validation->set_rules('tempat_lahir', $this->lang->line('tka_tempat_lahir') ?? 'Tempat Lahir', 'required');
+        $this->form_validation->set_rules('tanggal_lahir', $this->lang->line('tka_tanggal_lahir') ?? 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('jenis_kelamin', $this->lang->line('tka_jenis_kelamin') ?? 'Jenis Kelamin', 'required');
+        $this->form_validation->set_rules('jenis_notifikasi', $this->lang->line('tka_jenis_notifikasi') ?? 'Jenis Notifikasi', 'required');
+        $this->form_validation->set_rules('lunas_dkp', $this->lang->line('tka_lunas_dkp') ?? 'Lunas DKP', 'required');
+        $this->form_validation->set_rules('bidang_usaha', $this->lang->line('tka_bidang_usaha') ?? 'Bidang Usaha', 'required');
 
         if($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', validation_errors());
@@ -198,11 +198,11 @@ class User extends CI_Controller {
         if($this->Tka_model->update_detail($id, $data)) {
             $this->Tka_model->update_status($id, 'MENUNGGU_KASI');
             $this->Approval_log_model->insert_with_sla(
-                $id, 1, 'MENUNGGU_KASI', null, 'Pengajuan baru oleh perusahaan'
+                $id, 1, 'MENUNGGU_KASI', null, $this->lang->line('tka_log_new_submission') ?? 'Pengajuan baru oleh perusahaan'
             );
-            $this->session->set_flashdata('success', 'Data detail berhasil disimpan. Pengajuan masuk ke antrian verifikasi.');
+            $this->session->set_flashdata('success', $this->lang->line('user_flash_detail_saved'));
         } else {
-            $this->session->set_flashdata('error', 'Gagal menyimpan data detail.');
+            $this->session->set_flashdata('error', $this->lang->line('common_operation_failed'));
         }
         redirect('user/data_tka');
     }
@@ -212,11 +212,11 @@ class User extends CI_Controller {
         $tka = $this->Tka_model->get_by_id($id);
         if(!$tka || $tka->user_id != $this->session->userdata('user_id')) show_404();
         if($tka->status != 'DITOLAK') {
-            $this->session->set_flashdata('error', 'Pengajuan tidak dalam status ditolak.');
+            $this->session->set_flashdata('error', $this->lang->line('user_flash_not_rejected'));
             redirect('user/data_tka');
         }
         $this->Tka_model->update_status($id, 'DRAFT');
-        $this->session->set_flashdata('info', 'Silakan perbaiki data sesuai catatan penolakan, lalu simpan kembali.');
+        $this->session->set_flashdata('info', $this->lang->line('user_flash_fix_rejected'));
         redirect('user/edit_tka/'.$id);
     }
 
@@ -234,11 +234,11 @@ class User extends CI_Controller {
         $tka = $this->Tka_model->get_by_id($id);
         if(!$tka || $tka->user_id != $this->session->userdata('user_id')) show_404();
         if(!in_array($tka->status, ['DRAFT', 'MENUNGGU_KASI'])) {
-            $this->session->set_flashdata('error', 'Data tidak dapat diubah karena pengajuan sudah diproses lebih lanjut.');
+            $this->session->set_flashdata('error', $this->lang->line('user_flash_cannot_edit'));
             redirect('user/data_tka');
         }
 
-        $this->form_validation->set_rules('nama_tka', 'Nama TKA', 'required');
+        $this->form_validation->set_rules('nama_tka', $this->lang->line('val_field_nama_tka'), 'required');
         if($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', validation_errors());
             redirect('user/edit_tka/'.$id);
@@ -273,11 +273,11 @@ class User extends CI_Controller {
         if($last_reject && $tka->status == 'DRAFT') {
             $this->Tka_model->update_status($id, 'MENUNGGU_KASI');
             $this->Approval_log_model->insert_with_sla(
-                $id, 1, 'MENUNGGU_KASI', null, 'Perbaikan setelah penolakan oleh ' . $last_reject->role
+                $id, 1, 'MENUNGGU_KASI', null, ($this->lang->line('tka_log_revision') ?? 'Perbaikan setelah penolakan oleh ') . $last_reject->role
             );
-            $this->session->set_flashdata('success', 'Data berhasil diperbaiki dan dikirim ulang ke antrian verifikasi.');
+            $this->session->set_flashdata('success', $this->lang->line('user_flash_repaired'));
         } else {
-            $this->session->set_flashdata('success', 'Data TKA berhasil diupdate.');
+            $this->session->set_flashdata('success', $this->lang->line('user_flash_tka_updated'));
         }
         redirect('user/data_tka');
     }
@@ -285,12 +285,12 @@ class User extends CI_Controller {
     // ========== HAPUS TKA ==========
     public function delete_tka($id) {
         $tka = $this->Tka_model->get_by_id($id);
-        if (!$tka) show_error('Data TKA tidak ditemukan.');
-        if ($tka->status != 'DRAFT') show_error('Data tidak dapat dihapus karena sudah diverifikasi atau dalam proses.');
+        if (!$tka) show_error($this->lang->line('common_data_not_found'));
+        if ($tka->status != 'DRAFT') show_error($this->lang->line('user_flash_cannot_delete'));
         $folder = FCPATH . 'uploads/' . $id;
         if (is_dir($folder)) $this->delete_directory($folder);
         $this->Tka_model->delete($id);
-        $this->session->set_flashdata('success', 'Data TKA berhasil dihapus.');
+        $this->session->set_flashdata('success', $this->lang->line('user_flash_tka_deleted'));
         redirect('user/data_tka');
     }
 
@@ -312,7 +312,7 @@ class User extends CI_Controller {
         $tka = $this->Tka_model->get_by_id($id);
         if(!$tka || $tka->user_id != $this->session->userdata('user_id')) show_404();
         if(!in_array($tka->status, ['DRAFT','MENUNGGU_KASI'])) {
-            $this->session->set_flashdata('error', 'Tidak dapat mengganti berkas karena pengajuan sudah diproses lebih lanjut.');
+            $this->session->set_flashdata('error', $this->lang->line('user_flash_cannot_replace_file'));
             redirect('user/edit_tka/'.$id);
         }
 
@@ -345,16 +345,16 @@ class User extends CI_Controller {
                     $this->Berkas_model->update_field($id, $field, $file_name);
                     $updated = true;
                 } else {
-                    $this->session->set_flashdata('error', "Gagal upload $field: " . $this->upload->display_errors('', ''));
+                    $this->session->set_flashdata('error', sprintf($this->lang->line('user_flash_upload_failed_msg'), $field, $this->upload->display_errors('', '')));
                     redirect('user/edit_tka/'.$id);
                 }
             }
         }
 
         if($updated) {
-            $this->session->set_flashdata('success', 'Berkas berhasil diganti.');
+            $this->session->set_flashdata('success', $this->lang->line('user_flash_file_replaced'));
         } else {
-            $this->session->set_flashdata('info', 'Tidak ada file yang dipilih untuk diganti.');
+            $this->session->set_flashdata('info', $this->lang->line('user_flash_no_file_selected'));
         }
         redirect('user/edit_tka/'.$id);
     }
@@ -395,7 +395,7 @@ class User extends CI_Controller {
         $this->load->model('Notification_model');
         $user_id = $this->session->userdata('user_id');
         $this->Notification_model->mark_all_read($user_id);
-        $this->session->set_flashdata('success', 'Semua notifikasi telah ditandai sudah dibaca.');
+        $this->session->set_flashdata('success', $this->lang->line('user_flash_notif_read'));
         redirect('user/notifications');
     }
 
@@ -404,11 +404,11 @@ class User extends CI_Controller {
         $tka = $this->Tka_model->get_by_id($id);
         if (!$tka) show_404();
         if ($tka->status != 'SELESAI') {
-            $this->session->set_flashdata('error', 'Surat hanya dapat diunduh jika status sudah SELESAI.');
+            $this->session->set_flashdata('error', $this->lang->line('user_flash_letter_status'));
             redirect('user/data_tka');
         }
         if ($tka->surat_teks_approved != 1) {
-            $this->session->set_flashdata('error', 'Surat belum disetujui oleh admin.');
+            $this->session->set_flashdata('error', $this->lang->line('user_flash_letter_not_approved'));
             redirect('user/data_tka');
         }
 
@@ -496,9 +496,9 @@ class User extends CI_Controller {
     }
 
     public function change_password() {
-        $this->form_validation->set_rules('current_password', 'Password Saat Ini', 'required');
-        $this->form_validation->set_rules('new_password', 'Password Baru', 'required|min_length[6]');
-        $this->form_validation->set_rules('confirm_password', 'Konfirmasi Password', 'required|matches[new_password]');
+        $this->form_validation->set_rules('current_password', $this->lang->line('user_current_pw') ?? 'Password Saat Ini', 'required');
+        $this->form_validation->set_rules('new_password', $this->lang->line('user_new_pw') ?? 'Password Baru', 'required|min_length[6]');
+        $this->form_validation->set_rules('confirm_password', $this->lang->line('user_confirm_pw') ?? 'Konfirmasi Password', 'required|matches[new_password]');
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', validation_errors());
@@ -508,13 +508,13 @@ class User extends CI_Controller {
         $user_id = $this->session->userdata('user_id');
         $user = $this->User_model->get_by_id($user_id);
         if (!password_verify($this->input->post('current_password'), $user->password)) {
-            $this->session->set_flashdata('error', 'Password saat ini salah.');
+            $this->session->set_flashdata('error', $this->lang->line('user_flash_password_wrong'));
             redirect('user/profile');
         }
 
         $new_password = password_hash($this->input->post('new_password'), PASSWORD_DEFAULT);
         $this->User_model->update_password($user_id, $new_password);
-        $this->session->set_flashdata('success', 'Password berhasil diubah.');
+        $this->session->set_flashdata('success', $this->lang->line('user_flash_password_changed'));
         redirect('user/profile');
     }
 
@@ -527,7 +527,7 @@ class User extends CI_Controller {
         'alamat'      => $this->input->post('alamat'),
     ];
     $this->User_model->update($this->session->userdata('user_id'), $data);
-    $this->session->set_flashdata('success', 'Profil berhasil diperbarui.');
+    $this->session->set_flashdata('success', $this->lang->line('user_flash_profile_updated'));
     redirect('user/profile');
     }
 }

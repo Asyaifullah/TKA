@@ -516,7 +516,7 @@ function adm_is_active($uri)
         <img src="<?= base_url('assets/images/logo_kota_bekasi.png') ?>" alt="Logo Bekasi">
         <div class="sb-logo-text">
             <div class="sb-logo-title">SITLAKEB TKA</div>
-            <div class="sb-logo-sub">Disnaker Kota Bekasi</div>
+            <div class="sb-logo-sub"><?= lang_line('sidebar_disnaker') ?></div>
         </div>
     </a>
 
@@ -526,7 +526,7 @@ function adm_is_active($uri)
             <div class="sb-role-icon"><i class="fas fa-user-shield"></i></div>
             <div class="sb-role-info">
                 <div class="sb-role-name"><?= htmlspecialchars($nama_admin) ?></div>
-                <div class="sb-role-label">Admin</div>
+                <div class="sb-role-label"><?= lang_line('sidebar_admin_label') ?></div>
             </div>
         </div>
     </div>
@@ -536,103 +536,103 @@ function adm_is_active($uri)
         <!-- Dashboard -->
         <a href="<?= base_url('dashboard') ?>"
            class="sb-link <?= adm_is_active('dashboard') ?>"
-           data-tooltip="Dashboard">
+           data-tooltip="<?= lang_line('sidebar_dashboard') ?>">
             <div class="sb-icon"><i class="fas fa-tachometer-alt"></i></div>
-            <span>Dashboard</span>
+            <span><?= lang_line('sidebar_dashboard') ?></span>
         </a>
         <hr class="sb-divider">
 
         <!-- Section: Instansi -->
         <div class="sb-section" data-section="instansi">
-            <div class="sb-heading">Instansi<span class="sb-icon-dot"></span></div>
+            <div class="sb-heading"><?= lang_line('sidebar_instansi') ?><span class="sb-icon-dot"></span></div>
             <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="sb-section-group" data-group="instansi">
             <a href="<?= base_url('admin/manage_officers') ?>"
                class="sb-link <?= adm_is_active('admin/manage_officers') ?>"
-               data-tooltip="Manajemen Petugas">
+               data-tooltip="<?= lang_line('sidebar_officer_mgmt') ?>">
                 <div class="sb-icon"><i class="fas fa-users-gear"></i></div>
-                <span>Manajemen Petugas</span>
+                <span><?= lang_line('sidebar_officer_mgmt') ?></span>
             </a>
             <a href="<?= base_url('admin/upload_ttd') ?>"
                class="sb-link <?= adm_is_active('admin/upload_ttd') ?>"
-               data-tooltip="Pengaturan Surat & TTD">
+               data-tooltip="<?= lang_line('sidebar_letter_settings') ?>">
                 <div class="sb-icon"><i class="fas fa-stamp"></i></div>
-                <span>Pengaturan Surat & TTD</span>
+                <span><?= lang_line('sidebar_letter_settings') ?></span>
             </a>
             <a href="<?= base_url('admin/sla') ?>"
                class="sb-link <?= adm_is_active('admin/sla') ?>"
-               data-tooltip="Pengaturan SLA">
+               data-tooltip="<?= lang_line('sidebar_sla_settings') ?>">
                 <div class="sb-icon"><i class="fas fa-clock"></i></div>
-                <span>Pengaturan SLA</span>
+                <span><?= lang_line('sidebar_sla_settings') ?></span>
             </a>
         </div>
 
         <!-- Section: Perusahaan -->
         <div class="sb-section" data-section="perusahaan">
-            <div class="sb-heading">Perusahaan<span class="sb-icon-dot"></span></div>
+            <div class="sb-heading"><?= lang_line('sidebar_perusahaan') ?><span class="sb-icon-dot"></span></div>
             <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="sb-section-group" data-group="perusahaan">
             <a href="<?= base_url('admin/manage_users') ?>"
                class="sb-link <?= adm_is_active('admin/manage_users') ?>"
-               data-tooltip="Manajemen Perusahaan">
+               data-tooltip="<?= lang_line('sidebar_company_mgmt') ?>">
                 <div class="sb-icon"><i class="fas fa-users-cog"></i></div>
-                <span>Manajemen Perusahaan</span>
+                <span><?= lang_line('sidebar_company_mgmt') ?></span>
             </a>
             <a href="<?= base_url('admin/perusahaan') ?>"
                class="sb-link <?= adm_is_active('admin/perusahaan') ?>"
-               data-tooltip="Daftar Perusahaan">
+               data-tooltip="<?= lang_line('sidebar_company_list') ?>">
                 <div class="sb-icon"><i class="fas fa-building"></i></div>
-                <span>Daftar Perusahaan</span>
+                <span><?= lang_line('sidebar_company_list') ?></span>
             </a>
             <a href="<?= base_url('admin/semua_tka') ?>"
                class="sb-link <?= adm_is_active('admin/semua_tka') ?>"
-               data-tooltip="Semua TKA">
+               data-tooltip="<?= lang_line('sidebar_all_tka') ?>">
                 <div class="sb-icon"><i class="fas fa-id-badge"></i></div>
-                <span>Semua TKA</span>
+                <span><?= lang_line('sidebar_all_tka') ?></span>
             </a>
         </div>
 
         <!-- Section: Komunikasi -->
         <div class="sb-section" data-section="komunikasi">
-            <div class="sb-heading">Komunikasi<span class="sb-icon-dot"></span></div>
+            <div class="sb-heading"><?= lang_line('sidebar_communication') ?><span class="sb-icon-dot"></span></div>
             <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="sb-section-group" data-group="komunikasi">
             <a href="<?= base_url('admin/kirim_notifikasi') ?>"
                class="sb-link <?= adm_is_active('admin/kirim_notifikasi') ?>"
-               data-tooltip="Kirim Notifikasi">
+               data-tooltip="<?= lang_line('sidebar_send_notif') ?>">
                 <div class="sb-icon"><i class="fas fa-paper-plane"></i></div>
-                <span>Kirim Notifikasi</span>
+                <span><?= lang_line('sidebar_send_notif') ?></span>
             </a>
             <a href="<?= base_url('chat') ?>"
                class="sb-link <?= adm_is_active('chat') ?>"
-               data-tooltip="Chat Perusahaan"
+               data-tooltip="<?= lang_line('sidebar_chat_company') ?>"
                style="position: relative;">
                 <div class="sb-icon"><i class="fas fa-comment-dots"></i></div>
-                <span>Chat Perusahaan</span>
+                <span><?= lang_line('sidebar_chat_company') ?></span>
                 <span id="chatBadge" class="sb-badge" style="display: none;">0</span>
             </a>
         </div>
 
         <!-- Section: Lainnya -->
         <div class="sb-section" data-section="lainnya">
-            <div class="sb-heading">Lainnya<span class="sb-icon-dot"></span></div>
+            <div class="sb-heading"><?= lang_line('sidebar_others') ?><span class="sb-icon-dot"></span></div>
             <div class="toggle-icon"><i class="fas fa-chevron-down"></i></div>
         </div>
         <div class="sb-section-group" data-group="lainnya">
             <a href="<?= base_url('admin/laporan') ?>"
                class="sb-link <?= adm_is_active('admin/laporan') ?>"
-               data-tooltip="Laporan Bulanan">
+               data-tooltip="<?= lang_line('sidebar_monthly_report') ?>">
                 <div class="sb-icon"><i class="fas fa-chart-line"></i></div>
-                <span>Laporan Bulanan</span>
+                <span><?= lang_line('sidebar_monthly_report') ?></span>
             </a>
             <a href="<?= base_url('admin/logs') ?>"
                class="sb-link <?= adm_is_active('admin/logs') ?>"
-               data-tooltip="Log Aktivitas">
+               data-tooltip="<?= lang_line('sidebar_activity_log') ?>">
                 <div class="sb-icon"><i class="fas fa-scroll"></i></div>
-                <span>Log Aktivitas</span>
+                <span><?= lang_line('sidebar_activity_log') ?></span>
             </a>
         </div>
 
@@ -640,10 +640,10 @@ function adm_is_active($uri)
 
         <a href="<?= base_url('auth/logout') ?>"
            class="sb-link sb-logout"
-           data-tooltip="Logout"
-           onclick="return confirm('Yakin ingin keluar?')">
+           data-tooltip="<?= lang_line('sidebar_logout') ?>"
+           onclick="return confirm('<?= lang_line('common_confirm_logout') ?? 'Yakin ingin keluar?' ?>')">
             <div class="sb-icon"><i class="fas fa-right-from-bracket"></i></div>
-            <span>Logout</span>
+            <span><?= lang_line('sidebar_logout') ?></span>
         </a>
     </div>
 
@@ -651,8 +651,20 @@ function adm_is_active($uri)
     <div class="sb-toggle">
         <button class="sb-toggle-btn" id="adminSidebarToggle">
             <div class="sb-toggle-icon"><i class="fas fa-chevron-left" id="adminToggleChevron"></i></div>
-            <span>Tutup Sidebar</span>
+            <span><?= lang_line('sidebar_close') ?></span>
         </button>
+    </div>
+
+    <!-- Language Switcher -->
+    <div style="padding: 12px 18px; border-top: 1px solid rgba(255,255,255,0.08); margin-top: auto;">
+        <div style="display:flex; gap:4px; background:rgba(255,255,255,0.06); border-radius:8px; padding:3px;">
+            <a href="<?= lang_url('indonesian') ?>" style="flex:1; text-align:center; padding:6px 0; border-radius:6px; font-size:11px; font-weight:600; text-decoration:none; transition:all 0.2s; <?= current_lang() == 'indonesian' ? 'background:rgba(255,255,255,0.15); color:#000;' : 'color:rgba(0,0,0,0.5);' ?>">
+                🇮🇩 ID
+            </a>
+            <a href="<?= lang_url('english') ?>" style="flex:1; text-align:center; padding:6px 0; border-radius:6px; font-size:11px; font-weight:600; text-decoration:none; transition:all 0.2s; <?= current_lang() == 'english' ? 'background:rgba(255,255,255,0.15); color:#000;' : 'color:rgba(0,0,0,0.5);' ?>">
+                🇬🇧 EN
+            </a>
+        </div>
     </div>
 </nav>
 

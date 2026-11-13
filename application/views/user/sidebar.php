@@ -299,7 +299,7 @@ function usr_active($uri) {
         <img src="<?= base_url('assets/images/logo_kota_bekasi.png') ?>" alt="Logo Bekasi">
         <div class="sb-brand-text">
             <span class="sb-brand-name">SITLAKEB TKA</span>
-            <span class="sb-brand-sub">DISNAKER KOTA BEKASI</span>
+            <span class="sb-brand-sub"><?= lang_line('sidebar_disnaker') ?></span>
         </div>
     </a>
 
@@ -315,47 +315,47 @@ function usr_active($uri) {
 
         <a class="sb-link <?= usr_active('dashboard') ?>" href="<?= base_url('dashboard') ?>">
             <span class="sb-icon"><i class="fas fa-home"></i></span>
-            <span class="sb-label">Dashboard</span>
+            <span class="sb-label"><?= lang_line('sidebar_dashboard') ?></span>
         </a>
 
         <div class="sb-divider"></div>
-        <div class="sb-section">Pengajuan TKA</div>
+        <div class="sb-section"><?= lang_line('sidebar_tka_submission') ?></div>
 
         <a class="sb-link <?= usr_active('user/data_tka') ?>" href="<?= base_url('user/data_tka') ?>">
             <span class="sb-icon"><i class="fas fa-layer-group"></i></span>
-            <span class="sb-label">Data TKA</span>
+            <span class="sb-label"><?= lang_line('sidebar_data_tka') ?></span>
         </a>
 
         <div class="sb-divider"></div>
-        <div class="sb-section">Komunikasi</div>
+        <div class="sb-section"><?= lang_line('sidebar_communication') ?? 'Komunikasi' ?></div>
 
         <a class="sb-link <?= usr_active('chat') ?>" href="<?= base_url('chat') ?>" style="position:relative;">
             <span class="sb-icon"><i class="fas fa-comment-dots"></i></span>
-            <span class="sb-label">Chat Admin</span>
+            <span class="sb-label"><?= lang_line('sidebar_chat_admin') ?></span>
             <span id="chatBadge" class="sb-badge" style="display:none;">0</span>
         </a>
         <a class="sb-link <?= usr_active('user/notifications') ?>" href="<?= base_url('user/notifications') ?>" style="position:relative;">
             <span class="sb-icon"><i class="fas fa-bell"></i></span>
-            <span class="sb-label">Notifikasi</span>
+            <span class="sb-label"><?= lang_line('sidebar_notification') ?></span>
             <span id="notifBadgeSidebar" class="sb-badge" style="display:none;">0</span>
         </a>
 
         <div class="sb-divider"></div>
-        <div class="sb-section">Akun</div>
+        <div class="sb-section"><?= lang_line('sidebar_account') ?></div>
 
         <a class="sb-link <?= usr_active('user/profile') ?>" href="<?= base_url('user/profile') ?>">
             <span class="sb-icon"><i class="fas fa-user-circle"></i></span>
-            <span class="sb-label">Profil Saya</span>
+            <span class="sb-label"><?= lang_line('sidebar_my_profile') ?></span>
         </a>
 
         <div class="sb-divider"></div>
 
         <a href="<?= base_url('auth/logout') ?>"
         class="sb-link sb-logout"
-        data-tooltip="Logout"
-        onclick="return confirm('Yakin ingin keluar?')">
+        data-tooltip="<?= lang_line('sidebar_logout') ?>"
+        onclick="return confirm('<?= lang_line('common_confirm_logout') ?? 'Yakin ingin keluar?' ?>')">
             <div class="sb-icon"><i class="fas fa-right-from-bracket"></i></div>
-            <span class="sb-label">Logout</span>
+            <span class="sb-label"><?= lang_line('sidebar_logout') ?></span>
         </a>
 
     </div>
@@ -363,10 +363,21 @@ function usr_active($uri) {
     <div class="sb-toggle">
         <button class="sb-toggle-btn" id="userSidebarToggle">
             <span class="sb-toggle-icon"><i class="fas fa-chevron-left"></i></span>
-            <span class="sb-toggle-label">Tutup Sidebar</span>
+            <span class="sb-toggle-label"><?= lang_line('sidebar_close') ?></span>
         </button>
     </div>
 
+    <!-- Language Switcher -->
+    <div style="padding: 12px 18px; border-top: 1px solid rgba(255,255,255,0.08); margin-top: auto;">
+        <div style="display:flex; gap:4px; background:rgba(255,255,255,0.06); border-radius:8px; padding:3px;">
+            <a href="<?= lang_url('indonesian') ?>" style="flex:1; text-align:center; padding:6px 0; border-radius:6px; font-size:11px; font-weight:600; text-decoration:none; transition:all 0.2s; <?= current_lang() == 'indonesian' ? 'background:rgba(0,0,0,0.05); color:#000;' : 'color:rgba(0,0,0,0.5);' ?>">
+                🇮🇩 ID
+            </a>
+            <a href="<?= lang_url('english') ?>" style="flex:1; text-align:center; padding:6px 0; border-radius:6px; font-size:11px; font-weight:600; text-decoration:none; transition:all 0.2s; <?= current_lang() == 'english' ? 'background:rgba(0,0,0,0.05); color:#000;' : 'color:rgba(0,0,0,0.5);' ?>">
+                🇬🇧 EN
+            </a>
+        </div>
+    </div>
 </nav>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -380,7 +391,7 @@ $(document).ready(function() {
 
     function applyCollapse(isCollapsed) {
         $sidebar.toggleClass('collapsed', isCollapsed);
-        $toggleLabel.text(isCollapsed ? 'Buka Sidebar' : 'Tutup Sidebar');
+        $toggleLabel.text(isCollapsed ? '<?= lang_line('sidebar_open') ?>' : '<?= lang_line('sidebar_close') ?>');
         localStorage.setItem('userSidebarCollapsed', isCollapsed ? '1' : '0');
     }
 
@@ -455,10 +466,10 @@ $(document).ready(function() {
                 var saved = localStorage.getItem('userSidebarCollapsed');
                 if (saved === '1') {
                     $sidebar.addClass('collapsed');
-                    $toggleLabel.text('Buka Sidebar');
+                    $toggleLabel.text('<?= lang_line('sidebar_open') ?>');
                 } else {
                     $sidebar.removeClass('collapsed');
-                    $toggleLabel.text('Tutup Sidebar');
+                    $toggleLabel.text('<?= lang_line('sidebar_close') ?>');
                 }
             } else {
                 ensureMobileElements();

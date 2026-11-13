@@ -4,11 +4,11 @@
 // ============================================================
 ?>
 <!DOCTYPE html>
-<html lang="id">
+<html lang="<?= current_lang() == 'indonesian' ? 'id' : 'en' ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data TKA — SITLAKEB TKA</title>
+    <title><?= $this->lang->line('tka_page_title') ?></title>
     <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -159,11 +159,11 @@
         <div class="topnav-breadcrumb">
             <a href="<?= base_url('dashboard') ?>" style="color:var(--c-text-muted); text-decoration:none;"><i class="fas fa-home"></i></a>
             <i class="fas fa-chevron-right" style="font-size:8px;"></i>
-            <strong>Data TKA</strong>
+            <strong><?= $this->lang->line('tka_breadcrumb') ?></strong>
         </div>
         <div class="topnav-actions">
             <a href="<?= base_url('user/upload') ?>" class="btn-primary" style="height:36px; padding:0 14px;">
-                <i class="fas fa-plus"></i> Upload Baru
+                <i class="fas fa-plus"></i> <?= $this->lang->line('tka_upload_new') ?>
             </a>
         </div>
     </header>
@@ -172,8 +172,8 @@
 
         <div class="page-header" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
             <div>
-                <div class="page-title">Data Pengajuan TKA</div>
-                <div class="page-subtitle">Semua data TKA yang telah diajukan oleh akun Anda</div>
+                <div class="page-title"><?= $this->lang->line('tka_page_heading') ?></div>
+                <div class="page-subtitle"><?= $this->lang->line('tka_page_subtitle') ?></div>
             </div>
         </div>
 
@@ -181,7 +181,7 @@
             <div class="surface-header">
                 <div class="surface-title">
                     <i class="fas fa-layer-group"></i>
-                    Daftar TKA
+                    <?= $this->lang->line('tka_list_title') ?>
                     <?php if(!empty($tka)): ?>
                         <span style="background:var(--c-primary-light); color:var(--c-primary); padding:2px 8px; border-radius:20px; font-size:0.68rem;">
                             <?= count($tka) ?>
@@ -190,28 +190,28 @@
                 </div>
                 <div class="search-wrap">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" class="search-input" id="searchInput" placeholder="Cari nama TKA…">
+                    <input type="text" class="search-input" id="searchInput" placeholder="<?= $this->lang->line('tka_search_placeholder') ?>">
                 </div>
             </div>
 
             <!-- Filter chips -->
             <?php if(!empty($tka)): ?>
             <div class="filter-chips">
-                <div class="chip active" data-filter="all">Semua</div>
-                <div class="chip" data-filter="DRAFT">Draft</div>
-                <div class="chip" data-filter="proses">Dalam Proses</div>
-                <div class="chip" data-filter="SELESAI">Selesai</div>
-                <div class="chip" data-filter="DITOLAK">Ditolak</div>
+                <div class="chip active" data-filter="all"><?= $this->lang->line('tka_filter_all') ?></div>
+                <div class="chip" data-filter="DRAFT"><?= $this->lang->line('tka_filter_draft') ?></div>
+                <div class="chip" data-filter="proses"><?= $this->lang->line('tka_filter_process') ?></div>
+                <div class="chip" data-filter="SELESAI"><?= $this->lang->line('tka_filter_done') ?></div>
+                <div class="chip" data-filter="DITOLAK"><?= $this->lang->line('tka_filter_rejected') ?></div>
             </div>
             <?php endif; ?>
 
             <?php if(empty($tka)): ?>
                 <div class="empty-state">
                     <div class="empty-state-icon"><i class="fas fa-folder-open"></i></div>
-                    <h4>Belum Ada Data TKA</h4>
-                    <p>Anda belum memiliki pengajuan TKA.<br>Mulai dengan upload data TKA baru.</p>
+                    <h4><?= $this->lang->line('tka_empty_title') ?></h4>
+                    <p><?= $this->lang->line('tka_empty_message') ?></p>
                     <a href="<?= base_url('user/upload') ?>" class="btn-primary">
-                        <i class="fas fa-plus"></i> Upload Sekarang
+                        <i class="fas fa-plus"></i> <?= $this->lang->line('tka_empty_action') ?>
                     </a>
                 </div>
             <?php else: ?>
@@ -227,13 +227,13 @@
                 'DITOLAK'         => 'pp-ditolak',
             ];
             $pp_label = [
-                'DRAFT'           => 'Belum Lengkap',
-                'MENUNGGU_KASI'   => 'Verifikasi Kasi',
-                'MENUNGGU_KABID'  => 'Verifikasi Kabid',
-                'MENUNGGU_SEKDIS' => 'Verifikasi Sekdis',
-                'MENUNGGU_KADIS'  => 'Verifikasi Kadis',
-                'SELESAI'         => 'Surat Terbit',
-                'DITOLAK'         => 'Ditolak',
+                'DRAFT'           => $this->lang->line('tka_progress_draft'),
+                'MENUNGGU_KASI'   => $this->lang->line('tka_progress_kasi'),
+                'MENUNGGU_KABID'  => $this->lang->line('tka_progress_kabid'),
+                'MENUNGGU_SEKDIS' => $this->lang->line('tka_progress_sekdis'),
+                'MENUNGGU_KADIS'  => $this->lang->line('tka_progress_kadis'),
+                'SELESAI'         => $this->lang->line('tka_progress_done'),
+                'DITOLAK'         => $this->lang->line('tka_progress_rejected'),
             ];
             $proses_statuses = ['MENUNGGU_KASI','MENUNGGU_KABID','MENUNGGU_SEKDIS','MENUNGGU_KADIS'];
             ?>
@@ -243,12 +243,12 @@
                     <table class="data-table" id="dataTkaTable">
                         <thead>
                             <tr>
-                                <th class="cell-no">#</th>
-                                <th>Nama TKA</th>
-                                <th>Status</th>
-                                <th>Progress</th>
-                                <th>Tanggal Pengajuan</th>
-                                <th>Aksi</th>
+                                <th class="cell-no"><?= $this->lang->line('tka_col_number') ?></th>
+                                <th><?= $this->lang->line('tka_col_name') ?></th>
+                                <th><?= $this->lang->line('tka_col_status') ?></th>
+                                <th><?= $this->lang->line('tka_col_progress') ?></th>
+                                <th><?= $this->lang->line('tka_col_date') ?></th>
+                                <th><?= $this->lang->line('tka_col_action') ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -258,46 +258,46 @@
                             ?>
                             <tr data-status="<?= $filterGroup ?>" data-name="<?= strtolower(htmlspecialchars($t->nama_tka)) ?>">
                                 <td class="cell-no"><?= $no++ ?></td>
-                                <td class="cell-name" data-label="Nama TKA"><?= htmlspecialchars($t->nama_tka) ?></td>
-                                <td data-label="Status">
+                                <td class="cell-name" data-label="<?= $this->lang->line('tka_col_name') ?>"><?= htmlspecialchars($t->nama_tka) ?></td>
+                                <td data-label="<?= $this->lang->line('tka_col_status') ?>">
                                     <?php if($t->status == 'DRAFT'): ?>
-                                        <span class="badge badge-draft"><span class="badge-dot" style="background:#94a3b8;"></span>Draft</span>
+                                        <span class="badge badge-draft"><span class="badge-dot" style="background:#94a3b8;"></span><?= $this->lang->line('tka_status_draft') ?></span>
                                     <?php elseif(in_array($t->status, $proses_statuses)): ?>
-                                        <span class="badge badge-proses"><span class="badge-dot" style="background:#3b82f6;"></span>Proses</span>
+                                        <span class="badge badge-proses"><span class="badge-dot" style="background:#3b82f6;"></span><?= $this->lang->line('tka_status_process') ?></span>
                                     <?php elseif($t->status == 'SELESAI'): ?>
-                                        <span class="badge badge-selesai"><span class="badge-dot" style="background:#10b981;"></span>Selesai</span>
+                                        <span class="badge badge-selesai"><span class="badge-dot" style="background:#10b981;"></span><?= $this->lang->line('tka_status_done') ?></span>
                                     <?php elseif($t->status == 'DITOLAK'): ?>
-                                        <span class="badge badge-ditolak"><span class="badge-dot" style="background:#f43f5e;"></span>Ditolak</span>
+                                        <span class="badge badge-ditolak"><span class="badge-dot" style="background:#f43f5e;"></span><?= $this->lang->line('tka_status_rejected') ?></span>
                                     <?php else: ?>
                                         <span class="badge badge-draft"><?= htmlspecialchars($t->status) ?></span>
                                     <?php endif; ?>
                                 </td>
-                                <td data-label="Progress">
+                                <td data-label="<?= $this->lang->line('tka_col_progress') ?>">
                                     <span class="progress-pill <?= $pp_map[$t->status] ?? 'pp-draft' ?>">
                                         <?= $pp_label[$t->status] ?? $t->status ?>
                                     </span>
                                 </td>
-                                <td data-label="Tanggal">
+                                <td data-label="<?= $this->lang->line('tka_col_date') ?>">
                                     <div class="cell-date-main"><?= date('d M Y', strtotime($t->created_at)) ?></div>
-                                    <div class="cell-date-sub"><?= date('H:i', strtotime($t->created_at)) ?> WIB</div>
+                                    <div class="cell-date-sub"><?= date('H:i', strtotime($t->created_at)) ?> <?= $this->lang->line('auth_wib') ?? 'WIB' ?></div>
                                 </td>
-                                <td class="cell-action" data-label="Aksi">
+                                <td class="cell-action" data-label="<?= $this->lang->line('tka_col_action') ?>">
                                     <div class="btn-row">
                                         <?php if($t->status == 'DRAFT'): ?>
-                                            <a href="<?= base_url('user/detail/'.$t->id) ?>" class="btn-xs bx-detail"><i class="fas fa-eye"></i> Detail</a>
-                                            <a href="<?= base_url('user/detail_form/'.$t->id) ?>" class="btn-xs bx-lengkapi"><i class="fas fa-pen-fancy"></i> Lengkapi</a>
-                                            <a href="<?= base_url('user/edit_tka/'.$t->id) ?>" class="btn-xs bx-ganti"><i class="fas fa-file-upload"></i> Ganti</a>
-                                            <a href="<?= base_url('user/delete_tka/'.$t->id) ?>" class="btn-xs bx-delete" onclick="return confirm('Yakin hapus data TKA ini?')"><i class="fas fa-trash-alt"></i></a>
+                                            <a href="<?= base_url('user/detail/'.$t->id) ?>" class="btn-xs bx-detail"><i class="fas fa-eye"></i> <?= $this->lang->line('tka_btn_detail') ?></a>
+                                            <a href="<?= base_url('user/detail_form/'.$t->id) ?>" class="btn-xs bx-lengkapi"><i class="fas fa-pen-fancy"></i> <?= $this->lang->line('tka_btn_complete') ?></a>
+                                            <a href="<?= base_url('user/edit_tka/'.$t->id) ?>" class="btn-xs bx-ganti"><i class="fas fa-file-upload"></i> <?= $this->lang->line('tka_btn_replace') ?></a>
+                                            <a href="<?= base_url('user/delete_tka/'.$t->id) ?>" class="btn-xs bx-delete" onclick="return confirm('<?= $this->lang->line('tka_confirm_delete') ?>')"><i class="fas fa-trash-alt"></i></a>
                                         <?php else: ?>
-                                            <a href="<?= base_url('user/detail/'.$t->id) ?>" class="btn-xs bx-detail"><i class="fas fa-eye"></i> Detail</a>
+                                            <a href="<?= base_url('user/detail/'.$t->id) ?>" class="btn-xs bx-detail"><i class="fas fa-eye"></i> <?= $this->lang->line('tka_btn_detail') ?></a>
                                             <?php if($t->status == 'MENUNGGU_KASI'): ?>
-                                                <a href="<?= base_url('user/edit_tka/'.$t->id) ?>" class="btn-xs bx-edit"><i class="fas fa-edit"></i> Edit</a>
+                                                <a href="<?= base_url('user/edit_tka/'.$t->id) ?>" class="btn-xs bx-edit"><i class="fas fa-edit"></i> <?= $this->lang->line('tka_btn_edit') ?></a>
                                             <?php endif; ?>
                                             <?php if($t->status == 'DITOLAK'): ?>
-                                                <a href="<?= base_url('user/perbaiki_tka/'.$t->id) ?>" class="btn-xs bx-edit"><i class="fas fa-wrench"></i> Perbaiki</a>
+                                                <a href="<?= base_url('user/perbaiki_tka/'.$t->id) ?>" class="btn-xs bx-edit"><i class="fas fa-wrench"></i> <?= $this->lang->line('tka_btn_fix') ?></a>
                                             <?php endif; ?>
                                             <?php if($t->status == 'SELESAI'): ?>
-                                                <a href="<?= base_url('user/download_surat_word/'.$t->id) ?>" class="btn-xs bx-surat" target="_blank"><i class="fas fa-download"></i> Surat</a>
+                                                <a href="<?= base_url('user/download_surat_word/'.$t->id) ?>" class="btn-xs bx-surat" target="_blank"><i class="fas fa-download"></i> <?= $this->lang->line('tka_btn_letter') ?></a>
                                             <?php endif; ?>
                                         <?php endif; ?>
                                     </div>
@@ -313,14 +313,14 @@
                     <div class="paging-info" id="pagingInfo">—</div>
                     <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
                         <div class="per-page-wrap">
-                            <span>Tampilkan</span>
+                            <span><?= $this->lang->line('tka_show') ?></span>
                             <select class="per-page-select" id="perPageSelect">
                                 <option value="10" selected>10</option>
                                 <option value="25">25</option>
                                 <option value="50">50</option>
                                 <option value="100">100</option>
                             </select>
-                            <span>per halaman</span>
+                            <span><?= $this->lang->line('tka_per_page') ?></span>
                         </div>
                         <div class="paging-controls" id="pagingControls"></div>
                     </div>
@@ -329,7 +329,7 @@
                 <!-- no-result -->
                 <div id="noResult" style="display:none; padding:40px; text-align:center; color:var(--c-text-muted); font-size:0.82rem;">
                     <i class="fas fa-search" style="font-size:1.5rem; margin-bottom:10px; display:block;"></i>
-                    Tidak ada data yang cocok.
+                    <?= $this->lang->line('tka_no_match') ?>
                 </div>
 
             <?php endif; ?>
@@ -341,6 +341,10 @@
 <?php $this->load->view('footer'); ?>
 
 <script>
+    var lang_tka_showing = "<?= $this->lang->line('tka_showing') ?>";
+    var lang_tka_of_submissions = "<?= $this->lang->line('tka_of_submissions') ?>";
+    var lang_tka_zero = "<?= $this->lang->line('tka_zero') ?>";
+
 // ─── Filter, Search, dan Pagination ─────────────────
 (function(){
     let perPage = 10;
@@ -381,8 +385,8 @@
         });
 
         pagingInfo.innerHTML = total > 0
-            ? 'Menampilkan <strong>' + (start+1) + '–' + end + '</strong> dari <strong>' + total + '</strong> pengajuan'
-            : '0 pengajuan';
+            ? lang_tka_showing + ' <strong>' + (start+1) + '–' + end + '</strong> dari <strong>' + total + '</strong> ' + lang_tka_of_submissions
+            : lang_tka_zero;
 
         renderPagingControls(totalPages);
     }

@@ -1,0 +1,34 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+$lang['val_field_nama'] = 'Nama';
+$lang['val_field_email'] = 'Email';
+$lang['val_field_password'] = 'Password';
+$lang['val_field_perusahaan'] = 'Perusahaan';
+$lang['val_field_alamat'] = 'Alamat';
+$lang['val_field_no_hp'] = 'No HP';
+$lang['val_field_security_question'] = 'Pertanyaan Keamanan';
+$lang['val_field_security_answer'] = 'Jawaban Keamanan';
+$lang['val_field_confirm_password'] = 'Konfirmasi Password';
+$lang['val_field_nama_pic'] = 'Nama PIC';
+$lang['val_field_role'] = 'Role';
+$lang['val_field_nip'] = 'NIP';
+$lang['val_field_nama_tka'] = 'Nama TKA';
+$lang['val_field_status'] = 'Status';
+$lang['val_field_send_mode'] = 'Mode';
+$lang['val_field_title'] = 'Judul';
+$lang['val_field_message'] = 'Pesan';
+$lang['val_field_passport_no'] = 'Nomor Passport';
+$lang['val_field_kitas_no'] = 'Nomor KITAS';
+$lang['val_field_negara_asal'] = 'Kebangsaan';
+$lang['val_field_jabatan'] = 'Jabatan';
+$lang['val_field_tempat_lahir'] = 'Tempat Lahir';
+$lang['val_field_tanggal_lahir'] = 'Tanggal Lahir';
+$lang['val_field_jenis_kelamin'] = 'Jenis Kelamin';
+$lang['val_field_jenis_notifikasi'] = 'Jenis Notifikasi';
+$lang['val_field_lunas_dkp'] = 'Lunas DKP';
+$lang['val_field_bidang_usaha'] = 'Bidang Usaha';
+$lang['val_field_current_password'] = 'Password Saat Ini';
+$lang['val_field_new_password'] = 'Password Baru';
+$lang['val_msg_numeric_phone'] = 'Nomor Handphone harus berupa angka.';
+$lang['val_msg_email_unique'] = 'Email sudah terdaftar.';

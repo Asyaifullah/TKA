@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Dashboard extends CI_Controller {
+class Dashboard extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -44,7 +44,7 @@ class Dashboard extends CI_Controller {
                 $bulan = date('n', strtotime($t->created_at));
                 $monthly[$bulan]++;
             }
-            $chart_labels = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+            $chart_labels = [$this->lang->line('month_jan'), $this->lang->line('month_feb'), $this->lang->line('month_mar'), $this->lang->line('month_apr'), $this->lang->line('month_mei'), $this->lang->line('month_jun'), $this->lang->line('month_jul'), $this->lang->line('month_agu'), $this->lang->line('month_sep'), $this->lang->line('month_okt'), $this->lang->line('month_nov'), $this->lang->line('month_des')];
             $chart_data = array_values($monthly);
             $status_data = [$proses, $selesai, $ditolak];
 

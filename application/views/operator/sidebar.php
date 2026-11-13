@@ -288,7 +288,7 @@ $op_nama = $ci->session->userdata('nama') ?? 'Operator';
         <img src="<?= base_url('assets/images/logo_bekasi.png') ?>" alt="Logo Bekasi">
         <div class="sb-logo-text">
             <div class="sb-logo-title">SITLAKEB TKA</div>
-            <div class="sb-logo-sub">Kota Bekasi</div>
+            <div class="sb-logo-sub"><?= lang_line('sidebar_disnaker') ?></div>
         </div>
     </a>
 
@@ -298,7 +298,7 @@ $op_nama = $ci->session->userdata('nama') ?? 'Operator';
             <div class="sb-role-icon"><i class="fas fa-headset"></i></div>
             <div class="sb-role-info">
                 <div class="sb-role-name"><?= htmlspecialchars($op_nama) ?></div>
-                <div class="sb-role-label">Operator</div>
+                <div class="sb-role-label"><?= lang_line('sidebar_operator_label') ?></div>
             </div>
         </div>
     </div>
@@ -309,9 +309,9 @@ $op_nama = $ci->session->userdata('nama') ?? 'Operator';
         <!-- Dashboard -->
         <a href="<?= base_url('operator/dashboard') ?>"
            class="sb-link <?= op_is_active('operator/dashboard') ?>"
-           data-tooltip="Dashboard">
+           data-tooltip="<?= lang_line('sidebar_dashboard') ?>">
             <div class="sb-icon"><i class="fas fa-gauge-high"></i></div>
-            <span>Dashboard</span>
+            <span><?= lang_line('sidebar_dashboard') ?></span>
         </a>
 
         <hr class="sb-divider">
@@ -319,26 +319,26 @@ $op_nama = $ci->session->userdata('nama') ?? 'Operator';
 
         <a href="<?= base_url('operator/semua_tka') ?>"
            class="sb-link <?= op_is_active('operator/semua_tka') ?>"
-           data-tooltip="Semua Pengajuan">
+           data-tooltip="<?= lang_line('sidebar_all_submissions') ?>">
             <div class="sb-icon"><i class="fas fa-file-alt"></i></div>
-            <span>Semua Pengajuan</span>
+            <span><?= lang_line('sidebar_all_submissions') ?></span>
         </a>
 
         <a href="<?= base_url('operator/kirim_notifikasi') ?>"
            class="sb-link <?= op_is_active('operator/kirim_notifikasi') ?>"
-           data-tooltip="Kirim Notifikasi">
+           data-tooltip="<?= lang_line('sidebar_send_notif') ?>">
             <div class="sb-icon"><i class="fas fa-bell"></i></div>
-            <span>Kirim Notifikasi</span>
+            <span><?= lang_line('sidebar_send_notif') ?></span>
         </a>
 
         <hr class="sb-divider">
 
         <a href="<?= base_url('auth/logout') ?>"
            class="sb-link sb-logout"
-           data-tooltip="Logout"
-           onclick="return confirm('Yakin ingin keluar?')">
+           data-tooltip="<?= lang_line('sidebar_logout') ?>"
+           onclick="return confirm('<?= lang_line('common_confirm_logout') ?? 'Yakin ingin keluar?' ?>')">
             <div class="sb-icon"><i class="fas fa-right-from-bracket"></i></div>
-            <span>Logout</span>
+            <span><?= lang_line('sidebar_logout') ?></span>
         </a>
 
     </div><!-- /sb-menu -->
@@ -349,8 +349,20 @@ $op_nama = $ci->session->userdata('nama') ?? 'Operator';
             <div class="sb-toggle-icon">
                 <i class="fas fa-chevron-left" id="opToggleChevron"></i>
             </div>
-            <span>Tutup Sidebar</span>
+            <span><?= lang_line('sidebar_close') ?></span>
         </button>
+    </div>
+
+    <!-- Language Switcher -->
+    <div style="padding: 12px 18px; border-top: 1px solid rgba(255,255,255,0.08); margin-top: auto;">
+        <div style="display:flex; gap:4px; background:rgba(255,255,255,0.06); border-radius:8px; padding:3px;">
+            <a href="<?= lang_url('indonesian') ?>" style="flex:1; text-align:center; padding:6px 0; border-radius:6px; font-size:11px; font-weight:600; text-decoration:none; transition:all 0.2s; <?= current_lang() == 'indonesian' ? 'background:rgba(0,0,0,0.05); color:#000;' : 'color:rgba(0,0,0,0.5);' ?>">
+                🇮🇩 ID
+            </a>
+            <a href="<?= lang_url('english') ?>" style="flex:1; text-align:center; padding:6px 0; border-radius:6px; font-size:11px; font-weight:600; text-decoration:none; transition:all 0.2s; <?= current_lang() == 'english' ? 'background:rgba(0,0,0,0.05); color:#000;' : 'color:rgba(0,0,0,0.5);' ?>">
+                🇬🇧 EN
+            </a>
+        </div>
     </div>
 
 </nav>

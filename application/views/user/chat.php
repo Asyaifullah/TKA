@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="<?= current_lang() == 'indonesian' ? 'id' : 'en' ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Chat Admin — SITLAKEB TKA</title>
+    <title><?= $this->lang->line('chat_title') ?? 'Chat Admin — SITLAKEB TKA' ?></title>
     <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -424,15 +424,15 @@
                 <i class="fas fa-home"></i>
             </a>
             <i class="fas fa-chevron-right" style="font-size:8px;"></i>
-            <strong>Chat Admin</strong>
+            <strong><?= $this->lang->line('chat_admin') ?? 'Chat Admin' ?></strong>
         </div>
     </header>
 
     <main class="page-content">
 
         <div class="page-header">
-            <div class="page-title">Chat Admin Support</div>
-            <div class="page-subtitle">Hubungi petugas Dinas Tenaga Kerja untuk bantuan</div>
+            <div class="page-title"><?= $this->lang->line('chat_admin_support') ?? 'Chat Admin Support' ?></div>
+            <div class="page-subtitle"><?= $this->lang->line('chat_subtitle') ?? 'Hubungi petugas Dinas Tenaga Kerja untuk bantuan' ?></div>
         </div>
 
         <div class="chat-surface">
@@ -443,11 +443,11 @@
                     <i class="fas fa-headset"></i>
                 </div>
                 <div class="chat-header-info">
-                    <h5>Admin Support</h5>
-                    <p>Dinas Tenaga Kerja Kota Bekasi</p>
+                    <h5><?= $this->lang->line('chat_admin_name') ?? 'Admin Support' ?></h5>
+                    <p><?= $this->lang->line('chat_admin_dept') ?? 'Dinas Tenaga Kerja Kota Bekasi' ?></p>
                 </div>
                 <div class="online-badge">
-                    <span class="online-dot"></span> Online
+                    <span class="online-dot"></span> <?= $this->lang->line('chat_online') ?? 'Online' ?>
                 </div>
             </div>
 
@@ -459,10 +459,10 @@
                 <?php if(empty($messages)): ?>
                 <div class="chat-empty" id="chatEmpty">
                     <i class="fas fa-comments"></i>
-                    <p>Belum ada pesan. Mulai percakapan!</p>
+                    <p><?= $this->lang->line('chat_empty_msg') ?? 'Belum ada pesan. Mulai percakapan!' ?></p>
                 </div>
                 <?php else: ?>
-                <div class="date-sep">Riwayat Percakapan</div>
+                <div class="date-sep"><?= $this->lang->line('chat_history') ?? 'Riwayat Percakapan' ?></div>
                 <?php foreach($messages as $msg):
                     $isOut = ($msg->from_user_id == $this->session->userdata('user_id'));
                 ?>
@@ -478,9 +478,9 @@
                             <?= date('H:i', strtotime($msg->created_at)) ?>
                             <?php if($isOut): ?>
                                 <?php if($msg->is_read_admin == 1): ?>
-                                    <i class="fas fa-check-double" style="color:var(--c-primary);" title="Dibaca"></i>
+                                    <i class="fas fa-check-double" style="color:var(--c-primary);" title="<?= $this->lang->line('chat_read') ?? 'Dibaca' ?>"></i>
                                 <?php else: ?>
-                                    <i class="fas fa-check" title="Terkirim"></i>
+                                    <i class="fas fa-check" title="<?= $this->lang->line('chat_sent') ?? 'Terkirim' ?>"></i>
                                 <?php endif; ?>
                             <?php endif; ?>
                         </div>
@@ -497,7 +497,7 @@
                 </div>
 
                 <!-- Sending indicator -->
-                <div class="sending-ind" id="sendingInd">Mengirim…</div>
+                <div class="sending-ind" id="sendingInd"><?= $this->lang->line('chat_sending') ?? 'Mengirim…' ?></div>
 
             </div><!-- /chat-messages -->
 
@@ -506,11 +506,11 @@
                 <input type="text"
                        id="msgInput"
                        class="chat-input"
-                       placeholder="Tulis pesan…"
+                       placeholder="<?= $this->lang->line('chat_placeholder') ?? 'Tulis pesan…' ?>"
                        autocomplete="off"
                        maxlength="1000"
                        enterkeyhint="send">
-                <button id="sendBtn" class="send-btn" title="Kirim" disabled>
+                <button id="sendBtn" class="send-btn" title="<?= $this->lang->line('chat_send_btn') ?? 'Kirim' ?>" disabled>
                     <i class="fas fa-paper-plane"></i>
                 </button>
             </div>
@@ -531,6 +531,8 @@
    - Halaman TIDAK scroll (overflow:hidden di html/body mobile)
    - Hanya #chatMessages yang overflow-y:auto
    - scrollToBottom() hanya panggil chatMessages.scrollTop
+   - Polling pakai SEQUENCE (setTimeout berantai), bukan setInterval,
+     supaya token CSRF tidak tabrakan antar request yang overlap.
 ============================================================ */
 (function () {
     var lastId    = <?= !empty($messages) ? end($messages)->id : 0 ?>;
@@ -538,6 +540,7 @@
     var myId      = <?= (int)$this->session->userdata('user_id') ?>;
     var sending   = false;
     var toastTimer;
+    var pollTimer = null;
 
     var el = {
         messages : document.getElementById('chatMessages'),
@@ -630,10 +633,10 @@
             if (msg.is_read_admin == 1) {
                 ick.className = 'fas fa-check-double';
                 ick.style.color = 'var(--c-primary)';
-                ick.title = 'Dibaca';
+                ick.title = '<?= $this->lang->line('chat_read') ?? 'Dibaca' ?>';
             } else {
                 ick.className = 'fas fa-check';
-                ick.title = 'Terkirim';
+                ick.title = '<?= $this->lang->line('chat_sent') ?? 'Terkirim' ?>';
             }
             meta.appendChild(ick);
         }
@@ -645,7 +648,7 @@
         return wrap;
     }
 
-    /* ── Poll pesan baru ───────────────────────────────────── */
+    /* ── Poll pesan baru (sequence, bukan interval) ───────── */
     function poll() {
         var c = csrf();
         var xhr = new XMLHttpRequest();
@@ -654,20 +657,36 @@
         xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
         xhr.onload = function() {
             updateCsrf(xhr);
-            if (xhr.status !== 200) return;
-            var msgs;
-            try { msgs = JSON.parse(xhr.responseText); } catch(e) { return; }
-            if (!msgs || !msgs.length) return;
 
-            var empty = document.getElementById('chatEmpty');
-            if (empty) empty.remove();
+            if (xhr.status === 403) {
+                // Token benar-benar kadaluarsa (misal tab lama dibuka lagi) → reload
+                showErr('<?= $this->lang->line('chat_err_session') ?? 'Sesi keamanan kedaluwarsa. Memuat ulang…' ?>');
+                setTimeout(function() { location.reload(); }, 2000);
+                return; // jangan jadwalkan poll lagi, halaman akan reload
+            }
 
-            var ref = document.getElementById('sendingInd');
-            msgs.forEach(function(m) {
-                el.messages.insertBefore(makeBubble(m), ref);
-                if (m.id > lastId) lastId = m.id;
-            });
-            scrollBottom();
+            if (xhr.status === 200) {
+                var msgs;
+                try { msgs = JSON.parse(xhr.responseText); } catch(e) { msgs = null; }
+                if (msgs && msgs.length) {
+                    var empty = document.getElementById('chatEmpty');
+                    if (empty) empty.remove();
+
+                    var ref = document.getElementById('sendingInd');
+                    msgs.forEach(function(m) {
+                        el.messages.insertBefore(makeBubble(m), ref);
+                        if (parseInt(m.id) > parseInt(lastId)) lastId = m.id;
+                    });
+                    scrollBottom();
+                }
+            }
+
+            // Jadwalkan poll berikutnya HANYA setelah request ini selesai
+            pollTimer = setTimeout(poll, 2000);
+        };
+        xhr.onerror = function() {
+            // Gagal koneksi → tetap coba lagi nanti, jangan berhenti total
+            pollTimer = setTimeout(poll, 3000);
         };
         xhr.send(encode({ last_id: lastId, partner_id: partnerId, [c.name]: c.token }));
     }
@@ -687,16 +706,19 @@
         xhr.onload = function() {
             updateCsrf(xhr);
             if (xhr.status === 403) {
-                showErr('Sesi keamanan kedaluwarsa. Memuat ulang…');
+                showErr('<?= $this->lang->line('chat_err_session') ?? 'Sesi keamanan kedaluwarsa. Memuat ulang…' ?>');
                 setTimeout(function() { location.reload(); }, 2000);
             } else {
                 var res;
                 try { res = JSON.parse(xhr.responseText); } catch(e) {}
                 if (res && res.status === 'success') {
                     el.input.value = '';
+                    // Batalkan timer poll yang sedang menunggu, lalu poll segera
+                    // (mencegah 2 siklus poll berjalan bersamaan)
+                    if (pollTimer) clearTimeout(pollTimer);
                     poll();
                 } else {
-                    showErr(res && res.message ? res.message : 'Gagal mengirim pesan.');
+                    showErr(res && res.message ? res.message : '<?= $this->lang->line('chat_err_send') ?? 'Gagal mengirim pesan.' ?>');
                 }
             }
             setSending(false);
@@ -704,7 +726,7 @@
         };
 
         xhr.onerror = function() {
-            showErr('Tidak ada koneksi internet.');
+            showErr('<?= $this->lang->line('chat_err_conn') ?? 'Tidak ada koneksi internet.' ?>');
             setSending(false);
         };
 
@@ -731,7 +753,7 @@
 
     /* ── Init ──────────────────────────────────────────────── */
     scrollBottom();
-    setInterval(poll, 2000);
+    pollTimer = setTimeout(poll, 1000); // mulai siklus, bukan setInterval lepas
 
 })();
 </script>

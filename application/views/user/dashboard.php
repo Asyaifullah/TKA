@@ -2,11 +2,11 @@
 // views/user/dashboard.php
 ?>
 <!DOCTYPE html>
-<html lang="id">
+<html lang="<?= current_lang() == 'indonesian' ? 'id' : 'en' ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard — SITLAKEB TKA</title>
+    <title><?= $this->lang->line('dash_user_title') ?></title>
     <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -230,16 +230,16 @@
     <header class="topnav">
         <div class="topnav-breadcrumb">
             <i class="fas fa-home"></i>
-            <strong>Dashboard</strong>
+            <strong><?= $this->lang->line('sidebar_dashboard') ?></strong>
         </div>
         <div class="topnav-actions">
             <div style="position:relative;">
-                <button class="topnav-btn" id="notifBell" title="Notifikasi">
+                <button class="topnav-btn" id="notifBell" title="<?= $this->lang->line('dash_notification') ?>">
                     <i class="fas fa-bell"></i>
                     <span class="topnav-badge" id="notifBadge" style="display:none;">0</span>
                 </button>
             </div>
-            <a href="<?= base_url('user/profile') ?>" class="topnav-btn" title="Profil">
+            <a href="<?= base_url('user/profile') ?>" class="topnav-btn" title="<?= $this->lang->line('dash_profile') ?>">
                 <i class="fas fa-user-circle"></i>
             </a>
         </div>
@@ -250,8 +250,8 @@
         <!-- Greeting Banner -->
         <div class="greeting-banner">
             <div class="greeting-text">
-                <h2>Selamat Datang, <?= htmlspecialchars($this->session->userdata('nama')) ?> 👋</h2>
-                <p>Pantau dan kelola pengajuan Tenaga Kerja Asing Anda dari sini.</p>
+                <h2><?= $this->lang->line('dash_user_welcome') ?> <?= htmlspecialchars($this->session->userdata('nama')) ?> 👋</h2>
+                <p><?= $this->lang->line('dash_user_subtitle') ?></p>
             </div>
             <div class="greeting-badge">
                 <div class="gb-date" id="gbDate"></div>
@@ -265,13 +265,13 @@
                 <i class="fas fa-triangle-exclamation"></i>
             </div>
             <div class="info-banner-body">
-                <h6>Perhatian Sebelum Upload Data TKA</h6>
+                <h6><?= $this->lang->line('dash_upload_notice_title') ?></h6>
                 <ul>
-                    <li>Periksa kembali semua data — pastikan tidak ada kesalahan ketik.</li>
-                    <li>Keaslian dokumen menjadi tanggung jawab perusahaan.</li>
-                    <li>File PDF dan gambar maksimal 2 MB, format sesuai ketentuan.</li>
-                    <li>Nama TKA harus sesuai paspor (huruf kapital).</li>
-                    <li>Setelah upload, data akan diverifikasi petugas. Pantau status di menu Data TKA.</li>
+                    <li><?= $this->lang->line('dash_upload_notice_1') ?></li>
+                    <li><?= $this->lang->line('dash_upload_notice_2') ?></li>
+                    <li><?= $this->lang->line('dash_upload_notice_3') ?></li>
+                    <li><?= $this->lang->line('dash_upload_notice_4') ?></li>
+                    <li><?= $this->lang->line('dash_upload_notice_5') ?></li>
                 </ul>
             </div>
         </div>
@@ -289,19 +289,19 @@
         <div class="stats-grid">
             <div class="stat-card sc-total">
                 <div class="stat-top"><div class="stat-icon"><i class="fas fa-file-alt"></i></div></div>
-                <div><div class="stat-label">Total Pengajuan</div><div class="stat-value"><?= $total ?></div></div>
+                <div><div class="stat-label"><?= $this->lang->line('dash_total_submissions') ?></div><div class="stat-value"><?= $total ?></div></div>
             </div>
             <div class="stat-card sc-proses">
                 <div class="stat-top"><div class="stat-icon"><i class="fas fa-hourglass-half"></i></div></div>
-                <div><div class="stat-label">Dalam Proses</div><div class="stat-value"><?= $proses ?></div></div>
+                <div><div class="stat-label"><?= $this->lang->line('dash_in_process') ?></div><div class="stat-value"><?= $proses ?></div></div>
             </div>
             <div class="stat-card sc-selesai">
                 <div class="stat-top"><div class="stat-icon"><i class="fas fa-check-circle"></i></div></div>
-                <div><div class="stat-label">Selesai</div><div class="stat-value"><?= $selesai ?></div></div>
+                <div><div class="stat-label"><?= $this->lang->line('dash_completed') ?></div><div class="stat-value"><?= $selesai ?></div></div>
             </div>
             <div class="stat-card sc-ditolak">
                 <div class="stat-top"><div class="stat-icon"><i class="fas fa-times-circle"></i></div></div>
-                <div><div class="stat-label">Ditolak</div><div class="stat-value"><?= $ditolak ?></div></div>
+                <div><div class="stat-label"><?= $this->lang->line('dash_rejected') ?></div><div class="stat-value"><?= $ditolak ?></div></div>
             </div>
         </div>
 
@@ -310,18 +310,18 @@
             <div class="surface-header">
                 <div class="surface-title">
                     <i class="fas fa-layer-group"></i>
-                    Daftar Pengajuan TKA
+                    <?= $this->lang->line('dash_submission_list') ?>
                 </div>
                 <a href="<?= base_url('user/upload') ?>" class="btn-primary">
-                    <i class="fas fa-plus"></i> Upload Baru
+                    <i class="fas fa-plus"></i> <?= $this->lang->line('dash_upload_new') ?>
                 </a>
             </div>
 
             <?php if(empty($tka)): ?>
                 <div class="empty-state">
                     <!--<div class="empty-state-icon"><i class="fas fa-file-circle-plus"></i></div>-->
-                    <h4>Belum Ada Data TKA</h4>
-                    <p>Mulai dengan mengupload data TKA baru untuk memulai proses pengajuan.</p>
+                    <h4><?= $this->lang->line('dash_no_tka_data') ?></h4>
+                    <p><?= $this->lang->line('dash_no_tka_message') ?></p>
                     <!--<a href="<?= base_url('user/upload') ?>" class="btn-primary" style="margin-top:12px;">
                         <i class="fas fa-plus"></i> Upload Sekarang
                     </a>-->
@@ -333,23 +333,23 @@
                     <table class="data-table" id="dashboardTable">
                         <thead>
                             <tr>
-                                <th class="cell-no">#</th>
-                                <th>Nama TKA</th>
-                                <th>Status</th>
-                                <th>Progress</th>
-                                <th>Tanggal</th>
-                                <th>Aksi</th>
+                                <th class="cell-no"><?= $this->lang->line('tka_col_number') ?></th>
+                                <th><?= $this->lang->line('tka_col_name') ?></th>
+                                <th><?= $this->lang->line('tka_col_status') ?></th>
+                                <th><?= $this->lang->line('tka_col_progress') ?></th>
+                                <th><?= $this->lang->line('tka_col_date') ?></th>
+                                <th><?= $this->lang->line('tka_col_action') ?></th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php $no = 1; foreach($tka as $t):
-                                if($t->status == 'DRAFT')                                                                        { $sb = 'badge-draft';   $bd = '#94a3b8'; $st = 'Draft'; }
-                                elseif(in_array($t->status, ['MENUNGGU_KASI','MENUNGGU_KABID','MENUNGGU_SEKDIS','MENUNGGU_KADIS'])) { $sb = 'badge-proses';  $bd = '#3b82f6'; $st = 'Proses'; }
-                                elseif($t->status == 'SELESAI')                                                                  { $sb = 'badge-selesai'; $bd = '#10b981'; $st = 'Selesai'; }
-                                elseif($t->status == 'DITOLAK')                                                                  { $sb = 'badge-ditolak'; $bd = '#f43f5e'; $st = 'Ditolak'; }
+                                if($t->status == 'DRAFT')                                                                        { $sb = 'badge-draft';   $bd = '#94a3b8'; $st = $this->lang->line('dash_draft'); }
+                                elseif(in_array($t->status, ['MENUNGGU_KASI','MENUNGGU_KABID','MENUNGGU_SEKDIS','MENUNGGU_KADIS'])) { $sb = 'badge-proses';  $bd = '#3b82f6'; $st = $this->lang->line('dash_process'); }
+                                elseif($t->status == 'SELESAI')                                                                  { $sb = 'badge-selesai'; $bd = '#10b981'; $st = $this->lang->line('dash_completed'); }
+                                elseif($t->status == 'DITOLAK')                                                                  { $sb = 'badge-ditolak'; $bd = '#f43f5e'; $st = $this->lang->line('dash_rejected'); }
                                 else                                                                                             { $sb = 'badge-draft';   $bd = '#94a3b8'; $st = $t->status; }
 
-                                $pp_label = ['DRAFT'=>'Belum Lengkap','MENUNGGU_KASI'=>'Verifikasi Kasi','MENUNGGU_KABID'=>'Verifikasi Kabid','MENUNGGU_SEKDIS'=>'Verifikasi Sekdis','MENUNGGU_KADIS'=>'Verifikasi Kadis','SELESAI'=>'Surat Terbit','DITOLAK'=>'Ditolak'];
+                                $pp_label = ['DRAFT'=>$this->lang->line('dash_incomplete'),'MENUNGGU_KASI'=>$this->lang->line('dash_verify_kasi'),'MENUNGGU_KABID'=>$this->lang->line('dash_verify_kabid'),'MENUNGGU_SEKDIS'=>$this->lang->line('dash_verify_sekdis'),'MENUNGGU_KADIS'=>$this->lang->line('dash_verify_kadis'),'SELESAI'=>$this->lang->line('dash_letter_publish'),'DITOLAK'=>$this->lang->line('dash_rejected')];
                                 $pl = $pp_label[$t->status] ?? $t->status;
                                 if($t->status=='DRAFT') $pc='pp-draft';
                                 elseif(in_array($t->status,['MENUNGGU_KASI','MENUNGGU_KABID','MENUNGGU_SEKDIS','MENUNGGU_KADIS'])) $pc='pp-kasi';
@@ -359,32 +359,32 @@
                             ?>
                             <tr>
                                 <td class="cell-no"><?= $no++ ?></td>
-                                <td class="cell-name" data-label="Nama TKA"><?= htmlspecialchars($t->nama_tka) ?></td>
-                                <td data-label="Status">
+                                <td class="cell-name" data-label="<?= $this->lang->line('tka_col_name') ?>"><?= htmlspecialchars($t->nama_tka) ?></td>
+                                <td data-label="<?= $this->lang->line('tka_col_status') ?>">
                                     <span class="badge <?= $sb ?>">
                                         <span class="badge-dot" style="background:<?= $bd ?>;"></span> <?= $st ?>
                                     </span>
                                 </td>
-                                <td data-label="Progress">
+                                <td data-label="<?= $this->lang->line('tka_col_progress') ?>">
                                     <span class="progress-pill <?= $pc ?>"><?= $pl ?></span>
                                 </td>
-                                <td data-label="Tanggal">
+                                <td data-label="<?= $this->lang->line('tka_col_date') ?>">
                                     <div class="cell-date-main"><?= date('d M Y', strtotime($t->created_at)) ?></div>
-                                    <div class="cell-date-sub"><?= date('H:i', strtotime($t->created_at)) ?> WIB</div>
+                                    <div class="cell-date-sub"><?= date('H:i', strtotime($t->created_at)) ?> <?= $this->lang->line('auth_wib') ?></div>
                                 </td>
-                                <td class="cell-action" data-label="Aksi">
+                                <td class="cell-action" data-label="<?= $this->lang->line('tka_col_action') ?>">
                                     <div class="btn-row">
-                                        <a href="<?= base_url('user/detail/'.$t->id) ?>" class="btn-xs bx-detail"><i class="fas fa-eye"></i> Detail</a>
+                                        <a href="<?= base_url('user/detail/'.$t->id) ?>" class="btn-xs bx-detail"><i class="fas fa-eye"></i> <?= $this->lang->line('dash_btn_detail') ?></a>
                                         <?php if($t->status=='DRAFT'): ?>
-                                            <a href="<?= base_url('user/detail_form/'.$t->id) ?>" class="btn-xs bx-lengkapi"><i class="fas fa-pen-fancy"></i> Lengkapi</a>
-                                            <a href="<?= base_url('user/edit_tka/'.$t->id) ?>" class="btn-xs bx-ganti"><i class="fas fa-file-upload"></i> Ganti</a>
-                                            <a href="<?= base_url('user/delete_tka/'.$t->id) ?>" class="btn-xs bx-delete" onclick="return confirm('Yakin hapus data TKA ini?')"><i class="fas fa-trash-alt"></i></a>
+                                            <a href="<?= base_url('user/detail_form/'.$t->id) ?>" class="btn-xs bx-lengkapi"><i class="fas fa-pen-fancy"></i> <?= $this->lang->line('dash_btn_complete') ?></a>
+                                            <a href="<?= base_url('user/edit_tka/'.$t->id) ?>" class="btn-xs bx-ganti"><i class="fas fa-file-upload"></i> <?= $this->lang->line('dash_btn_replace') ?></a>
+                                            <a href="<?= base_url('user/delete_tka/'.$t->id) ?>" class="btn-xs bx-delete" onclick="return confirm('<?= $this->lang->line('dash_confirm_delete') ?>')"><i class="fas fa-trash-alt"></i></a>
                                         <?php elseif($t->status=='DITOLAK'): ?>
-                                            <a href="<?= base_url('user/perbaiki_tka/'.$t->id) ?>" class="btn-xs bx-edit"><i class="fas fa-wrench"></i> Perbaiki</a>
+                                            <a href="<?= base_url('user/perbaiki_tka/'.$t->id) ?>" class="btn-xs bx-edit"><i class="fas fa-wrench"></i> <?= $this->lang->line('dash_btn_fix') ?></a>
                                         <?php elseif($t->status=='SELESAI'): ?>
-                                            <a href="<?= base_url('user/download_surat_word/'.$t->id) ?>" class="btn-xs bx-surat" target="_blank"><i class="fas fa-download"></i> Surat</a>
+                                            <a href="<?= base_url('user/download_surat_word/'.$t->id) ?>" class="btn-xs bx-surat" target="_blank"><i class="fas fa-download"></i> <?= $this->lang->line('dash_btn_letter') ?></a>
                                         <?php elseif(in_array($t->status,['MENUNGGU_KASI','MENUNGGU_KABID','MENUNGGU_SEKDIS','MENUNGGU_KADIS'])): ?>
-                                            <a href="<?= base_url('user/edit_tka/'.$t->id) ?>" class="btn-xs bx-edit"><i class="fas fa-edit"></i> Edit</a>
+                                            <a href="<?= base_url('user/edit_tka/'.$t->id) ?>" class="btn-xs bx-edit"><i class="fas fa-edit"></i> <?= $this->lang->line('dash_btn_edit') ?></a>
                                         <?php endif; ?>
                                     </div>
                                 </td>
@@ -397,13 +397,13 @@
                 <!-- ── MOBILE: card list ── -->
                 <div class="tka-card-list" id="mobileCardList">
                     <?php foreach($tka as $t):
-                        if($t->status=='DRAFT')                                                                        { $sb='badge-draft';   $bd='#94a3b8'; $st='Draft'; }
-                        elseif(in_array($t->status,['MENUNGGU_KASI','MENUNGGU_KABID','MENUNGGU_SEKDIS','MENUNGGU_KADIS'])) { $sb='badge-proses';  $bd='#3b82f6'; $st='Proses'; }
-                        elseif($t->status=='SELESAI')                                                                  { $sb='badge-selesai'; $bd='#10b981'; $st='Selesai'; }
-                        elseif($t->status=='DITOLAK')                                                                  { $sb='badge-ditolak'; $bd='#f43f5e'; $st='Ditolak'; }
+                        if($t->status=='DRAFT')                                                                        { $sb='badge-draft';   $bd='#94a3b8'; $st=$this->lang->line('dash_draft'); }
+                        elseif(in_array($t->status,['MENUNGGU_KASI','MENUNGGU_KABID','MENUNGGU_SEKDIS','MENUNGGU_KADIS'])) { $sb='badge-proses';  $bd='#3b82f6'; $st=$this->lang->line('dash_process'); }
+                        elseif($t->status=='SELESAI')                                                                  { $sb='badge-selesai'; $bd='#10b981'; $st=$this->lang->line('dash_completed'); }
+                        elseif($t->status=='DITOLAK')                                                                  { $sb='badge-ditolak'; $bd='#f43f5e'; $st=$this->lang->line('dash_rejected'); }
                         else                                                                                           { $sb='badge-draft';   $bd='#94a3b8'; $st=$t->status; }
 
-                        $pp_label = ['DRAFT'=>'Belum Lengkap','MENUNGGU_KASI'=>'Verifikasi Kasi','MENUNGGU_KABID'=>'Verifikasi Kabid','MENUNGGU_SEKDIS'=>'Verifikasi Sekdis','MENUNGGU_KADIS'=>'Verifikasi Kadis','SELESAI'=>'Surat Terbit','DITOLAK'=>'Ditolak'];
+                        $pp_label = ['DRAFT'=>$this->lang->line('dash_incomplete'),'MENUNGGU_KASI'=>$this->lang->line('dash_verify_kasi'),'MENUNGGU_KABID'=>$this->lang->line('dash_verify_kabid'),'MENUNGGU_SEKDIS'=>$this->lang->line('dash_verify_sekdis'),'MENUNGGU_KADIS'=>$this->lang->line('dash_verify_kadis'),'SELESAI'=>$this->lang->line('dash_letter_publish'),'DITOLAK'=>$this->lang->line('dash_rejected')];
                         $pl = $pp_label[$t->status] ?? $t->status;
                         if($t->status=='DRAFT') $pc='pp-draft';
                         elseif(in_array($t->status,['MENUNGGU_KASI','MENUNGGU_KABID','MENUNGGU_SEKDIS','MENUNGGU_KADIS'])) $pc='pp-kasi';
@@ -426,24 +426,24 @@
                                     <i class="fas fa-calendar-alt" style="font-size:10px;"></i>
                                     <?= date('d M Y', strtotime($t->created_at)) ?>
                                     <span style="opacity:.4;">·</span>
-                                    <?= date('H:i', strtotime($t->created_at)) ?> WIB
+                                    <?= date('H:i', strtotime($t->created_at)) ?> <?= $this->lang->line('auth_wib') ?>
                                 </div>
                                 <div class="tka-card-progress">
                                     <span class="progress-pill <?= $pc ?>"><?= $pl ?></span>
                                 </div>
                             </div>
                             <div class="tka-card-actions">
-                                <a href="<?= base_url('user/detail/'.$t->id) ?>" class="btn-xs bx-detail" title="Detail"><i class="fas fa-eye"></i></a>
+                                <a href="<?= base_url('user/detail/'.$t->id) ?>" class="btn-xs bx-detail" title="<?= $this->lang->line('dash_btn_detail') ?>"><i class="fas fa-eye"></i></a>
                                 <?php if($t->status=='DRAFT'): ?>
-                                    <a href="<?= base_url('user/detail_form/'.$t->id) ?>" class="btn-xs bx-lengkapi" title="Lengkapi"><i class="fas fa-pen-fancy"></i></a>
-                                    <a href="<?= base_url('user/edit_tka/'.$t->id) ?>" class="btn-xs bx-ganti" title="Ganti"><i class="fas fa-file-upload"></i></a>
-                                    <a href="<?= base_url('user/delete_tka/'.$t->id) ?>" class="btn-xs bx-delete" title="Hapus" onclick="return confirm('Yakin hapus data TKA ini?')"><i class="fas fa-trash-alt"></i></a>
+                                    <a href="<?= base_url('user/detail_form/'.$t->id) ?>" class="btn-xs bx-lengkapi" title="<?= $this->lang->line('dash_btn_complete') ?>"><i class="fas fa-pen-fancy"></i></a>
+                                    <a href="<?= base_url('user/edit_tka/'.$t->id) ?>" class="btn-xs bx-ganti" title="<?= $this->lang->line('dash_btn_replace') ?>"><i class="fas fa-file-upload"></i></a>
+                                    <a href="<?= base_url('user/delete_tka/'.$t->id) ?>" class="btn-xs bx-delete" title="<?= $this->lang->line('common_delete') ?? 'Hapus' ?>" onclick="return confirm('<?= $this->lang->line('dash_confirm_delete') ?>')"><i class="fas fa-trash-alt"></i></a>
                                 <?php elseif($t->status=='DITOLAK'): ?>
-                                    <a href="<?= base_url('user/perbaiki_tka/'.$t->id) ?>" class="btn-xs bx-edit" title="Perbaiki"><i class="fas fa-wrench"></i></a>
+                                    <a href="<?= base_url('user/perbaiki_tka/'.$t->id) ?>" class="btn-xs bx-edit" title="<?= $this->lang->line('dash_btn_fix') ?>"><i class="fas fa-wrench"></i></a>
                                 <?php elseif($t->status=='SELESAI'): ?>
-                                    <a href="<?= base_url('user/download_surat_word/'.$t->id) ?>" class="btn-xs bx-surat" title="Download Surat" target="_blank"><i class="fas fa-download"></i></a>
+                                    <a href="<?= base_url('user/download_surat_word/'.$t->id) ?>" class="btn-xs bx-surat" title="<?= $this->lang->line('dash_btn_letter') ?>" target="_blank"><i class="fas fa-download"></i></a>
                                 <?php elseif(in_array($t->status,['MENUNGGU_KASI','MENUNGGU_KABID','MENUNGGU_SEKDIS','MENUNGGU_KADIS'])): ?>
-                                    <a href="<?= base_url('user/edit_tka/'.$t->id) ?>" class="btn-xs bx-edit" title="Edit"><i class="fas fa-edit"></i></a>
+                                    <a href="<?= base_url('user/edit_tka/'.$t->id) ?>" class="btn-xs bx-edit" title="<?= $this->lang->line('dash_btn_edit') ?>"><i class="fas fa-edit"></i></a>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -456,14 +456,14 @@
                     <div class="paging-info" id="pagingInfo">—</div>
                     <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
                         <div class="per-page-wrap">
-                            <span>Tampilkan</span>
+                            <span><?= $this->lang->line('dash_show') ?></span>
                             <select class="per-page-select" id="perPageSelect">
                                 <option value="10" selected>10</option>
                                 <option value="25">25</option>
                                 <option value="50">50</option>
                                 <option value="100">100</option>
                             </select>
-                            <span>per halaman</span>
+                            <span><?= $this->lang->line('dash_per_page') ?></span>
                         </div>
                         <div class="paging-controls" id="pagingControls"></div>
                     </div>
@@ -479,9 +479,15 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    var lang_dash_showing_of = "<?= $this->lang->line('dash_showing_of') ?>";
+    var lang_dash_zero_submissions = "<?= $this->lang->line('dash_zero_submissions') ?>";
+    var lang_dash_notification = "<?= $this->lang->line('dash_notification') ?>";
+    var lang_no_notifications = "<?= $this->lang->line('notif_no_notifications') ?>";
+    var current_locale = "<?= current_lang() == 'indonesian' ? 'id-ID' : 'en-US' ?>";
+
 (function(){
     var d = new Date();
-    var months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+    var months = <?= current_lang() == 'indonesian' ? "['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des']" : "['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']" ?>;
     document.getElementById('gbDate').textContent = String(d.getDate()).padStart(2,'0');
     document.getElementById('gbMonth').textContent = months[d.getMonth()] + ' ' + d.getFullYear();
 })();
@@ -505,19 +511,19 @@ $(document).ready(function(){
         e.stopPropagation();
         var $d = $('.notif-dropdown');
         if($d.length){ $d.toggle(); return; }
-        var html = '<div class="notif-dropdown"><div class="notif-dropdown-header"><i class="fas fa-bell me-2"></i>Notifikasi</div>';
+        var html = '<div class="notif-dropdown"><div class="notif-dropdown-header"><i class="fas fa-bell me-2"></i>'+lang_dash_notification+'</div>';
         var notifs = window._notifData || [];
         if(notifs.length){
             $.each(notifs, function(i,n){
                 var dt = new Date(n.created_at);
-                var ds = dt.toLocaleDateString('id-ID') + ' ' + dt.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+                var ds = dt.toLocaleDateString(current_locale) + ' ' + dt.toLocaleTimeString(current_locale,{hour:'2-digit',minute:'2-digit'});
                 html += '<a class="notif-item" href="<?= base_url("user/mark_notification_read/") ?>'+n.id+'">'
                       + '<div class="notif-item-title">'+n.title+'</div>'
                       + '<div class="notif-item-msg">'+n.message+'</div>'
                       + '<div class="notif-item-time">'+ds+'</div></a>';
             });
         } else {
-            html += '<div class="notif-item" style="color:var(--c-text-muted);">Tidak ada notifikasi</div>';
+            html += '<div class="notif-item" style="color:var(--c-text-muted);">'+lang_no_notifications+'</div>';
         }
         html += '</div>';
         $(this).parent().append(html);
@@ -549,9 +555,9 @@ $(document).ready(function(){
         tableRows.forEach(function(r,i){ r.style.display = (i>=start&&i<end)?'':'none'; });
         mobileCards.forEach(function(c,i){ c.style.display = (i>=start&&i<end)?'':'none'; });
 
-        infoEl.innerHTML = total > 0
-            ? 'Menampilkan <strong>'+(start+1)+'–'+end+'</strong> dari <strong>'+total+'</strong> pengajuan'
-            : '0 pengajuan';
+        var template = lang_dash_showing_of;
+        template = template.replace('{start}', start+1).replace('{end}', end).replace('{total}', total);
+        infoEl.innerHTML = total > 0 ? template : lang_dash_zero_submissions;
         renderCtrl(totalPages);
     }
 

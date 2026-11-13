@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Chat extends CI_Controller {
+class Chat extends MY_Controller {
     public function __construct() {
         parent::__construct();
         if (!$this->session->userdata('logged_in')) redirect('auth/login');
@@ -51,7 +51,7 @@ class Chat extends CI_Controller {
             $this->output
                 ->set_content_type('application/json')
                 ->set_header('X-CSRF-Token: ' . $this->security->get_csrf_hash())
-                ->set_output(json_encode(['status' => 'error', 'message' => 'Pesan kosong']));
+                ->set_output(json_encode(['status' => 'error', 'message' => $this->lang->line('chat_error_empty_short')]));
             return;
         }
 
@@ -74,7 +74,7 @@ class Chat extends CI_Controller {
                 $this->output
                     ->set_content_type('application/json')
                     ->set_header('X-CSRF-Token: ' . $this->security->get_csrf_hash())
-                    ->set_output(json_encode(['status' => 'error', 'message' => 'Penerima tidak valid']));
+                    ->set_output(json_encode(['status' => 'error', 'message' => $this->lang->line('chat_error_recipient')]));
                 return;
             }
         }

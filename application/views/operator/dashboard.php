@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="<?= current_lang() == 'indonesian' ? 'id' : 'en' ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Operator — TKA App</title>
+    <title><?= $this->lang->line('dash_op_title') ?> — TKA App</title>
     <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/shared.css') ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -185,23 +185,23 @@
 <div class="page-wrapper">
     <div class="topnav">
         <div class="topnav-breadcrumb">
-            <span>Home</span>
+            <span><?= $this->lang->line('layout_breadcrumb_home') ?></span>
             <i class="fas fa-chevron-right"></i>
-            <strong>Dashboard Operator</strong>
+            <strong><?= $this->lang->line('dash_op_title') ?></strong>
         </div>
         <div class="topnav-actions">
             <span class="badge" style="background:var(--c-primary-light);color:var(--c-primary);font-weight:600;padding:5px 12px;">
-                <i class="fas fa-user-cog" style="margin-right:5px;"></i> Operator
+                <i class="fas fa-user-cog" style="margin-right:5px;"></i> <?= $this->lang->line('sidebar_operator_label') ?>
             </span>
         </div>
     </div>
 
     <div class="page-content">
         <div class="page-header">
-            <h1 class="page-title">Dashboard Operator</h1>
+            <h1 class="page-title"><?= $this->lang->line('dash_op_title') ?></h1>
             <p class="page-subtitle">
-                Selamat datang, <strong><?= htmlspecialchars($this->session->userdata('nama')) ?></strong>.
-                Pantau dan kelola pengajuan TKA dari satu tempat.
+                <?= $this->lang->line('dash_op_welcome') ?> <strong><?= htmlspecialchars($this->session->userdata('nama')) ?></strong>.
+                <?= $this->lang->line('dash_op_subtitle') ?>
             </p>
         </div>
 
@@ -209,19 +209,19 @@
         <div class="stats-grid">
             <div class="stat-card sc-total">
                 <div class="stat-top"><div class="stat-icon"><i class="fas fa-file-alt"></i></div></div>
-                <div><div class="stat-label">Total Pengajuan</div><div class="stat-value"><?= $total_tka ?? 0 ?></div></div>
+                <div><div class="stat-label"><?= $this->lang->line('dash_total_submissions') ?></div><div class="stat-value"><?= $total_tka ?? 0 ?></div></div>
             </div>
             <div class="stat-card sc-selesai">
                 <div class="stat-top"><div class="stat-icon"><i class="fas fa-check-circle"></i></div></div>
-                <div><div class="stat-label">Selesai</div><div class="stat-value"><?= $total_selesai ?? 0 ?></div></div>
+                <div><div class="stat-label"><?= $this->lang->line('dash_completed') ?></div><div class="stat-value"><?= $total_selesai ?? 0 ?></div></div>
             </div>
             <div class="stat-card sc-proses">
                 <div class="stat-top"><div class="stat-icon"><i class="fas fa-spinner"></i></div></div>
-                <div><div class="stat-label">Dalam Proses</div><div class="stat-value"><?= $total_proses ?? 0 ?></div></div>
+                <div><div class="stat-label"><?= $this->lang->line('dash_in_process') ?></div><div class="stat-value"><?= $total_proses ?? 0 ?></div></div>
             </div>
             <div class="stat-card sc-ditolak">
                 <div class="stat-top"><div class="stat-icon"><i class="fas fa-times-circle"></i></div></div>
-                <div><div class="stat-label">Ditolak</div><div class="stat-value"><?= $total_ditolak ?? 0 ?></div></div>
+                <div><div class="stat-label"><?= $this->lang->line('dash_rejected') ?></div><div class="stat-value"><?= $total_ditolak ?? 0 ?></div></div>
             </div>
         </div>
 
@@ -229,11 +229,11 @@
         <div class="info-banner">
             <div class="info-banner-icon"><i class="fas fa-bullhorn"></i></div>
             <div class="info-banner-body">
-                <h6>Hal yang perlu diperhatikan</h6>
+                <h6><?= $this->lang->line('dash_op_notice_title') ?></h6>
                 <ul>
-                    <li>Pastikan nomor surat sudah diisi sebelum mengunduh dokumen.</li>
-                    <li>Pengajuan <strong>DRAFT</strong> belum masuk antrean persetujuan — segera lengkapi.</li>
-                    <li>Gunakan tombol <em>Edit Nomor</em> untuk menyesuaikan penomoran surat.</li>
+                    <li><?= $this->lang->line('dash_op_notice_1') ?></li>
+                    <li><?= $this->lang->line('dash_op_notice_2') ?></li>
+                    <li><?= $this->lang->line('dash_op_notice_3') ?></li>
                 </ul>
             </div>
         </div>
@@ -242,10 +242,10 @@
         <div class="surface">
             <div class="surface-header">
                 <div class="surface-title">
-                    <i class="fas fa-clock"></i> Pengajuan Terbaru
+                    <i class="fas fa-clock"></i> <?= $this->lang->line('dash_recent_submissions') ?>
                 </div>
                 <a href="<?= base_url('operator/semua_tka') ?>" class="btn-secondary" style="padding:6px 14px;font-size:0.75rem;">
-                    Lihat Semua <i class="fas fa-arrow-right"></i>
+                    <?= $this->lang->line('dash_view_all') ?> <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
             <div class="surface-body" style="padding:0;">
@@ -263,12 +263,12 @@
                         <table class="data-table" id="recentTable">
                             <thead>
                                 <tr>
-                                    <th style="width:40px;text-align:center;">#</th>
-                                    <th>Perusahaan</th>
-                                    <th>Nama TKA</th>
-                                    <th>Status</th>
-                                    <th>Tanggal</th>
-                                    <th>Aksi</th>
+                                    <th style="width:40px;text-align:center;"><?= $this->lang->line('tka_col_number') ?></th>
+                                    <th><?= $this->lang->line('dash_company') ?></th>
+                                    <th><?= $this->lang->line('tka_col_name') ?></th>
+                                    <th><?= $this->lang->line('tka_col_status') ?></th>
+                                    <th><?= $this->lang->line('tka_col_date') ?></th>
+                                    <th><?= $this->lang->line('tka_col_action') ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -297,14 +297,14 @@
                                     <td class="cell-action" data-label="Aksi">
                                         <div class="btn-row">
                                             <?php if ($t->status == 'SELESAI' && !empty($t->surat_teks_approved) && $t->surat_teks_approved == 1): ?>
-                                                <a href="<?= base_url('operator/download_surat_word/'.$t->id) ?>" class="btn-xs bx-surat" title="Download Surat">
+                                                <a href="<?= base_url('operator/download_surat_word/'.$t->id) ?>" class="btn-xs bx-surat" title="<?= $this->lang->line('dash_op_download_letter') ?>">
                                                     <i class="fas fa-download"></i> Surat
                                                 </a>
                                             <?php endif; ?>
-                                            <a href="<?= base_url('operator/edit_nomor_surat/'.$t->id) ?>" class="btn-xs bx-edit" title="Edit Nomor Surat">
-                                                <i class="fas fa-pen-alt"></i> Edit Nomor
+                                            <a href="<?= base_url('operator/edit_nomor_surat/'.$t->id) ?>" class="btn-xs bx-edit" title="<?= $this->lang->line('dash_op_edit_letter_no') ?>">
+                                                <i class="fas fa-pen-alt"></i> <?= $this->lang->line('dash_op_edit_number') ?>
                                             </a>
-                                            <a href="<?= base_url('operator/detail_tka/'.$t->id) ?>" class="btn-xs bx-detail" title="Lihat Detail">
+                                            <a href="<?= base_url('operator/detail_tka/'.$t->id) ?>" class="btn-xs bx-detail" title="<?= $this->lang->line('dash_op_view_detail') ?>">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                         </div>
@@ -348,14 +348,14 @@
                                 </div>
                                 <div class="tka-card-actions">
                                     <?php if ($t->status == 'SELESAI' && !empty($t->surat_teks_approved) && $t->surat_teks_approved == 1): ?>
-                                        <a href="<?= base_url('operator/download_surat_word/'.$t->id) ?>" class="btn-xs bx-surat" title="Download Surat">
+                                        <a href="<?= base_url('operator/download_surat_word/'.$t->id) ?>" class="btn-xs bx-surat" title="<?= $this->lang->line('dash_op_download_letter') ?>">
                                             <i class="fas fa-download"></i>
                                         </a>
                                     <?php endif; ?>
-                                    <a href="<?= base_url('operator/edit_nomor_surat/'.$t->id) ?>" class="btn-xs bx-edit" title="Edit Nomor">
+                                    <a href="<?= base_url('operator/edit_nomor_surat/'.$t->id) ?>" class="btn-xs bx-edit" title="<?= $this->lang->line('dash_op_edit_number') ?>">
                                         <i class="fas fa-pen-alt"></i>
                                     </a>
-                                    <a href="<?= base_url('operator/detail_tka/'.$t->id) ?>" class="btn-xs bx-detail" title="Detail">
+                                    <a href="<?= base_url('operator/detail_tka/'.$t->id) ?>" class="btn-xs bx-detail" title="<?= $this->lang->line('dash_op_view_detail') ?>">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                 </div>
@@ -385,8 +385,8 @@
                 <?php else: ?>
                     <div class="empty-state">
                         <div class="empty-state-icon"><i class="fas fa-inbox"></i></div>
-                        <h4>Belum ada pengajuan</h4>
-                        <p>Semua pengajuan TKA yang masuk akan muncul di sini.<br>Silakan mulai dengan membuat pengajuan baru.</p>
+                        <h4><?= $this->lang->line('dash_op_no_submissions') ?></h4>
+                        <p><?= $this->lang->line('dash_op_no_sub_message') ?><br>Silakan mulai dengan membuat pengajuan baru.</p>
                     </div>
                 <?php endif; ?>
 

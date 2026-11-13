@@ -1,0 +1,32 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+$lang['approval_title'] = 'Approval';
+$lang['approval_dashboard'] = 'Dashboard';
+$lang['approval_list_title'] = 'Daftar Pengajuan';
+$lang['approval_list_subtitle'] = 'Pengajuan yang menunggu verifikasi Anda';
+$lang['approval_detail_title'] = 'Detail Pengajuan';
+$lang['approval_log_title'] = 'Log Approval';
+$lang['approval_log_subtitle'] = 'Rekam jejak persetujuan & penolakan pengajuan TKA';
+$lang['approval_btn_approve'] = 'Setujui';
+$lang['approval_btn_reject'] = 'Tolak';
+$lang['approval_note_label'] = 'Catatan';
+$lang['approval_note_placeholder'] = 'Tulis catatan...';
+$lang['approval_rejection_note'] = 'Catatan penolakan';
+$lang['approval_rejection_required'] = 'Catatan penolakan wajib diisi.';
+$lang['approval_flash_status_changed'] = 'Status TKA sudah berubah, tidak dapat diproses.';
+$lang['approval_flash_approve_failed'] = 'Gagal mengupdate status TKA (approve). Silakan coba lagi.';
+$lang['approval_flash_log_failed'] = 'Status berhasil diubah, tetapi gagal mencatat log approval.';
+$lang['approval_flash_reject_failed'] = 'Gagal mengupdate status TKA (reject). Silakan coba lagi.';
+$lang['approval_flash_rejected_log_fail'] = 'Pemberkasan ditolak, tetapi gagal mencatat log approval.';
+$lang['approval_flash_approved'] = 'Berhasil approve pengajuan TKA.';
+$lang['approval_flash_rejected'] = 'Pengajuan TKA ditolak.';
+$lang['approval_access_denied'] = 'Akses ditolak. Anda tidak memiliki hak untuk halaman ini.';
+$lang['approval_status_invalid'] = 'Status tidak sesuai untuk role ini.';
+$lang['approval_action_invalid'] = 'Aksi tidak valid.';
+$lang['approval_role_kasi'] = 'Kepala Seksi';
+$lang['approval_role_kabid'] = 'Kepala Bidang';
+$lang['approval_role_sekdis'] = 'Sekretaris Dinas';
+$lang['approval_role_kadis'] = 'Kepala Dinas';
+$lang['approval_level'] = 'Level';
+$lang['approval_of_stages'] = 'dari 4 tahap persetujuan';

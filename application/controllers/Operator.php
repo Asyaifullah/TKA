@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Operator extends CI_Controller {
+class Operator extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -79,7 +79,7 @@ class Operator extends CI_Controller {
         $tka = $this->Tka_model->get_by_id($tka_id);
         if (!$tka) show_404();
         if ($tka->status != 'SELESAI') {
-            $this->session->set_flashdata('error', 'Nomor surat hanya dapat diedit jika status SELESAI.');
+            $this->session->set_flashdata('error', $this->lang->line('operator_flash_letter_edit_status'));
             redirect('operator/semua_tka');
         }
         $data['tka'] = $tka;
@@ -89,13 +89,11 @@ class Operator extends CI_Controller {
     public function update_nomor_surat($tka_id) {
         $tka = $this->Tka_model->get_by_id($tka_id);
         if (!$tka) {
-            $this->session->set_flashdata('error', 'Data TKA tidak ditemukan.');
+            $this->session->set_flashdata('error', $this->lang->line('common_data_not_found'));
             redirect('operator/semua_tka');
         }
         if ($tka->status != 'SELESAI') {
-            $this->session->set_flashdata('error',
-                'Nomor surat hanya dapat diedit jika status SELESAI (status saat ini: ' . $tka->status . ').'
-            );
+            $this->session->set_flashdata('error', $this->lang->line('operator_flash_letter_edit_status'));
             redirect('operator/edit_nomor_surat/' . $tka_id);
         }
         $update = $this->db->where('id', $tka_id)->update('tka', [
@@ -104,9 +102,9 @@ class Operator extends CI_Controller {
             'surat_teks_approved'    => 1,
         ]);
         if ($update) {
-            $this->session->set_flashdata('success', 'Nomor surat berhasil diupdate.');
+            $this->session->set_flashdata('success', $this->lang->line('admin_flash_letter_updated'));
         } else {
-            $this->session->set_flashdata('error', 'Gagal mengupdate nomor surat. Silakan coba lagi.');
+            $this->session->set_flashdata('error', $this->lang->line('common_operation_failed'));
         }
         redirect('operator/semua_tka');
     }
@@ -116,11 +114,11 @@ class Operator extends CI_Controller {
         if (!$tka) show_404();
 
         if ($tka->status != 'SELESAI') {
-            $this->session->set_flashdata('error', 'Surat hanya dapat diunduh jika status sudah SELESAI.');
+            $this->session->set_flashdata('error', $this->lang->line('user_flash_letter_status'));
             redirect('admin/semua_tka');
         }
         if ($tka->surat_teks_approved != 1) {
-            $this->session->set_flashdata('error', 'Surat belum disetujui oleh admin (teks belum diisi).');
+            $this->session->set_flashdata('error', $this->lang->line('user_flash_letter_not_approved'));
             redirect('admin/semua_tka');
         }
 
@@ -226,7 +224,7 @@ class Operator extends CI_Controller {
         // Ambil semua user role 'user'
         $users = $this->db->where('role', 'user')->get('users')->result();
         if (empty($users)) {
-            $this->session->set_flashdata('error', 'Tidak ada perusahaan terdaftar.');
+            $this->session->set_flashdata('error', $this->lang->line('admin_flash_no_company'));
             redirect('operator/kirim_notifikasi');
             return;
         }
@@ -236,17 +234,17 @@ class Operator extends CI_Controller {
             $this->send_notification($u->id, $title, $message, $link);
             $count++;
         }
-        $this->session->set_flashdata('success', "Notifikasi berhasil dikirim ke $count perusahaan.");
+        $this->session->set_flashdata('success', sprintf($this->lang->line('admin_flash_notif_sent_count'), $count));
     } else {
         // Single user
         $user_id = $this->input->post('user_id', TRUE);
         if (empty($user_id)) {
-            $this->session->set_flashdata('error', 'Pilih perusahaan terlebih dahulu.');
+            $this->session->set_flashdata('error', $this->lang->line('admin_flash_select_company'));
             redirect('operator/kirim_notifikasi');
             return;
         }
         $this->send_notification($user_id, $title, $message, $link);
-        $this->session->set_flashdata('success', 'Notifikasi berhasil dikirim ke perusahaan yang dipilih.');
+        $this->session->set_flashdata('success', $this->lang->line('admin_flash_notif_sent_selected'));
     }
 
     redirect('operator/kirim_notifikasi');
@@ -301,7 +299,7 @@ class Operator extends CI_Controller {
         $message = trim($this->input->post('message'));
 
         if (empty($message)) {
-            echo json_encode(['status' => 'error', 'message' => 'Pesan tidak boleh kosong.']);
+            echo json_encode(['status' => 'error', 'message' => $this->lang->line('chat_error_empty')]);
             return;
         }
 
@@ -313,7 +311,7 @@ class Operator extends CI_Controller {
 
         echo json_encode($insert
             ? ['status' => 'success']
-            : ['status' => 'error', 'message' => 'Gagal mengirim pesan.']
+            : ['status' => 'error', 'message' => $this->lang->line('chat_error_send')]
         );
     }
 

@@ -1,0 +1,32 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+$lang['approval_title'] = 'Approval';
+$lang['approval_dashboard'] = 'Dashboard';
+$lang['approval_list_title'] = 'Submission List';
+$lang['approval_list_subtitle'] = 'Submissions awaiting your verification';
+$lang['approval_detail_title'] = 'Submission Detail';
+$lang['approval_log_title'] = 'Approval Log';
+$lang['approval_log_subtitle'] = 'Approval and rejection history of TKA submissions';
+$lang['approval_btn_approve'] = 'Approve';
+$lang['approval_btn_reject'] = 'Reject';
+$lang['approval_note_label'] = 'Notes';
+$lang['approval_note_placeholder'] = 'Write notes...';
+$lang['approval_rejection_note'] = 'Rejection notes';
+$lang['approval_rejection_required'] = 'Rejection notes are required.';
+$lang['approval_flash_status_changed'] = 'TKA status has changed, cannot process.';
+$lang['approval_flash_approve_failed'] = 'Failed to update TKA status (approve). Please try again.';
+$lang['approval_flash_log_failed'] = 'Status changed successfully, but failed to record approval log.';
+$lang['approval_flash_reject_failed'] = 'Failed to update TKA status (reject). Please try again.';
+$lang['approval_flash_rejected_log_fail'] = 'Submission rejected, but failed to record approval log.';
+$lang['approval_flash_approved'] = 'TKA submission approved successfully.';
+$lang['approval_flash_rejected'] = 'TKA submission rejected.';
+$lang['approval_access_denied'] = 'Access denied. You do not have permission for this page.';
+$lang['approval_status_invalid'] = 'Status does not match this role.';
+$lang['approval_action_invalid'] = 'Invalid action.';
+$lang['approval_role_kasi'] = 'Section Head';
+$lang['approval_role_kabid'] = 'Division Head';
+$lang['approval_role_sekdis'] = 'Department Secretary';
+$lang['approval_role_kadis'] = 'Agency Head';
+$lang['approval_level'] = 'Level';
+$lang['approval_of_stages'] = 'of 4 approval stages';

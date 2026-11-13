@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @package    SITLAKEB TKA
  * @author     ZAI
  */
-class Admin extends CI_Controller
+class Admin extends MY_Controller
 {
     // =========================================================================
     // KONSTANTA ROLE
@@ -202,10 +202,10 @@ class Admin extends CI_Controller
     {
         $this->_get_user_or_404($id, 'user');
         $rules = [
-            ['field' => 'nama',       'label' => 'Nama PIC',   'rules' => 'required'],
-            ['field' => 'perusahaan', 'label' => 'Perusahaan', 'rules' => 'required'],
-            ['field' => 'no_hp',      'label' => 'No HP',      'rules' => 'required'],
-            ['field' => 'alamat',     'label' => 'Alamat',     'rules' => 'required'],
+            ['field' => 'nama',       'label' => $this->lang->line('val_field_nama_pic'),   'rules' => 'required'],
+            ['field' => 'perusahaan', 'label' => $this->lang->line('val_field_perusahaan'), 'rules' => 'required'],
+            ['field' => 'no_hp',      'label' => $this->lang->line('val_field_no_hp'),      'rules' => 'required'],
+            ['field' => 'alamat',     'label' => $this->lang->line('val_field_alamat'),     'rules' => 'required'],
         ];
         if ( ! $this->_validate($rules, "admin/edit_user/$id")) return;
 
@@ -216,7 +216,7 @@ class Admin extends CI_Controller
             'alamat'     => $this->input->post('alamat'),
         ]);
         $this->_log('EDIT_USER', 'user', $id, "Mengedit data perusahaan ID $id");
-        $this->session->set_flashdata('success', 'Data perusahaan berhasil diupdate.');
+        $this->session->set_flashdata('success', $this->lang->line('admin_flash_company_updated'));
         redirect('admin/manage_users');
     }
 
@@ -225,7 +225,7 @@ class Admin extends CI_Controller
         $user = $this->_get_user_or_404($id, 'user');
         $this->User_model->update_user($id, ['password' => password_hash('password123', PASSWORD_DEFAULT)]);
         $this->_log('RESET_PASSWORD', 'user', $id, "Reset password perusahaan {$user->perusahaan}");
-        $this->session->set_flashdata('success', 'Password berhasil direset menjadi <strong>password123</strong>.');
+        $this->session->set_flashdata('success', $this->lang->line('admin_flash_password_reset_user'));
         redirect('admin/manage_users');
     }
 
@@ -234,7 +234,7 @@ class Admin extends CI_Controller
         if ( ! $id) show_404();
         $user = $this->_get_user_or_404($id, 'user');
         $new_status = ($user->is_active == 1) ? 0 : 1;
-        $label = $new_status ? 'diaktifkan' : 'dinonaktifkan';
+        $label = $new_status ? $this->lang->line('admin_flash_activated') : $this->lang->line('admin_flash_deactivated');
         $this->User_model->update_user($id, ['is_active' => $new_status]);
         $this->_log('TOGGLE_USER_STATUS', 'user', $id, "Perusahaan {$user->perusahaan} (ID {$id}) {$label}");
         $this->session->set_flashdata('success', "Akun perusahaan <strong>{$user->perusahaan}</strong> berhasil {$label}.");
@@ -246,7 +246,7 @@ class Admin extends CI_Controller
         $user = $this->_get_user_or_404($id, 'user');
         $this->User_model->delete_user($id);
         $this->_log('DELETE_USER', 'user', $id, "Menghapus perusahaan {$user->perusahaan}");
-        $this->session->set_flashdata('success', 'Perusahaan dan semua data terkait berhasil dihapus.');
+        $this->session->set_flashdata('success', $this->lang->line('admin_flash_company_deleted'));
         redirect('admin/manage_users');
     }
 
@@ -263,12 +263,12 @@ class Admin extends CI_Controller
     public function add_officer(): void
     {
         $rules = [
-            ['field' => 'nama',     'label' => 'Nama',     'rules' => 'required|trim'],
-            ['field' => 'email',    'label' => 'Email',    'rules' => 'required|valid_email|is_unique[users.email]'],
-            ['field' => 'password', 'label' => 'Password', 'rules' => 'required|min_length[6]'],
-            ['field' => 'role',     'label' => 'Role',     'rules' => 'required|in_list[' . implode(',', self::OFFICER_ROLES) . ']'],
-            ['field' => 'nip',      'label' => 'NIP',      'rules' => 'required|trim'],
-            ['field' => 'no_hp',    'label' => 'No HP',    'rules' => 'required|trim'],
+            ['field' => 'nama',     'label' => $this->lang->line('val_field_nama'),     'rules' => 'required|trim'],
+            ['field' => 'email',    'label' => $this->lang->line('val_field_email'),    'rules' => 'required|valid_email|is_unique[users.email]'],
+            ['field' => 'password', 'label' => $this->lang->line('val_field_password'), 'rules' => 'required|min_length[6]'],
+            ['field' => 'role',     'label' => $this->lang->line('val_field_role'),     'rules' => 'required|in_list[' . implode(',', self::OFFICER_ROLES) . ']'],
+            ['field' => 'nip',      'label' => $this->lang->line('val_field_nip'),      'rules' => 'required|trim'],
+            ['field' => 'no_hp',    'label' => $this->lang->line('val_field_no_hp'),    'rules' => 'required|trim'],
         ];
         if ( ! $this->_validate($rules, 'admin/manage_officers')) return;
 
@@ -285,7 +285,7 @@ class Admin extends CI_Controller
         ];
         $new_id = $this->User_model->insert($insert_data);
         $this->_log('ADD_OFFICER', 'user', $new_id, "Menambahkan petugas baru: {$insert_data['nama']} (role {$insert_data['role']})");
-        $this->session->set_flashdata('success', "Petugas <strong>{$insert_data['nama']}</strong> berhasil ditambahkan.");
+        $this->session->set_flashdata('success', sprintf($this->lang->line('admin_flash_officer_added'), "<strong>{$insert_data['nama']}</strong>"));
         redirect('admin/manage_officers');
     }
 
@@ -299,10 +299,10 @@ class Admin extends CI_Controller
     {
         $this->_get_officer_or_404($id);
         $rules = [
-            ['field' => 'nama',  'label' => 'Nama',  'rules' => 'required|trim'],
-            ['field' => 'nip',   'label' => 'NIP',   'rules' => 'required|trim'],
-            ['field' => 'no_hp', 'label' => 'No HP', 'rules' => 'required|trim'],
-            ['field' => 'role',  'label' => 'Role',  'rules' => 'required|in_list[' . implode(',', self::OFFICER_ROLES) . ']'],
+            ['field' => 'nama',  'label' => $this->lang->line('val_field_nama'),  'rules' => 'required|trim'],
+            ['field' => 'nip',   'label' => $this->lang->line('val_field_nip'),   'rules' => 'required|trim'],
+            ['field' => 'no_hp', 'label' => $this->lang->line('val_field_no_hp'), 'rules' => 'required|trim'],
+            ['field' => 'role',  'label' => $this->lang->line('val_field_role'),  'rules' => 'required|in_list[' . implode(',', self::OFFICER_ROLES) . ']'],
         ];
         if ( ! $this->_validate($rules, "admin/edit_officer/$id")) return;
 
@@ -314,7 +314,7 @@ class Admin extends CI_Controller
             'is_active' => $this->input->post('is_active') ? 1 : 0,
         ]);
         $this->_log('EDIT_OFFICER', 'user', $id, "Mengedit data petugas ID $id");
-        $this->session->set_flashdata('success', 'Data petugas berhasil diupdate.');
+        $this->session->set_flashdata('success', $this->lang->line('admin_flash_officer_updated'));
         redirect('admin/manage_officers');
     }
 
@@ -322,14 +322,14 @@ class Admin extends CI_Controller
     {
         $logged_in = (int) $this->session->userdata('user_id');
         if ($id === $logged_in) {
-            $this->session->set_flashdata('error', 'Gunakan halaman profil untuk mengganti password Anda sendiri.');
+            $this->session->set_flashdata('error', $this->lang->line('admin_flash_use_profile'));
             redirect('admin/manage_officers');
             return;
         }
         $user = $this->_get_officer_or_404($id);
         $this->User_model->update_user($id, ['password' => password_hash('Admin@1234', PASSWORD_DEFAULT)]);
         $this->_log('RESET_OFFICER_PASSWORD', 'user', $id, "Reset password petugas {$user->nama}");
-        $this->session->set_flashdata('success', "Password <strong>{$user->nama}</strong> berhasil direset menjadi <strong>Admin@1234</strong>.");
+        $this->session->set_flashdata('success', sprintf($this->lang->line('admin_flash_password_reset_officer'), "<strong>{$user->nama}</strong>"));
         redirect('admin/manage_officers');
     }
 
@@ -340,13 +340,13 @@ class Admin extends CI_Controller
 
         $logged_in = (int) $this->session->userdata('user_id');
         if ($id === $logged_in) {
-            $this->session->set_flashdata('error', 'Anda tidak dapat menonaktifkan akun Anda sendiri.');
+            $this->session->set_flashdata('error', $this->lang->line('admin_flash_cannot_deactivate_self'));
             redirect('admin/manage_officers');
             return;
         }
         $user = $this->_get_officer_or_404($id);
         $new_status = ($user->is_active == 1) ? 0 : 1;
-        $label = $new_status ? 'diaktifkan' : 'dinonaktifkan';
+        $label = $new_status ? $this->lang->line('admin_flash_activated') : $this->lang->line('admin_flash_deactivated');
         $this->User_model->update_user($id, ['is_active' => $new_status]);
         $this->_log('TOGGLE_OFFICER_STATUS', 'user', $id, "Petugas {$user->nama} (ID {$id}) {$label}");
         $this->session->set_flashdata('success', "Akun petugas <strong>{$user->nama}</strong> berhasil {$label}.");
@@ -358,12 +358,12 @@ class Admin extends CI_Controller
         if ( ! $id) show_404();
         $logged_in = (int) $this->session->userdata('user_id');
         if ($id === $logged_in) {
-            $this->session->set_flashdata('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+            $this->session->set_flashdata('error', $this->lang->line('admin_flash_cannot_delete_self'));
             redirect('admin/manage_officers');
             return;
         }
         if ($id === 1) {
-            $this->session->set_flashdata('error', 'Admin utama (ID 1) tidak dapat dihapus.');
+            $this->session->set_flashdata('error', $this->lang->line('admin_flash_cannot_delete_main'));
             redirect('admin/manage_officers');
             return;
         }
@@ -408,8 +408,8 @@ class Admin extends CI_Controller
     {
         $this->_get_tka_or_404($id);
         $rules = [
-            ['field' => 'nama_tka', 'label' => 'Nama TKA', 'rules' => 'required'],
-            ['field' => 'status',   'label' => 'Status',   'rules' => 'required'],
+            ['field' => 'nama_tka', 'label' => $this->lang->line('val_field_nama_tka'), 'rules' => 'required'],
+            ['field' => 'status',   'label' => $this->lang->line('val_field_status'),   'rules' => 'required'],
         ];
         if ( ! $this->_validate($rules, "admin/edit_tka/$id")) return;
 
@@ -418,7 +418,7 @@ class Admin extends CI_Controller
                    'jenis_kelamin', 'alamat_tinggal', 'lokasi_kerja'];
         $this->Tka_model->update_detail($id, $this->input->post($fields));
         $this->_log('EDIT_TKA', 'tka', $id, "Mengedit data TKA ID $id");
-        $this->session->set_flashdata('success', 'Data TKA berhasil diupdate.');
+        $this->session->set_flashdata('success', $this->lang->line('admin_flash_tka_updated'));
         redirect('admin/semua_tka');
     }
 
@@ -428,7 +428,7 @@ class Admin extends CI_Controller
         $this->_delete_directory('./uploads/' . $id);
         $this->Tka_model->delete($id);
         $this->_log('DELETE_TKA', 'tka', $id, "Menghapus TKA {$tka->nama_tka}");
-        $this->session->set_flashdata('success', 'Data TKA berhasil dihapus.');
+        $this->session->set_flashdata('success', $this->lang->line('admin_flash_tka_deleted'));
         redirect('admin/semua_tka');
     }
 
@@ -453,7 +453,7 @@ class Admin extends CI_Controller
         $this->Notification_model->add($tka->user_id, 'Nomor Surat Telah Ditentukan',
             "Nomor surat untuk TKA {$tka->nama_tka} telah siap. Silakan download surat.",
             base_url("user/detail/$tka_id"));
-        $this->session->set_flashdata('success', 'Nomor surat berhasil diupdate. User sekarang bisa download.');
+        $this->session->set_flashdata('success', $this->lang->line('admin_flash_letter_updated'));
         redirect('admin/semua_tka');
     }
 
@@ -486,7 +486,7 @@ class Admin extends CI_Controller
         // Ambil semua user role 'user'
         $users = $this->db->where('role', 'user')->get('users')->result();
         if (empty($users)) {
-            $this->session->set_flashdata('error', 'Tidak ada perusahaan terdaftar.');
+            $this->session->set_flashdata('error', $this->lang->line('admin_flash_no_company'));
             redirect('admin/kirim_notifikasi');
             return;
         }
@@ -496,17 +496,17 @@ class Admin extends CI_Controller
             $this->send_notification($u->id, $title, $message, $link);
             $count++;
         }
-        $this->session->set_flashdata('success', "Notifikasi berhasil dikirim ke $count perusahaan.");
+        $this->session->set_flashdata('success', sprintf($this->lang->line('admin_flash_notif_sent_count'), $count));
     } else {
         // Single user
         $user_id = $this->input->post('user_id', TRUE);
         if (empty($user_id)) {
-            $this->session->set_flashdata('error', 'Pilih perusahaan terlebih dahulu.');
+            $this->session->set_flashdata('error', $this->lang->line('admin_flash_select_company'));
             redirect('admin/kirim_notifikasi');
             return;
         }
         $this->send_notification($user_id, $title, $message, $link);
-        $this->session->set_flashdata('success', 'Notifikasi berhasil dikirim ke perusahaan yang dipilih.');
+        $this->session->set_flashdata('success', $this->lang->line('admin_flash_notif_sent_selected'));
     }
 
     redirect('admin/kirim_notifikasi');
@@ -542,7 +542,7 @@ class Admin extends CI_Controller
             'kepala_dinas'     => $this->input->post('kepala_dinas'),
             'nip_kepala_dinas' => $this->input->post('nip_kepala_dinas'),
         ]);
-        $this->session->set_flashdata('success', 'Data Kepala Dinas berhasil diupdate.');
+        $this->session->set_flashdata('success', $this->lang->line('admin_flash_head_updated'));
         redirect('admin/upload_ttd');
     }
 
@@ -561,7 +561,7 @@ class Admin extends CI_Controller
             $old_ttd = $this->Surat_template_model->get_ttd_path();
             if ($old_ttd && file_exists($old_ttd)) unlink($old_ttd);
             $this->Surat_template_model->update_ttd($file_path);
-            $this->session->set_flashdata('success', 'TTD berhasil diupload.');
+            $this->session->set_flashdata('success', $this->lang->line('admin_flash_ttd_uploaded'));
         } else {
             $this->session->set_flashdata('error', $this->upload->display_errors());
         }
@@ -573,7 +573,7 @@ class Admin extends CI_Controller
         $old_ttd = $this->Surat_template_model->get_ttd_path();
         if ($old_ttd && file_exists($old_ttd)) unlink($old_ttd);
         $this->Surat_template_model->update_ttd(null);
-        $this->session->set_flashdata('success', 'TTD berhasil dihapus.');
+        $this->session->set_flashdata('success', $this->lang->line('admin_flash_ttd_deleted'));
         redirect('admin/upload_ttd');
     }
 
@@ -589,7 +589,7 @@ class Admin extends CI_Controller
             'kepala_dinas'     => $this->input->post('kepala_dinas'),
             'nip_kepala_dinas' => $this->input->post('nip_kepala_dinas'),
         ]);
-        $this->session->set_flashdata('success', 'Data kepala dinas berhasil diupdate.');
+        $this->session->set_flashdata('success', $this->lang->line('admin_flash_head_updated'));
         redirect('admin/edit_surat_settings');
     }
 
@@ -601,7 +601,7 @@ class Admin extends CI_Controller
     {
         $tka = $this->_get_tka_or_404($id);
         if ($tka->status !== 'SELESAI' || $tka->surat_teks_approved != 1) {
-            $this->session->set_flashdata('error', 'Surat tidak dapat diunduh. Status belum SELESAI atau teks belum disetujui.');
+            $this->session->set_flashdata('error', $this->lang->line('admin_flash_letter_error'));
             redirect('admin/semua_tka');
             return;
         }
@@ -874,7 +874,7 @@ class Admin extends CI_Controller
         }
 
         $this->_log('UPDATE_SLA', null, null, 'Memperbarui pengaturan SLA approval');
-        $this->session->set_flashdata('success', 'Pengaturan SLA berhasil disimpan.');
+        $this->session->set_flashdata('success', $this->lang->line('admin_flash_sla_saved'));
         redirect('admin/sla');
     }
 
@@ -987,9 +987,9 @@ class Admin extends CI_Controller
     $update = $this->Tka_model->update_detail($id, $data);
 
     if ($update) {
-        $this->session->set_flashdata('success', 'Data TKA berhasil diperbarui.');
+        $this->session->set_flashdata('success', $this->lang->line('admin_flash_tka_save_success'));
     } else {
-        $this->session->set_flashdata('error', 'Gagal memperbarui data TKA.');
+        $this->session->set_flashdata('error', $this->lang->line('admin_flash_tka_save_failed'));
     }
 
     redirect('admin/semua_tka'); // sesuaikan dengan halaman daftar TKA admin

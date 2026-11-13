@@ -46,5 +46,8 @@ $route['do-register'] = 'auth/do_register';
 
 $route['logout'] = 'auth/logout';
 
+// Language switch
+$route['lang/switch/(:any)'] = 'language/switch_lang/$1';
+
 $route['dashboard'] = 'dashboard/index';
 

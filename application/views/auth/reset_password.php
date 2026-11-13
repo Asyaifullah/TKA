@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="<?= current_lang() == 'indonesian' ? 'id' : 'en' ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reset Password - SITLAKEB TKA</title>
+    <title><?= $this->lang->line('auth_reset_title') ?></title>
 
     <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -373,6 +373,17 @@
 <body>
 
 <div class="reset-page">
+    <div style="display:flex; flex-direction:column; gap:20px; align-items:center; z-index:2;">
+        <!-- Language Switcher -->
+        <div class="lang-switcher" style="display: flex; align-items: center; background: rgba(255,255,255,0.85); backdrop-filter: blur(8px); border-radius: 12px; padding: 4px; border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+            <a href="<?= lang_url('indonesian') ?>" class="<?= current_lang() == 'indonesian' ? 'active' : '' ?>" style="display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9px; font-size: 12px; font-weight: 700; text-decoration: none; color: <?= current_lang() == 'indonesian' ? '#ffffff' : '#64748b' ?>; background: <?= current_lang() == 'indonesian' ? '#087456' : 'transparent' ?>;">
+                <i class="fas fa-globe"></i> <?= $this->lang->line('lang_indonesian') ?>
+            </a>
+            <a href="<?= lang_url('english') ?>" class="<?= current_lang() == 'english' ? 'active' : '' ?>" style="display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9px; font-size: 12px; font-weight: 700; text-decoration: none; color: <?= current_lang() == 'english' ? '#ffffff' : '#64748b' ?>; background: <?= current_lang() == 'english' ? '#087456' : 'transparent' ?>;">
+                <i class="fas fa-globe"></i> <?= $this->lang->line('lang_english') ?>
+            </a>
+        </div>
+
     <div class="reset-card">
 
         <div class="reset-icon">
@@ -380,11 +391,8 @@
         </div>
 
         <div class="reset-title">
-            <h2>Reset Password</h2>
-            <p>
-                Buat password baru yang kuat<br>
-                untuk keamanan akun Anda
-            </p>
+            <h2><?= $this->lang->line('auth_reset_heading') ?></h2>
+            <p><?= $this->lang->line('auth_reset_subtitle') ?></p>
         </div>
 
         <?php if($this->session->flashdata('error')): ?>
@@ -399,7 +407,7 @@
                    value="<?= $this->security->get_csrf_hash(); ?>">
 
             <div class="field">
-                <label for="password">Password Baru</label>
+                <label for="password"><?= $this->lang->line('auth_new_password') ?></label>
                 <div class="input-wrap">
                     <i class="fas fa-lock input-icon"></i>
                     <input
@@ -407,13 +415,13 @@
                         name="password"
                         id="password"
                         class="form-input"
-                        placeholder="Masukkan password baru"
+                        placeholder="<?= $this->lang->line('auth_new_password_placeholder') ?>"
                         required
                         oninput="checkStrength(this.value); checkMatch();">
 
                     <button type="button" class="toggle-password"
                             onclick="togglePassword('password', this)"
-                            aria-label="Tampilkan password">
+                            aria-label="<?= $this->lang->line('auth_show_password') ?>">
                         <i class="far fa-eye"></i>
                     </button>
                 </div>
@@ -423,19 +431,19 @@
                         <div class="strength-fill" id="strengthFill"></div>
                     </div>
                     <div class="strength-label">
-                        <span id="strengthText">Terlalu lemah</span>
+                        <span id="strengthText"></span>
                         <span id="strengthPct"></span>
                     </div>
                 </div>
 
                 <div class="hint">
                     <i class="fas fa-circle-info"></i>
-                    <span>Min. 8 karakter, huruf besar, huruf kecil, angka, dan simbol (@$!%*?&amp;)</span>
+                    <span><?= $this->lang->line('auth_password_requirement') ?></span>
                 </div>
             </div>
 
             <div class="field">
-                <label for="confirm_password">Konfirmasi Password Baru</label>
+                <label for="confirm_password"><?= $this->lang->line('auth_confirm_password') ?></label>
                 <div class="input-wrap">
                     <i class="fas fa-lock input-icon"></i>
                     <input
@@ -443,13 +451,13 @@
                         name="confirm_password"
                         id="confirm_password"
                         class="form-input"
-                        placeholder="Ulangi password baru"
+                        placeholder="<?= $this->lang->line('auth_confirm_placeholder') ?>"
                         required
                         oninput="checkMatch();">
 
                     <button type="button" class="toggle-password"
                             onclick="togglePassword('confirm_password', this)"
-                            aria-label="Tampilkan konfirmasi password">
+                            aria-label="<?= $this->lang->line('auth_show_confirm') ?>">
                         <i class="far fa-eye"></i>
                     </button>
                 </div>
@@ -462,17 +470,18 @@
 
             <button type="submit" class="btn-submit" id="btnSubmit">
                 <i class="fas fa-check" style="font-size:12px; margin-right:7px;"></i>
-                Reset Password
+                <?= $this->lang->line('auth_btn_reset') ?>
             </button>
         </form>
 
         <div class="back-link">
             <a href="<?= base_url('auth/login') ?>">
                 <i class="fas fa-arrow-left" style="font-size:10px; margin-right:3px;"></i>
-                Kembali
+                <?= $this->lang->line('common_back') ?>
             </a>
         </div>
 
+    </div>
     </div>
 </div>
 
@@ -512,11 +521,11 @@ function checkStrength(val){
     if(/[@$!%*?&]/.test(val)) score++;
 
     var levels = [
-        {pct:20, color:'#f43f5e', label:'Terlalu lemah'},
-        {pct:40, color:'#f97316', label:'Lemah'},
-        {pct:60, color:'#eab308', label:'Sedang'},
-        {pct:80, color:'#3b82f6', label:'Kuat'},
-        {pct:100, color:'#10b981', label:'Sangat kuat'}
+        {pct:20, color:'#f43f5e', label:'<?= $this->lang->line("auth_password_strength_weak") ?>'},
+        {pct:40, color:'#f97316', label:'<?= $this->lang->line("auth_password_strength_fair") ?>'},
+        {pct:60, color:'#eab308', label:'<?= $this->lang->line("auth_password_strength_good") ?>'},
+        {pct:80, color:'#3b82f6', label:'<?= $this->lang->line("auth_password_strength_strong") ?>'},
+        {pct:100, color:'#10b981', label:'<?= $this->lang->line("auth_password_strength_excellent") ?>'}
     ];
 
     var lv = levels[Math.max(0, score - 1)];
@@ -547,12 +556,12 @@ function checkMatch(){
     if(pw === cpw){
         hint.className = 'match-hint show ok';
         icon.className = 'fas fa-circle-check';
-        txt.textContent = 'Password cocok';
+        txt.textContent = '<?= $this->lang->line("auth_password_match") ?>';
         btn.disabled = false;
     }else{
         hint.className = 'match-hint show no';
         icon.className = 'fas fa-circle-xmark';
-        txt.textContent = 'Password tidak cocok';
+        txt.textContent = '<?= $this->lang->line("auth_password_mismatch") ?>';
         btn.disabled = true;
     }
 }

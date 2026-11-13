@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="<?= current_lang() == 'indonesian' ? 'id' : 'en' ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit TKA — <?= htmlspecialchars($tka->nama_tka) ?></title>
+    <title><?= $this->lang->line('tka_edit_title') ?? 'Edit TKA' ?> — <?= htmlspecialchars($tka->nama_tka) ?></title>
     <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -467,10 +467,10 @@
             </a>
             <i class="fas fa-chevron-right" style="font-size:8px;"></i>
             <a href="<?= base_url('user/data_tka') ?>" style="color:var(--c-text-muted);text-decoration:none;">
-                Data TKA
+                <?= $this->lang->line('tka_breadcrumb') ?? 'Data TKA' ?>
             </a>
             <i class="fas fa-chevron-right" style="font-size:8px;"></i>
-            <strong>Edit TKA</strong>
+            <strong><?= $this->lang->line('tka_edit_data') ?? 'Edit TKA' ?></strong>
         </div>
     </header>
 
@@ -492,7 +492,7 @@
                         <i class="fas fa-circle" style="font-size:5px;"></i>
                         <?= $status ?>
                     </span>
-                    Edit Data TKA
+                    <?= $this->lang->line('tka_edit_data') ?? 'Edit Data TKA' ?>
                 </div>
             </div>
         </div>
@@ -526,7 +526,7 @@
             if($last_reject && !empty($last_reject->catatan)): ?>
         <div class="flash flash-err flash-reject">
             <div class="flash-reject-title">
-                <i class="fas fa-exclamation-triangle"></i> Catatan Penolakan
+                <i class="fas fa-exclamation-triangle"></i> <?= $this->lang->line('tka_rejection_title') ?? 'Catatan Penolakan' ?>
             </div>
             <div><?= nl2br(htmlspecialchars($last_reject->catatan)) ?></div>
         </div>
@@ -537,8 +537,8 @@
         <div class="flash flash-warn">
             <i class="fas fa-lock"></i>
             <div>
-                Pengajuan sudah diproses lebih lanjut (status: <strong><?= $status ?></strong>).
-                Data tidak dapat diedit. Hubungi admin jika diperlukan perubahan.
+                <?= $this->lang->line('tka_lock_msg1') ?? 'Pengajuan sudah diproses lebih lanjut (status:' ?> <strong><?= $status ?></strong>).
+                <?= $this->lang->line('tka_lock_msg2') ?? 'Data tidak dapat diedit. Hubungi admin jika diperlukan perubahan.' ?>
             </div>
         </div>
         <?php endif; ?>
@@ -549,7 +549,7 @@
         <div class="surface">
             <div class="surface-header">
                 <div class="surface-icon"><i class="fas fa-id-card"></i></div>
-                <div class="surface-title">Data Diri TKA</div>
+                <div class="surface-title"><?= $this->lang->line('tka_personal_data') ?? 'Data Diri TKA' ?></div>
             </div>
             <div class="surface-body">
                 <form action="<?= base_url('user/update_tka/'.$tka->id) ?>" method="post"
@@ -561,18 +561,18 @@
                     <!-- ── Identitas ──────────────────────────── -->
                     <div class="sec-label">
                         <div class="sec-label-icon"><i class="fas fa-user"></i></div>
-                        Identitas
+                        <?= $this->lang->line('tka_identity') ?? 'Identitas' ?>
                     </div>
 
                     <div class="field-grid">
                         <div class="fgroup">
-                            <label class="fl">Nama TKA <span class="req">*</span></label>
+                            <label class="fl"><?= $this->lang->line('tka_name') ?? 'Nama TKA' ?> <span class="req">*</span></label>
                             <input type="text" name="nama_tka" class="f-input"
                                    value="<?= htmlspecialchars($tka->nama_tka) ?>"
                                    required <?= !$can_edit ? 'disabled' : '' ?>>
                         </div>
                         <div class="fgroup">
-                            <label class="fl">Kebangsaan</label>
+                            <label class="fl"><?= $this->lang->line('tka_nationality') ?? 'Kebangsaan' ?></label>
                             <input type="text" name="negara_asal" class="f-input"
                                    value="<?= htmlspecialchars($tka->negara_asal) ?>"
                                    <?= !$can_edit ? 'disabled' : '' ?>>
@@ -581,48 +581,48 @@
 
                     <div class="field-grid cols-3">
                         <div class="fgroup">
-                            <label class="fl">Tempat Lahir</label>
+                            <label class="fl"><?= $this->lang->line('tka_birthplace') ?? 'Tempat Lahir' ?></label>
                             <input type="text" name="tempat_lahir" class="f-input"
                                    value="<?= htmlspecialchars($tka->tempat_lahir) ?>"
                                    <?= !$can_edit ? 'disabled' : '' ?>>
                         </div>
                         <div class="fgroup">
-                            <label class="fl">Tanggal Lahir</label>
+                            <label class="fl"><?= $this->lang->line('tka_birthdate') ?? 'Tanggal Lahir' ?></label>
                             <input type="date" name="tanggal_lahir" class="f-input"
                                    value="<?= $tka->tanggal_lahir ?>"
                                    <?= !$can_edit ? 'disabled' : '' ?>>
                         </div>
                         <div class="fgroup">
-                            <label class="fl">Jenis Kelamin</label>
+                            <label class="fl"><?= $this->lang->line('tka_gender') ?? 'Jenis Kelamin' ?></label>
                             <select name="jenis_kelamin" class="f-select"
                                     <?= !$can_edit ? 'disabled' : '' ?>>
-                                <option value="">— Pilih —</option>
-                                <option value="Laki-laki"  <?= $tka->jenis_kelamin=='Laki-laki'  ?'selected':'' ?>>Laki-laki</option>
-                                <option value="Perempuan"  <?= $tka->jenis_kelamin=='Perempuan'  ?'selected':'' ?>>Perempuan</option>
+                                <option value=""><?= $this->lang->line('tka_select') ?? '— Pilih —' ?></option>
+                                <option value="Laki-laki"  <?= $tka->jenis_kelamin=='Laki-laki'  ?'selected':'' ?>><?= $this->lang->line('tka_male') ?? 'Laki-laki' ?></option>
+                                <option value="Perempuan"  <?= $tka->jenis_kelamin=='Perempuan'  ?'selected':'' ?>><?= $this->lang->line('tka_female') ?? 'Perempuan' ?></option>
                             </select>
                         </div>
                     </div>
 
                     <div class="field-grid">
                         <div class="fgroup">
-                            <label class="fl">Jabatan</label>
+                            <label class="fl"><?= $this->lang->line('tka_position') ?? 'Jabatan' ?></label>
                             <input type="text" name="jabatan" class="f-input"
                                    value="<?= htmlspecialchars($tka->jabatan) ?>"
                                    <?= !$can_edit ? 'disabled' : '' ?>>
                         </div>
                         <div class="fgroup">
-                            <label class="fl">Bidang Usaha</label>
+                            <label class="fl"><?= $this->lang->line('tka_business_field') ?? 'Bidang Usaha' ?></label>
                             <input type="text" name="bidang_usaha" class="f-input"
                                    value="<?= htmlspecialchars($tka->bidang_usaha) ?>"
                                    <?= !$can_edit ? 'disabled' : '' ?>>
                         </div>
                         <div class="fgroup col-2-3">
-                            <label class="fl">Alamat Tinggal</label>
+                            <label class="fl"><?= $this->lang->line('tka_address') ?? 'Alamat Tinggal' ?></label>
                             <textarea name="alamat_tinggal" class="f-textarea"
                                       <?= !$can_edit ? 'disabled' : '' ?>><?= htmlspecialchars($tka->alamat_tinggal) ?></textarea>
                         </div>
                         <div class="fgroup">
-                            <label class="fl">Lokasi Kerja</label>
+                            <label class="fl"><?= $this->lang->line('tka_work_location') ?? 'Lokasi Kerja' ?></label>
                             <input type="text" name="lokasi_kerja" class="f-input"
                                    value="<?= htmlspecialchars($tka->lokasi_kerja) ?>"
                                    <?= !$can_edit ? 'disabled' : '' ?>>
@@ -632,30 +632,30 @@
                     <!-- ── Dokumen Perjalanan ─────────────────── -->
                     <div class="sec-label">
                         <div class="sec-label-icon"><i class="fas fa-passport"></i></div>
-                        Dokumen Perjalanan
+                        <?= $this->lang->line('tka_identity_docs') ?? 'Dokumen Perjalanan' ?>
                     </div>
 
                     <div class="field-grid">
                         <div class="fgroup">
-                            <label class="fl">Nomor Passport</label>
+                            <label class="fl"><?= $this->lang->line('tka_passport_no') ?? 'Nomor Passport' ?></label>
                             <input type="text" name="passport_no" class="f-input"
                                    value="<?= htmlspecialchars($tka->passport_no) ?>"
                                    <?= !$can_edit ? 'disabled' : '' ?>>
                         </div>
                         <div class="fgroup">
-                            <label class="fl">Masa Berlaku Passport</label>
+                            <label class="fl"><?= $this->lang->line('tka_passport_expiry') ?? 'Masa Berlaku Passport' ?></label>
                             <input type="date" name="passport_expiry" class="f-input"
                                    value="<?= $tka->passport_expiry ?>"
                                    <?= !$can_edit ? 'disabled' : '' ?>>
                         </div>
                         <div class="fgroup">
-                            <label class="fl">Nomor KITAS</label>
+                            <label class="fl"><?= $this->lang->line('tka_kitas_no') ?? 'Nomor KITAS' ?></label>
                             <input type="text" name="kitas_no" class="f-input"
                                    value="<?= htmlspecialchars($tka->kitas_no) ?>"
                                    <?= !$can_edit ? 'disabled' : '' ?>>
                         </div>
                         <div class="fgroup">
-                            <label class="fl">Nomor STM</label>
+                            <label class="fl"><?= $this->lang->line('tka_stm_no') ?? 'Nomor STM' ?></label>
                             <input type="text" name="stm_no" class="f-input"
                                    value="<?= htmlspecialchars($tka->stm_no) ?>"
                                    <?= !$can_edit ? 'disabled' : '' ?>>
@@ -665,30 +665,30 @@
                     <!-- ── Notifikasi & RPTKA ─────────────────── -->
                     <div class="sec-label">
                         <div class="sec-label-icon"><i class="fas fa-file-alt"></i></div>
-                        Notifikasi &amp; RPTKA
+                        <?= $this->lang->line('tka_notif_work') ?? 'Notifikasi &amp; RPTKA' ?>
                     </div>
 
                     <div class="field-grid">
                         <div class="fgroup">
-                            <label class="fl">Nomor RPTKA</label>
+                            <label class="fl"><?= $this->lang->line('tka_rptka_no') ?? 'Nomor RPTKA' ?></label>
                             <input type="text" name="rptka_no" class="f-input"
                                    value="<?= htmlspecialchars($tka->rptka_no) ?>"
                                    <?= !$can_edit ? 'disabled' : '' ?>>
                         </div>
                         <div class="fgroup">
-                            <label class="fl">Tanggal RPTKA</label>
+                            <label class="fl"><?= $this->lang->line('tka_rptka_date') ?? 'Tanggal RPTKA' ?></label>
                             <input type="date" name="rptka_date" class="f-input"
                                    value="<?= $tka->rptka_date ?>"
                                    <?= !$can_edit ? 'disabled' : '' ?>>
                         </div>
                         <div class="fgroup">
-                            <label class="fl">Nomor Notifikasi</label>
+                            <label class="fl"><?= $this->lang->line('tka_notif_no') ?? 'Nomor Notifikasi' ?></label>
                             <input type="text" name="notifikasi_no" class="f-input"
                                    value="<?= htmlspecialchars($tka->notifikasi_no) ?>"
                                    <?= !$can_edit ? 'disabled' : '' ?>>
                         </div>
                         <div class="fgroup">
-                            <label class="fl">Tanggal Notifikasi</label>
+                            <label class="fl"><?= $this->lang->line('tka_notif_date') ?? 'Tanggal Notifikasi' ?></label>
                             <input type="date" name="notifikasi_date" class="f-input"
                                    value="<?= $tka->notifikasi_date ?>"
                                    <?= !$can_edit ? 'disabled' : '' ?>>
@@ -697,28 +697,28 @@
 
                     <div class="field-grid cols-3">
                         <div class="fgroup">
-                            <label class="fl">Jenis Notifikasi</label>
+                            <label class="fl"><?= $this->lang->line('tka_notif_type') ?? 'Jenis Notifikasi' ?></label>
                             <select name="jenis_notifikasi" class="f-select"
                                     <?= !$can_edit ? 'disabled' : '' ?>>
-                                <option value="">— Pilih —</option>
-                                <option value="Baru"          <?= $tka->jenis_notifikasi=='Baru'          ?'selected':'' ?>>Baru</option>
-                                <option value="Jangka Pendek" <?= $tka->jenis_notifikasi=='Jangka Pendek' ?'selected':'' ?>>Jangka Pendek</option>
-                                <option value="Perpanjangan"  <?= $tka->jenis_notifikasi=='Perpanjangan'  ?'selected':'' ?>>Perpanjangan</option>
+                                <option value=""><?= $this->lang->line('tka_select') ?? '— Pilih —' ?></option>
+                                <option value="Baru"          <?= $tka->jenis_notifikasi=='Baru'          ?'selected':'' ?>><?= $this->lang->line('tka_notif_new') ?? 'Baru' ?></option>
+                                <option value="Jangka Pendek" <?= $tka->jenis_notifikasi=='Jangka Pendek' ?'selected':'' ?>><?= $this->lang->line('tka_notif_short') ?? 'Jangka Pendek' ?></option>
+                                <option value="Perpanjangan"  <?= $tka->jenis_notifikasi=='Perpanjangan'  ?'selected':'' ?>><?= $this->lang->line('tka_notif_extend') ?? 'Perpanjangan' ?></option>
                             </select>
                         </div>
                         <div class="fgroup">
-                            <label class="fl">Masa Berlaku Notifikasi</label>
+                            <label class="fl"><?= $this->lang->line('tka_notif_expiry') ?? 'Masa Berlaku Notifikasi' ?></label>
                             <input type="text" name="masa_berlaku_notifikasi" class="f-input"
                                    value="<?= htmlspecialchars($tka->masa_berlaku_notifikasi) ?>"
                                    <?= !$can_edit ? 'disabled' : '' ?>>
                         </div>
                         <div class="fgroup">
-                            <label class="fl">Lunas DKP-TKA</label>
+                            <label class="fl"><?= $this->lang->line('tka_dkp_paid') ?? 'Lunas DKP-TKA' ?></label>
                             <select name="lunas_dkp" class="f-select"
                                     <?= !$can_edit ? 'disabled' : '' ?>>
-                                <option value="">— Pilih —</option>
-                                <option value="Lunas"       <?= $tka->lunas_dkp=='Lunas'       ?'selected':'' ?>>Lunas</option>
-                                <option value="Belum Lunas" <?= $tka->lunas_dkp=='Belum Lunas' ?'selected':'' ?>>Belum Lunas</option>
+                                <option value=""><?= $this->lang->line('tka_select') ?? '— Pilih —' ?></option>
+                                <option value="Lunas"       <?= $tka->lunas_dkp=='Lunas'       ?'selected':'' ?>><?= $this->lang->line('tka_paid') ?? 'Lunas' ?></option>
+                                <option value="Belum Lunas" <?= $tka->lunas_dkp=='Belum Lunas' ?'selected':'' ?>><?= $this->lang->line('tka_not_paid') ?? 'Belum Lunas' ?></option>
                             </select>
                         </div>
                     </div>
@@ -726,10 +726,10 @@
                     <?php if($can_edit): ?>
                     <div class="form-foot">
                         <button type="submit" class="btn-save">
-                            <i class="fas fa-floppy-disk"></i> Simpan Perubahan
+                            <i class="fas fa-floppy-disk"></i> <?= $this->lang->line('tka_btn_save_submit') ?? 'Simpan Perubahan' ?>
                         </button>
                         <a href="<?= base_url('user/data_tka') ?>" class="btn-ghost">
-                            <i class="fas fa-xmark"></i> Batal
+                            <i class="fas fa-xmark"></i> <?= $this->lang->line('tka_btn_cancel') ?? 'Batal' ?>
                         </a>
                     </div>
                     <?php endif; ?>
@@ -744,13 +744,12 @@
         <div class="surface">
             <div class="surface-header">
                 <div class="surface-icon"><i class="fas fa-file-upload"></i></div>
-                <div class="surface-title">Ganti Berkas</div>
+                <div class="surface-title"><?= $this->lang->line('tka_replace_files') ?? 'Ganti Berkas' ?></div>
             </div>
             <div class="surface-body">
 
                 <p class="upload-note">
-                    Upload ulang untuk mengganti berkas lama. Kosongkan field jika tidak ingin mengubah.
-                    Maks. <strong>2 MB</strong> per file.
+                    <?= $this->lang->line('tka_replace_note') ?? 'Upload ulang untuk mengganti berkas lama. Kosongkan field jika tidak ingin mengubah. Maks. <strong>2 MB</strong> per file.' ?>
                 </p>
 
                 <form action="<?= base_url('user/update_berkas/'.$tka->id) ?>"
@@ -762,20 +761,20 @@
                     <!-- PDF -->
                     <div class="sec-label">
                         <div class="sec-label-icon"><i class="fas fa-file-pdf"></i></div>
-                        Dokumen PDF
+                        <?= $this->lang->line('tka_section_pdf') ?? 'Dokumen PDF' ?>
                     </div>
 
                     <div class="field-grid" style="margin-bottom:20px;">
                         <?php
                         $pdfs = [
-                            'surat_permohonan' => 'Surat Permohonan',
-                            'passport'         => 'Passport',
-                            'kitas'            => 'KITAS',
-                            'stm'              => 'STM',
-                            'rptka'            => 'RPTKA',
-                            'notifikasi'       => 'Notifikasi',
-                            'bukti_bayar'      => 'Bukti Bayar',
-                            'surat_kuasa'      => 'Surat Kuasa',
+                            'surat_permohonan' => $this->lang->line('tka_doc_surat_permohonan') ?? 'Surat Permohonan',
+                            'passport'         => $this->lang->line('tka_doc_passport') ?? 'Passport',
+                            'kitas'            => $this->lang->line('tka_doc_kitas') ?? 'KITAS',
+                            'stm'              => $this->lang->line('tka_doc_stm') ?? 'STM',
+                            'rptka'            => $this->lang->line('tka_doc_rptka') ?? 'RPTKA',
+                            'notifikasi'       => $this->lang->line('tka_doc_notifikasi') ?? 'Notifikasi',
+                            'bukti_bayar'      => $this->lang->line('tka_doc_bukti_bayar') ?? 'Bukti Bayar',
+                            'surat_kuasa'      => $this->lang->line('tka_doc_surat_kuasa') ?? 'Surat Kuasa',
                         ];
                         foreach($pdfs as $k => $v): ?>
                         <div>
@@ -803,14 +802,14 @@
                     <!-- Gambar -->
                     <div class="sec-label">
                         <div class="sec-label-icon"><i class="fas fa-image"></i></div>
-                        Dokumen Gambar
+                        <?= $this->lang->line('tka_section_image') ?? 'Dokumen Gambar' ?>
                     </div>
 
                     <div class="field-grid" style="margin-bottom:20px;">
                         <?php
                         $imgs = [
-                            'ktp'  => 'KTP Penanggung Jawab',
-                            'foto' => 'Foto TKA',
+                            'ktp'  => $this->lang->line('tka_ktp_label') ?? 'KTP Penanggung Jawab',
+                            'foto' => $this->lang->line('tka_photo_label') ?? 'Foto TKA',
                         ];
                         foreach($imgs as $k => $v): ?>
                         <div>
@@ -833,7 +832,7 @@
                                 </div>
                                 <div class="img-preview" id="pv_<?= $k ?>">
                                     <img id="pvi_<?= $k ?>" src="" alt="preview">
-                                    <span>Preview gambar baru</span>
+                                    <span><?= $this->lang->line('tka_ktp_preview') ?? 'Preview gambar baru' ?></span>
                                 </div>
                             </div>
                         </div>
@@ -842,7 +841,7 @@
 
                     <div class="form-foot">
                         <button type="submit" class="btn-save" id="btnUpload">
-                            <i class="fas fa-upload"></i> Ganti Berkas
+                            <i class="fas fa-upload"></i> <?= $this->lang->line('tka_replace_files') ?? 'Ganti Berkas' ?>
                         </button>
                     </div>
                 </form>
@@ -854,7 +853,7 @@
         <div class="back-row">
             <a href="<?= base_url('user/data_tka') ?>" class="btn-ghost">
                 <i class="fas fa-arrow-left"></i>
-                <?= $can_edit ? 'Batal &amp; Kembali' : 'Kembali ke Data TKA' ?>
+                <?= $can_edit ? ($this->lang->line('tka_btn_cancel') ?? 'Batal &amp; Kembali') : ($this->lang->line('tka_back_data') ?? 'Kembali ke Data TKA') ?>
             </a>
         </div>
 
@@ -867,6 +866,10 @@
 /* ============================================================
    Validasi file upload
 ============================================================ */
+var lang_js_invalid_pdf = "<?= $this->lang->line('tka_js_invalid_pdf') ?? 'Tipe file tidak diizinkan. Harap unggah file PDF (.pdf)' ?>";
+var lang_js_invalid_image = "<?= $this->lang->line('tka_js_invalid_image') ?? 'Tipe file tidak diizinkan. Harap unggah gambar JPG/JPEG/PNG' ?>";
+var lang_js_file_too_large = "<?= $this->lang->line('tka_js_file_too_large') ?? 'Ukuran file melebihi batas maksimum 2 MB' ?>";
+
 function setErr(k, msg) {
     var fi = document.getElementById('fi_' + k);
     var fe = document.getElementById('fe_' + k);
@@ -888,11 +891,11 @@ function vFile(inp, k, type) {
 
     var ok = true, msg = '';
     if (type === 'pdf') {
-        if (!f.name.toLowerCase().endsWith('.pdf')) { ok = false; msg = 'Harap unggah file PDF.'; }
+        if (!f.name.toLowerCase().endsWith('.pdf')) { ok = false; msg = lang_js_invalid_pdf; }
     } else {
-        if (!/\.(jpg|jpeg|png)$/i.test(f.name)) { ok = false; msg = 'Harap unggah JPG/PNG.'; }
+        if (!/\.(jpg|jpeg|png)$/i.test(f.name)) { ok = false; msg = lang_js_invalid_image; }
     }
-    if (ok && f.size > 2 * 1024 * 1024) { ok = false; msg = 'Ukuran melebihi 2 MB.'; }
+    if (ok && f.size > 2 * 1024 * 1024) { ok = false; msg = lang_js_file_too_large; }
 
     if (!ok) {
         inp.value = '';
@@ -939,11 +942,11 @@ if (fBerkas) {
             var ok  = true, msg = '';
 
             if (pdf) {
-                if (!f.name.toLowerCase().endsWith('.pdf')) { ok = false; msg = 'Harap unggah file PDF.'; }
+                if (!f.name.toLowerCase().endsWith('.pdf')) { ok = false; msg = lang_js_invalid_pdf; }
             } else {
-                if (!/\.(jpg|jpeg|png)$/i.test(f.name)) { ok = false; msg = 'Harap unggah JPG/PNG.'; }
+                if (!/\.(jpg|jpeg|png)$/i.test(f.name)) { ok = false; msg = lang_js_invalid_image; }
             }
-            if (ok && f.size > 2 * 1024 * 1024) { ok = false; msg = 'Ukuran melebihi 2 MB.'; }
+            if (ok && f.size > 2 * 1024 * 1024) { ok = false; msg = lang_js_file_too_large; }
 
             if (!ok) { setErr(k, msg); err = true; } else { clrErr(k); }
         });
@@ -958,7 +961,7 @@ if (fBerkas) {
         var b = document.getElementById('btnUpload');
         if (b) {
             b.disabled = true;
-            b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengupload…';
+            b.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + ("<?= $this->lang->line('chat_sending') ?? 'Mengupload…' ?>");
         }
     });
 }

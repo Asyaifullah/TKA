@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="<?= current_lang() == 'indonesian' ? 'id' : 'en' ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verifikasi OTP - SITLAKEB TKA</title>
+    <title><?= $this->lang->line('auth_otp_title') ?></title>
 
     <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -335,6 +335,17 @@
 <body>
 
 <div class="otp-page">
+    <div style="display:flex; flex-direction:column; gap:20px; align-items:center; z-index:2;">
+        <!-- Language Switcher -->
+        <div class="lang-switcher" style="display: flex; align-items: center; background: rgba(255,255,255,0.85); backdrop-filter: blur(8px); border-radius: 12px; padding: 4px; border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+            <a href="<?= lang_url('indonesian') ?>" class="<?= current_lang() == 'indonesian' ? 'active' : '' ?>" style="display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9px; font-size: 12px; font-weight: 700; text-decoration: none; color: <?= current_lang() == 'indonesian' ? '#ffffff' : '#64748b' ?>; background: <?= current_lang() == 'indonesian' ? '#087456' : 'transparent' ?>;">
+                <i class="fas fa-globe"></i> <?= $this->lang->line('lang_indonesian') ?>
+            </a>
+            <a href="<?= lang_url('english') ?>" class="<?= current_lang() == 'english' ? 'active' : '' ?>" style="display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9px; font-size: 12px; font-weight: 700; text-decoration: none; color: <?= current_lang() == 'english' ? '#ffffff' : '#64748b' ?>; background: <?= current_lang() == 'english' ? '#087456' : 'transparent' ?>;">
+                <i class="fas fa-globe"></i> <?= $this->lang->line('lang_english') ?>
+            </a>
+        </div>
+
     <div class="otp-card">
 
         <div class="otp-icon">
@@ -342,11 +353,8 @@
         </div>
 
         <div class="otp-title">
-            <h2>Verifikasi OTP</h2>
-            <p>
-                Masukkan kode OTP yang telah<br>
-                dikirim ke email Anda
-            </p>
+            <h2><?= $this->lang->line('auth_otp_heading') ?></h2>
+            <p><?= $this->lang->line('auth_otp_subtitle') ?></p>
         </div>
 
         <?php if($this->session->flashdata('error')): ?>
@@ -388,31 +396,32 @@
             <div class="timer-wrap">
                 <div class="timer-badge active" id="timerBadge">
                     <div class="timer-dot" id="timerDot"></div>
-                    <span id="timerText">Memuat...</span>
+                    <span id="timerText"><?= $this->lang->line('auth_otp_loading') ?></span>
                 </div>
             </div>
 
             <button type="submit" class="btn-submit" id="submitBtn">
                 <i class="fas fa-check" style="font-size:12px; margin-right:7px;"></i>
-                Verifikasi Kode
+                <?= $this->lang->line('auth_otp_verify') ?>
             </button>
         </form>
 
         <div class="resend-wrap">
-            Tidak menerima kode?
+            <?= $this->lang->line('auth_otp_no_code') ?>
             <span id="resendCounter"></span>
             <a href="<?= base_url('auth/resend_otp') ?>" id="resendLink" style="display:none;">
-                Kirim ulang
+                <?= $this->lang->line('auth_otp_resend') ?>
             </a>
         </div>
 
         <div class="back-link">
             <a href="<?= base_url('auth/register') ?>">
                 <i class="fas fa-arrow-left" style="font-size:10px; margin-right:3px;"></i>
-                Kembali
+                <?= $this->lang->line('common_back') ?>
             </a>
         </div>
 
+    </div>
     </div>
 </div>
 
@@ -492,7 +501,7 @@ function updateTimer(){
     if(remaining <= 0){
         timerBadge.className = 'timer-badge expired';
         timerDot.className = 'timer-dot stopped';
-        timerText.textContent = 'Kode sudah kadaluarsa';
+        timerText.textContent = '<?= $this->lang->line('auth_otp_expired') ?>';
 
         resendCounter.style.display = 'none';
         resendLink.style.display = 'inline';
@@ -503,7 +512,7 @@ function updateTimer(){
     var m = Math.floor(remaining / 60);
     var s = remaining % 60;
 
-    timerText.textContent = 'Berlaku: ' + m + ':' + String(s).padStart(2, '0');
+    timerText.textContent = '<?= $this->lang->line('auth_otp_valid') ?> ' + m + ':' + String(s).padStart(2, '0');
     resendCounter.innerHTML = '(<b>' + m + ':' + String(s).padStart(2,'0') + '</b>)';
 
     remaining--;

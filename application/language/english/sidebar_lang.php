@@ -1,0 +1,35 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+$lang['sidebar_dashboard'] = 'Dashboard';
+$lang['sidebar_instansi'] = 'Agency';
+$lang['sidebar_officer_mgmt'] = 'Officer Management';
+$lang['sidebar_letter_settings'] = 'Letter & Signature Settings';
+$lang['sidebar_sla_settings'] = 'SLA Settings';
+$lang['sidebar_perusahaan'] = 'Companies';
+$lang['sidebar_company_mgmt'] = 'Company Management';
+$lang['sidebar_company_list'] = 'Company List';
+$lang['sidebar_all_tka'] = 'All Foreign Workers';
+$lang['sidebar_communication'] = 'Communication';
+$lang['sidebar_send_notif'] = 'Send Notification';
+$lang['sidebar_chat_company'] = 'Company Chat';
+$lang['sidebar_others'] = 'Others';
+$lang['sidebar_monthly_report'] = 'Monthly Report';
+$lang['sidebar_activity_log'] = 'Activity Log';
+$lang['sidebar_logout'] = 'Logout';
+$lang['sidebar_close'] = 'Close Sidebar';
+$lang['sidebar_open'] = 'Open Sidebar';
+$lang['sidebar_admin_label'] = 'Admin';
+$lang['sidebar_disnaker'] = 'Labor Dept. Bekasi City';
+$lang['sidebar_tka_submission'] = 'TKA Submission';
+$lang['sidebar_data_tka'] = 'TKA Data';
+$lang['sidebar_chat_admin'] = 'Chat Admin';
+$lang['sidebar_notification'] = 'Notifications';
+$lang['sidebar_account'] = 'Account';
+$lang['sidebar_my_profile'] = 'My Profile';
+$lang['sidebar_operator_label'] = 'Operator';
+$lang['sidebar_all_submissions'] = 'All Submissions';
+$lang['sidebar_edit_letter_no'] = 'Edit Letter Number';
+$lang['sidebar_approval'] = 'Approval';
+$lang['sidebar_pending_list'] = 'Pending List';
+$lang['sidebar_approval_log'] = 'Approval Log';

@@ -1,0 +1,36 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+$lang['notif_page_title'] = 'Notifikasi — SITLAKEB TKA';
+$lang['notif_breadcrumb'] = 'Notifikasi';
+$lang['notif_mark_all_confirm'] = 'Tandai semua notifikasi sudah dibaca?';
+$lang['notif_mark_all'] = 'Tandai Semua Dibaca';
+$lang['notif_heading'] = 'Notifikasi Saya';
+$lang['notif_subtitle'] = 'Riwayat seluruh notifikasi pada akun Anda';
+$lang['notif_history'] = 'Riwayat Notifikasi';
+$lang['notif_unread_count'] = 'Belum Dibaca';
+$lang['notif_empty_title'] = 'Belum Ada Notifikasi';
+$lang['notif_empty_message'] = 'Anda belum memiliki notifikasi apapun.';
+$lang['notif_filter_all'] = 'Semua';
+$lang['notif_filter_unread'] = 'Belum Dibaca';
+$lang['notif_filter_read'] = 'Sudah Dibaca';
+$lang['notif_search_placeholder'] = 'Cari notifikasi…';
+$lang['notif_col_number'] = '#';
+$lang['notif_col_status'] = 'Status';
+$lang['notif_col_title'] = 'Judul';
+$lang['notif_col_message'] = 'Pesan';
+$lang['notif_col_time'] = 'Waktu';
+$lang['notif_col_action'] = 'Aksi';
+$lang['notif_status_unread'] = 'Belum Dibaca';
+$lang['notif_status_read'] = 'Sudah Dibaca';
+$lang['notif_mark_read'] = 'Tandai Dibaca';
+$lang['notif_badge_new'] = 'Baru';
+$lang['notif_badge_read'] = 'Dibaca';
+$lang['notif_show'] = 'Tampilkan';
+$lang['notif_per_page'] = 'per halaman';
+$lang['notif_no_match'] = 'Tidak ada notifikasi yang cocok dengan pencarian.';
+$lang['notif_showing'] = 'Menampilkan';
+$lang['notif_of_notifs'] = 'notifikasi';
+$lang['notif_zero'] = '0 notifikasi';
+$lang['notif_flash_marked_all'] = 'Semua notifikasi telah ditandai sudah dibaca.';
+$lang['notif_no_notif'] = 'Tidak ada notifikasi';

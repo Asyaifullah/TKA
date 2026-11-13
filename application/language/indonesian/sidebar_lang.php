@@ -1,0 +1,35 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+$lang['sidebar_dashboard'] = 'Dashboard';
+$lang['sidebar_instansi'] = 'Instansi';
+$lang['sidebar_officer_mgmt'] = 'Manajemen Petugas';
+$lang['sidebar_letter_settings'] = 'Pengaturan Surat & TTD';
+$lang['sidebar_sla_settings'] = 'Pengaturan SLA';
+$lang['sidebar_perusahaan'] = 'Perusahaan';
+$lang['sidebar_company_mgmt'] = 'Manajemen Perusahaan';
+$lang['sidebar_company_list'] = 'Daftar Perusahaan';
+$lang['sidebar_all_tka'] = 'Semua TKA';
+$lang['sidebar_communication'] = 'Komunikasi';
+$lang['sidebar_send_notif'] = 'Kirim Notifikasi';
+$lang['sidebar_chat_company'] = 'Chat Perusahaan';
+$lang['sidebar_others'] = 'Lainnya';
+$lang['sidebar_monthly_report'] = 'Laporan Bulanan';
+$lang['sidebar_activity_log'] = 'Log Aktivitas';
+$lang['sidebar_logout'] = 'Logout';
+$lang['sidebar_close'] = 'Tutup Sidebar';
+$lang['sidebar_open'] = 'Buka Sidebar';
+$lang['sidebar_admin_label'] = 'Admin';
+$lang['sidebar_disnaker'] = 'Disnaker Kota Bekasi';
+$lang['sidebar_tka_submission'] = 'Pengajuan TKA';
+$lang['sidebar_data_tka'] = 'Data TKA';
+$lang['sidebar_chat_admin'] = 'Chat Admin';
+$lang['sidebar_notification'] = 'Notifikasi';
+$lang['sidebar_account'] = 'Akun';
+$lang['sidebar_my_profile'] = 'Profil Saya';
+$lang['sidebar_operator_label'] = 'Operator';
+$lang['sidebar_all_submissions'] = 'Semua Pengajuan';
+$lang['sidebar_edit_letter_no'] = 'Edit Nomor Surat';
+$lang['sidebar_approval'] = 'Approval';
+$lang['sidebar_pending_list'] = 'Daftar Menunggu';
+$lang['sidebar_approval_log'] = 'Log Approval';

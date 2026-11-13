@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Auth extends CI_Controller {
+class Auth extends MY_Controller {
 
     private $smtp_email = 'faridivanrizqy501@gmail.com';
     private $smtp_app_password = 'rydipupxvrgedyxh';

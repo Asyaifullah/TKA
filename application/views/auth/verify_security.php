@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="<?= current_lang() == 'indonesian' ? 'id' : 'en' ?>">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Verifikasi Keamanan - SITLAKEB TKA</title>
+<title><?= $this->lang->line('auth_verify_title') ?></title>
 
 <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -491,42 +491,52 @@ body{
         </div>
 
         <h1 class="brand-title">
-            SITLAKEB <span>TKA</span>
+            <?= $this->lang->line('auth_brand_name') ?>
         </h1>
 
         <p class="brand-subtitle">
-            Sistem Informasi Tenaga Kerja Asing<br>
-            Dinas Tenaga Kerja Kota Bekasi
+            <?= $this->lang->line('auth_brand_subtitle') ?><br>
+            <?= $this->lang->line('auth_brand_agency') ?>
         </p>
 
         <div class="feature-grid">
             <div class="feature-card">
                 <i class="fas fa-file-alt"></i>
-                <p>Pengajuan izin TKA online</p>
+                <p><?= $this->lang->line('auth_feature_1') ?></p>
             </div>
 
             <div class="feature-card">
                 <i class="fas fa-tasks"></i>
-                <p>Alur persetujuan terstruktur</p>
+                <p><?= $this->lang->line('auth_feature_2') ?></p>
             </div>
 
             <div class="feature-card">
                 <i class="fas fa-bell"></i>
-                <p>Notifikasi real-time pengajuan</p>
+                <p><?= $this->lang->line('auth_feature_3') ?></p>
             </div>
 
             <div class="feature-card">
                 <i class="fas fa-download"></i>
-                <p>Download surat keterangan digital</p>
+                <p><?= $this->lang->line('auth_feature_4') ?></p>
             </div>
         </div>
     </section>
 
     <section class="right-section">
+        <!-- Language Switcher -->
+        <div class="lang-switcher" style="display: flex; align-items: center; background: rgba(255,255,255,0.85); backdrop-filter: blur(8px); border-radius: 12px; padding: 4px; border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+            <a href="<?= lang_url('indonesian') ?>" class="<?= current_lang() == 'indonesian' ? 'active' : '' ?>" style="display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9px; font-size: 12px; font-weight: 700; text-decoration: none; color: <?= current_lang() == 'indonesian' ? '#ffffff' : '#64748b' ?>; background: <?= current_lang() == 'indonesian' ? '#087456' : 'transparent' ?>;">
+                <i class="fas fa-globe"></i> <?= $this->lang->line('lang_indonesian') ?>
+            </a>
+            <a href="<?= lang_url('english') ?>" class="<?= current_lang() == 'english' ? 'active' : '' ?>" style="display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9px; font-size: 12px; font-weight: 700; text-decoration: none; color: <?= current_lang() == 'english' ? '#ffffff' : '#64748b' ?>; background: <?= current_lang() == 'english' ? '#087456' : 'transparent' ?>;">
+                <i class="fas fa-globe"></i> <?= $this->lang->line('lang_english') ?>
+            </a>
+        </div>
+
         <div class="login-card">
             <div class="form-title">
-                <h2>Verifikasi Keamanan </h2>
-                <p>Jawab pertanyaan keamanan yang Anda daftarkan untuk melanjutkan reset password.</p>
+                <h2><?= $this->lang->line('auth_verify_heading') ?></h2>
+                <p><?= $this->lang->line('auth_verify_subtitle') ?></p>
             </div>
 
             <?php if($this->session->flashdata('error')): ?>
@@ -548,7 +558,7 @@ body{
             ?>
                 <div class="alert-box alert-warn">
                     <i class="fas fa-triangle-exclamation"></i>
-                    <span>Sisa percobaan: <strong><?= $attempts_left ?> kali</strong> lagi sebelum akun dikunci sementara.</span>
+                    <span><?= $this->lang->line('auth_verify_remaining') ?> <strong><?= $attempts_left ?></strong> <?= $this->lang->line('auth_verify_remaining_suffix') ?></span>
                 </div>
             <?php
                 endif;
@@ -560,18 +570,18 @@ body{
             ?>
                 <div class="alert-box alert-lock">
                     <i class="fas fa-lock"></i>
-                    <span>Akun dikunci. Coba lagi setelah <strong><?= $h ?> jam <?= $m ?> menit</strong>.</span>
+                    <span><?= $this->lang->line('auth_verify_locked') ?> <strong><?= $h ?> jam <?= $m ?> menit</strong>.</span>
                 </div>
             <?php endif; ?>
 
             <div class="info-box">
                 <div class="info-row">
                     <i class="fas fa-envelope"></i>
-                    <span><strong>Email:</strong> <?= htmlspecialchars($email) ?></span>
+                    <span><strong><?= $this->lang->line('auth_verify_email') ?></strong> <?= htmlspecialchars($email) ?></span>
                 </div>
                 <div class="info-row">
                     <i class="fas fa-circle-question"></i>
-                    <span><strong>Pertanyaan:</strong> <?= htmlspecialchars($question) ?></span>
+                    <span><strong><?= $this->lang->line('auth_verify_question') ?></strong> <?= htmlspecialchars($question) ?></span>
                 </div>
             </div>
 
@@ -580,27 +590,27 @@ body{
                        value="<?= $this->security->get_csrf_hash(); ?>">
 
                 <div class="field">
-                    <label for="sec_answer">Jawaban Anda</label>
+                    <label for="sec_answer"><?= $this->lang->line('auth_verify_answer_label') ?></label>
                     <div class="input-wrap">
                         <i class="fas fa-key input-icon"></i>
                         <input type="text" id="sec_answer" name="security_answer" class="form-input"
-                               placeholder="Ketik jawaban di sini" required autocomplete="off"
+                               placeholder="<?= $this->lang->line('auth_verify_answer_placeholder') ?>" required autocomplete="off"
                                <?php if($is_locked) echo 'disabled'; ?>>
                     </div>
                     <div class="hint">
                         <i class="fas fa-circle-info"></i>
-                        Jawaban tidak case-sensitive (huruf besar/kecil diabaikan)
+                        <?= $this->lang->line('auth_verify_answer_hint') ?>
                     </div>
                 </div>
 
                 <button type="submit" class="btn-submit" <?php if($is_locked) echo 'disabled'; ?>>
-                    <i class="fas fa-shield-check"></i> Verifikasi Jawaban
+                    <i class="fas fa-shield-check"></i> <?= $this->lang->line('auth_verify_btn') ?>
                 </button>
             </form>
 
             <div class="form-footer">
                 <a href="<?= base_url('auth/forgot_password') ?>">
-                    <i class="fas fa-arrow-left" style="font-size:11px; margin-right:4px Pap;"></i> Kembali ke Lupa Password
+                    <i class="fas fa-arrow-left" style="font-size:11px; margin-right:4px;"></i> <?= $this->lang->line('auth_back_forgot') ?>
                 </a>
             </div>
         </div>

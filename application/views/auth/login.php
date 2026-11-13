@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="<?= current_lang() == 'indonesian' ? 'id' : 'en' ?>">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Login - SITLAKEB TKA</title>
+<title><?= $this->lang->line('auth_login_title') ?></title>
 
 <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -205,6 +205,19 @@ body{
     margin-bottom:18px;
 }
 
+.alert-success-msg{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#f0fdf4;
+    border:1px solid #bbf7d0;
+    color:#166534;
+    border-radius:12px;
+    padding:12px 14px;
+    font-size:13px;
+    margin-bottom:18px;
+}
+
 .field{
     margin-bottom:18px;
 }
@@ -337,6 +350,54 @@ label{
 }
 
 /* ========================================================
+   LANGUAGE SWITCHER
+   ======================================================== */
+.lang-switcher {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    padding: 4px;
+    border: 1px solid rgba(255,255,255,0.6);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    z-index: 10;
+}
+
+.lang-switcher a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    color: #64748b;
+    transition: all 0.2s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.lang-switcher a:hover {
+    color: #087456;
+    background: rgba(8,116,86,0.06);
+}
+
+.lang-switcher a.active {
+    background: #087456;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(8,116,86,0.3);
+}
+
+.lang-switcher a img {
+    width: 18px;
+    height: 13px;
+    object-fit: cover;
+    border-radius: 2px;
+}
+
+/* ========================================================
    5. BREAKPOINTS MEDIA QUERIES (BREAKDOWN RESPONSIVE)
    ======================================================== */
 
@@ -366,7 +427,7 @@ label{
         overflow-y:auto;
     }
     .login-page{
-        flex-direction:column; /* Layout beralih dari menyamping ke vertikal kebawah */
+        flex-direction:column;
         justify-content:flex-start;
         gap:40px;
         padding:60px 24px;
@@ -382,7 +443,7 @@ label{
         flex: none;
     }
     .feature-grid {
-        flex-wrap: wrap; /* Menghindari luapan teks fiturnya menyempit */
+        flex-wrap: wrap;
         justify-content: center;
         gap: 20px;
     }
@@ -407,7 +468,6 @@ label{
         font-size:15px;
         margin-bottom:30px;
     }
-    /* Di layar smartphone kecil, barisan fitur diubah menjadi grid 2x2 agar tetap rapi */
     .feature-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -455,38 +515,48 @@ label{
         </h1>
 
         <p class="brand-subtitle">
-            Sistem Informasi Tenaga Kerja Asing<br>
-            Dinas Tenaga Kerja Kota Bekasi
+            <?= $this->lang->line('auth_brand_subtitle') ?><br>
+            <?= $this->lang->line('auth_brand_agency') ?>
         </p>
 
         <div class="feature-grid">
             <div class="feature-card">
                 <i class="fas fa-file-alt"></i>
-                <p>Pengajuan izin TKA online</p>
+                <p><?= $this->lang->line('auth_feature_1') ?></p>
             </div>
 
             <div class="feature-card">
                 <i class="fas fa-tasks"></i>
-                <p>Alur persetujuan terstruktur</p>
+                <p><?= $this->lang->line('auth_feature_2') ?></p>
             </div>
 
             <div class="feature-card">
                 <i class="fas fa-bell"></i>
-                <p>Notifikasi real-time pengajuan</p>
+                <p><?= $this->lang->line('auth_feature_3') ?></p>
             </div>
 
             <div class="feature-card">
                 <i class="fas fa-download"></i>
-                <p>Download surat keterangan digital</p>
+                <p><?= $this->lang->line('auth_feature_4') ?></p>
             </div>
         </div>
     </section>
 
     <section class="right-section">
+        <!-- Language Switcher -->
+        <div class="lang-switcher">
+            <a href="<?= lang_url('indonesian') ?>" class="<?= current_lang() == 'indonesian' ? 'active' : '' ?>">
+                <i class="fas fa-globe"></i> <?= $this->lang->line('lang_indonesian') ?>
+            </a>
+            <a href="<?= lang_url('english') ?>" class="<?= current_lang() == 'english' ? 'active' : '' ?>">
+                <i class="fas fa-globe"></i> <?= $this->lang->line('lang_english') ?>
+            </a>
+        </div>
+
         <div class="login-card">
             <div class="form-title">
-                <h2>Selamat Datang</h2>
-                <p>Masuk ke akun Anda untuk melanjutkan</p>
+                <h2><?= $this->lang->line('auth_welcome') ?></h2>
+                <p><?= $this->lang->line('auth_login_subtitle') ?></p>
             </div>
 
             <?php if($this->session->flashdata('error')): ?>
@@ -496,31 +566,38 @@ label{
                 </div>
             <?php endif; ?>
 
+            <?php if($this->session->flashdata('success')): ?>
+                <div class="alert-success-msg">
+                    <i class="fas fa-check-circle"></i>
+                    <?= $this->session->flashdata('success') ?>
+                </div>
+            <?php endif; ?>
+
             <form action="<?= base_url('auth/do_login') ?>" method="post">
                 <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>"
                        value="<?= $this->security->get_csrf_hash(); ?>">
 
                 <div class="field">
-                    <label for="email">Email</label>
+                    <label for="email"><?= $this->lang->line('auth_email_label') ?></label>
                     <div class="input-wrap">
                         <i class="fas fa-envelope input-icon"></i>
                         <input type="email" id="email" name="email" class="form-input"
-                               placeholder="Masukkan email" required autocomplete="email">
+                               placeholder="<?= $this->lang->line('auth_email_placeholder') ?>" required autocomplete="email">
                     </div>
                 </div>
 
                 <div class="field">
                     <div class="label-row">
-                        <label for="password">Kata Sandi</label>
+                        <label for="password"><?= $this->lang->line('auth_password_label') ?></label>
                         <a href="<?= base_url('auth/forgot_password') ?>" class="forgot-link">
-                            Lupa password?
+                            <?= $this->lang->line('auth_forgot_password') ?>
                         </a>
                     </div>
 
                     <div class="input-wrap">
                         <i class="fas fa-lock input-icon"></i>
                         <input type="password" id="password" name="password" class="form-input"
-                               placeholder="Masukkan password" required autocomplete="current-password">
+                               placeholder="<?= $this->lang->line('auth_password_placeholder') ?>" required autocomplete="current-password">
                         <button type="button" class="toggle-btn" onclick="togglePass('password', this)">
                             <i class="far fa-eye"></i>
                         </button>
@@ -528,15 +605,15 @@ label{
                 </div>
 
                 <button type="submit" class="btn-submit">
-                    <i class="fas fa-sign-in-alt"></i> Masuk
+                    <i class="fas fa-sign-in-alt"></i> <?= $this->lang->line('auth_btn_login') ?>
                 </button>
             </form>
 
-            <div class="form-divider">atau</div>
+            <div class="form-divider"><?= $this->lang->line('auth_or') ?></div>
 
             <div class="form-footer">
-                Belum punya akun?
-                <a href="<?= base_url('auth/register') ?>">Daftar Perusahaan</a>
+                <?= $this->lang->line('auth_no_account') ?>
+                <a href="<?= base_url('auth/register') ?>"><?= $this->lang->line('auth_register_link') ?></a>
             </div>
         </div>
 
@@ -563,6 +640,7 @@ function togglePass(id, btn){
 // Fungsi Update Jam & Tanggal Digital Real-time
 function updateAccessInfo(){
     const now = new Date();
+    const locale = '<?= current_lang() == "english" ? "en-US" : "id-ID" ?>';
 
     const dateOptions = {
         day: '2-digit',
@@ -581,12 +659,14 @@ function updateAccessInfo(){
         hour12: false
     };
 
-    const dateText = now.toLocaleDateString('id-ID', dateOptions);
-    const dayText = now.toLocaleDateString('id-ID', dayOptions);
-    const timeText = now.toLocaleTimeString('id-ID', timeOptions);
+    const dateText = now.toLocaleDateString(locale, dateOptions);
+    const dayText = now.toLocaleDateString(locale, dayOptions);
+    const timeText = now.toLocaleTimeString(locale, timeOptions);
 
-    document.getElementById('current-date').innerHTML = dayText + ', ' + dateText;
-    document.getElementById('current-time').innerHTML = timeText + ' WIB';
+    const dateEl = document.getElementById('current-date');
+    const timeEl = document.getElementById('current-time');
+    if(dateEl) dateEl.innerHTML = dayText + ', ' + dateText;
+    if(timeEl) timeEl.innerHTML = timeText + ' <?= $this->lang->line("auth_wib") ?>';
 }
 
 // Eksekusi fungsi waktu

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="<?= current_lang() == 'indonesian' ? 'id' : 'en' ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lengkapi Detail — <?= isset($tka) && is_object($tka) ? htmlspecialchars($tka->nama_tka) : 'Error' ?></title>
+    <title><?= $this->lang->line('tka_btn_complete') ?? 'Lengkapi Detail' ?> — <?= isset($tka) && is_object($tka) ? htmlspecialchars($tka->nama_tka) : 'Error' ?></title>
     <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -290,9 +290,9 @@
         <div class="topnav-breadcrumb">
             <a href="<?= base_url('dashboard') ?>" style="color:var(--c-text-muted);text-decoration:none;"><i class="fas fa-home"></i></a>
             <i class="fas fa-chevron-right" style="font-size:8px;"></i>
-            <a href="<?= base_url('user/data_tka') ?>" style="color:var(--c-text-muted);text-decoration:none;">Data TKA</a>
+            <a href="<?= base_url('user/data_tka') ?>" style="color:var(--c-text-muted);text-decoration:none;"><?= $this->lang->line('tka_breadcrumb') ?? 'Data TKA' ?></a>
             <i class="fas fa-chevron-right" style="font-size:8px;"></i>
-            <strong>Lengkapi Detail</strong>
+            <strong><?= $this->lang->line('tka_btn_complete') ?? 'Lengkapi Detail' ?></strong>
         </div>
         <div class="topnav-actions"></div>
     </header>
@@ -302,8 +302,8 @@
         <?php if(!isset($tka) || !is_object($tka)): ?>
             <div style="background:#fff1f2;border:1px solid #fecdd3;border-left:4px solid #f43f5e;border-radius:12px;padding:14px 18px;font-size:0.84rem;color:#9f1239;">
                 <i class="fas fa-exclamation-triangle me-2"></i>
-                Data TKA tidak ditemukan.
-                <a href="<?= base_url('user/data_tka') ?>" style="color:#9f1239;font-weight:700;margin-left:6px;">← Kembali</a>
+                <?= $this->lang->line('tka_not_found') ?? 'Data TKA tidak ditemukan.' ?>
+                <a href="<?= base_url('user/data_tka') ?>" style="color:#9f1239;font-weight:700;margin-left:6px;">← <?= $this->lang->line('tka_back') ?? 'Kembali' ?></a>
             </div>
         <?php else: ?>
 
@@ -312,7 +312,7 @@
             <div>
                 <h2 style="font-size:1.2rem;font-weight:700;margin:0;display:flex;align-items:center;gap:10px;">
                     <div class="section-icon"><i class="fas fa-user-edit"></i></div>
-                    Lengkapi Data Detail TKA
+                    <?= $this->lang->line('tka_complete_detail') ?? 'Lengkapi Data Detail TKA' ?>
                 </h2>
                 <div style="display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;">
                     <span style="background:#ecfdf5;color:#0f766e;padding:3px 12px;border-radius:20px;font-size:0.73rem;font-weight:700;display:inline-flex;align-items:center;gap:5px;">
@@ -324,7 +324,7 @@
                 </div>
             </div>
             <a href="<?= base_url('user/data_tka') ?>" class="back-link" style="color:#64748b;font-size:0.78rem;text-decoration:none;display:flex;align-items:center;gap:5px;">
-                <i class="fas fa-arrow-left"></i> Kembali ke daftar
+                <i class="fas fa-arrow-left"></i> <?= $this->lang->line('tka_back_to_list') ?? 'Kembali ke daftar' ?>
             </a>
         </div>
 
@@ -339,7 +339,7 @@
         <?php if($tka->status == 'DRAFT'): ?>
         <div class="info-strip">
             <i class="fas fa-info-circle"></i>
-            <span><strong>Lengkapi semua data wajib (*)</strong> — setelah disimpan, pengajuan akan otomatis masuk ke antrian verifikasi.</span>
+            <span><?= $this->lang->line('tka_complete_info') ?? '<strong>Lengkapi semua data wajib (*)</strong> — setelah disimpan, pengajuan akan otomatis masuk ke antrian verifikasi.' ?></span>
         </div>
         <?php endif; ?>
 
@@ -350,7 +350,7 @@
             <div class="surface" style="border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.04);">
                 <div class="surface-header" style="padding:18px 28px;">
                     <div class="surface-title" style="font-size:0.95rem;">
-                        <i class="fas fa-id-card" style="color:var(--c-primary);"></i> Formulir Data TKA
+                        <i class="fas fa-id-card" style="color:var(--c-primary);"></i> <?= $this->lang->line('tka_form_title') ?? 'Formulir Data TKA' ?>
                     </div>
                 </div>
 
@@ -360,28 +360,28 @@
                         <!-- ─── KIRI: Dokumen ─── -->
                         <div>
                             <div class="field">
-                                <label class="form-label required">Nomor Passport</label>
+                                <label class="form-label required"><?= $this->lang->line('tka_passport_no') ?? 'Nomor Passport' ?></label>
                                 <input type="text" name="passport_no" class="form-control" required placeholder="M45608921">
                             </div>
                             <div class="field">
-                                <label class="form-label required">Masa Berlaku Passport</label>
+                                <label class="form-label required"><?= $this->lang->line('tka_passport_expiry') ?? 'Masa Berlaku Passport' ?></label>
                                 <input type="date" name="passport_expiry" class="form-control" required>
                             </div>
                             <div class="field">
-                                <label class="form-label required">Nomor Kitas</label>
+                                <label class="form-label required"><?= $this->lang->line('tka_kitas_no') ?? 'Nomor Kitas' ?></label>
                                 <input type="text" name="kitas_no" class="form-control" required placeholder="2D4564511LA8-B">
                             </div>
                             <div class="field">
-                                <label class="form-label required">Nomor STM</label>
-                                 <input type="text" name="stm_no" class="form-control" required placeholder="Nomor STM">
+                                <label class="form-label required"><?= $this->lang->line('tka_stm_no') ?? 'Nomor STM' ?></label>
+                                 <input type="text" name="stm_no" class="form-control" required placeholder="<?= $this->lang->line('tka_stm_no') ?? 'Nomor STM' ?>">
                             </div>
-                            <div class="section-divider" style="grid-column:unset;"><span>Data RPTKA</span></div>
+                            <div class="section-divider" style="grid-column:unset;"><span><?= $this->lang->line('tka_rptka_data') ?? 'Data RPTKA' ?></span></div>
                             <div class="field">
-                                <label class="form-label required">Nomor RPTKA</label>
+                                <label class="form-label required"><?= $this->lang->line('tka_rptka_no') ?? 'Nomor RPTKA' ?></label>
                                 <input type="text" name="rptka_no" class="form-control" required placeholder="B.3/54643/PK.04.00/VIII/2025">
                             </div>
                             <div class="field">
-                                <label class="form-label required">Tanggal RPTKA</label>
+                                <label class="form-label required"><?= $this->lang->line('tka_rptka_date') ?? 'Tanggal RPTKA' ?></label>
                                 <input type="date" name="rptka_date" class="form-control" required>
                             </div>
                         </div>
@@ -389,40 +389,40 @@
                         <!-- ─── KANAN: Data Pribadi ─── -->
                         <div>
                             <div class="field">
-                                <label class="form-label required">Jabatan</label>
+                                <label class="form-label required"><?= $this->lang->line('tka_position') ?? 'Jabatan' ?></label>
                                 <input type="text" name="jabatan" class="form-control" required placeholder="Direktur Teknik">
                             </div>
                             <div class="field">
-                                <label class="form-label required">Kebangsaan</label>
+                                <label class="form-label required"><?= $this->lang->line('tka_nationality') ?? 'Kebangsaan' ?></label>
                                 <input type="text" name="negara_asal" class="form-control" required placeholder="Tiongkok">
                             </div>
                             <div class="field">
-                                <label class="form-label required">Tempat Lahir</label>
+                                <label class="form-label required"><?= $this->lang->line('tka_birthplace') ?? 'Tempat Lahir' ?></label>
                                 <input type="text" name="tempat_lahir" class="form-control" required placeholder="Beijing">
                             </div>
                             <div class="dob-gender-grid">
                                 <div class="field">
-                                    <label class="form-label required">Tgl Lahir</label>
+                                    <label class="form-label required"><?= $this->lang->line('tka_birthdate') ?? 'Tgl Lahir' ?></label>
                                     <input type="date" name="tanggal_lahir" class="form-control" required>
                                 </div>
                                 <div class="field">
-                                    <label class="form-label required">Jenis Kelamin</label>
+                                    <label class="form-label required"><?= $this->lang->line('tka_gender') ?? 'Jenis Kelamin' ?></label>
                                     <select name="jenis_kelamin" class="form-select" required>
                                         <option value="">—</option>
-                                        <option value="Laki-laki">Laki-laki</option>
-                                        <option value="Perempuan">Perempuan</option>
+                                        <option value="Laki-laki"><?= $this->lang->line('tka_male') ?? 'Laki-laki' ?></option>
+                                        <option value="Perempuan"><?= $this->lang->line('tka_female') ?? 'Perempuan' ?></option>
                                     </select>
                                 </div>
                             </div>
                             <div class="field">
-                                <label class="form-label required">Alamat Tinggal</label>
-                                <textarea name="alamat_tinggal" class="form-control" rows="3" required placeholder="Alamat lengkap di Indonesia"></textarea>
+                                <label class="form-label required"><?= $this->lang->line('tka_address') ?? 'Alamat Tinggal' ?></label>
+                                <textarea name="alamat_tinggal" class="form-control" rows="3" required placeholder="<?= $this->lang->line('tka_address') ?? 'Alamat Tinggal' ?>"></textarea>
                             </div>
                         </div>
 
                         <!-- ─── FULL WIDTH: Notifikasi & Pekerjaan ─── -->
                         <div class="section-divider span-full">
-                            <span><i class="fas fa-bell" style="margin-right:4px;"></i> Notifikasi &amp; Pekerjaan</span>
+                            <span><i class="fas fa-bell" style="margin-right:4px;"></i> <?= $this->lang->line('tka_notif_work') ?? 'Notifikasi &amp; Pekerjaan' ?></span>
                         </div>
 
                         <div class="span-full">
@@ -430,46 +430,46 @@
                                 <!-- Kolom 1 -->
                                 <div style="display:flex;flex-direction:column;gap:14px;">
                                     <div class="field">
-                                        <label class="form-label required">No Notifikasi</label>
+                                        <label class="form-label required"><?= $this->lang->line('tka_notif_no') ?? 'No Notifikasi' ?></label>
                                         <input type="text" name="notifikasi_no" class="form-control" required placeholder="B.3/115909/...">
                                     </div>
                                     <div class="field">
-                                        <label class="form-label required">Tgl Notifikasi</label>
+                                        <label class="form-label required"><?= $this->lang->line('tka_notif_date') ?? 'Tgl Notifikasi' ?></label>
                                         <input type="date" name="notifikasi_date" class="form-control" required>
                                     </div>
                                     <div class="field">
-                                        <label class="form-label required">Jenis</label>
+                                        <label class="form-label required"><?= $this->lang->line('tka_notif_type') ?? 'Jenis' ?></label>
                                         <select name="jenis_notifikasi" class="form-select" required>
                                             <option value="">—</option>
-                                            <option value="Baru">Baru</option>
-                                            <option value="Perpanjangan">Perpanjangan</option>
-                                            <option value="jangka pendek">Jangka Pendek</option>
+                                            <option value="Baru"><?= $this->lang->line('tka_notif_new') ?? 'Baru' ?></option>
+                                            <option value="Perpanjangan"><?= $this->lang->line('tka_notif_extend') ?? 'Perpanjangan' ?></option>
+                                            <option value="jangka pendek"><?= $this->lang->line('tka_notif_short') ?? 'Jangka Pendek' ?></option>
                                         </select>
                                     </div>
                                 </div>
                                 <!-- Kolom 2 -->
                                 <div style="display:flex;flex-direction:column;gap:14px;">
                                     <div class="field">
-                                        <label class="form-label required">Masa Berlaku</label>
+                                        <label class="form-label required"><?= $this->lang->line('tka_notif_expiry') ?? 'Masa Berlaku' ?></label>
                                         <input type="text" name="masa_berlaku_notifikasi" class="form-control" required placeholder="01-01-2025 s/d ...">
                                     </div>
                                     <div class="field">
-                                        <label class="form-label required">Lokasi Kerja</label>
+                                        <label class="form-label required"><?= $this->lang->line('tka_work_location') ?? 'Lokasi Kerja' ?></label>
                                         <input type="text" name="lokasi_kerja" class="form-control" required placeholder="Kawasan Industri...">
                                     </div>
                                 </div>
                                 <!-- Kolom 3 -->
                                 <div style="display:flex;flex-direction:column;gap:14px;">
                                     <div class="field">
-                                        <label class="form-label required">Lunas DKP</label>
+                                        <label class="form-label required"><?= $this->lang->line('tka_dkp_paid') ?? 'Lunas DKP' ?></label>
                                         <select name="lunas_dkp" class="form-select" required>
                                             <option value="">—</option>
-                                            <option value="Lunas">Lunas</option>
-                                            <option value="Belum Lunas">Belum Lunas</option>
+                                            <option value="Lunas"><?= $this->lang->line('tka_paid') ?? 'Lunas' ?></option>
+                                            <option value="Belum Lunas"><?= $this->lang->line('tka_not_paid') ?? 'Belum Lunas' ?></option>
                                         </select>
                                     </div>
                                     <div class="field">
-                                        <label class="form-label required">Bidang Usaha</label>
+                                        <label class="form-label required"><?= $this->lang->line('tka_business_field') ?? 'Bidang Usaha' ?></label>
                                         <input type="text" name="bidang_usaha" class="form-control" required placeholder="Manufaktur">
                                     </div>
                                 </div>
@@ -481,10 +481,10 @@
                     <!-- Action bar -->
                     <div class="action-bar">
                         <button type="submit" class="btn-save" id="btnSimpan">
-                            <i class="fas fa-paper-plane"></i> Simpan &amp; Ajukan
+                            <i class="fas fa-paper-plane"></i> <?= $this->lang->line('tka_btn_save_submit') ?? 'Simpan &amp; Ajukan' ?>
                         </button>
                         <a href="<?= base_url('user/data_tka') ?>" class="btn-lewati">
-                            <i class="fas fa-arrow-left"></i> Kembali
+                            <i class="fas fa-arrow-left"></i> <?= $this->lang->line('tka_btn_cancel') ?? 'Kembali' ?>
                         </a>
                     </div>
 
@@ -532,7 +532,7 @@
             kosong[0].focus();
             return;
         }
-        if(!confirm('Simpan data dan ajukan?')) return;
+        if(!confirm("<?= $this->lang->line('tka_confirm_save_submit') ?? 'Simpan data dan ajukan?' ?>")) return;
         form.submit();
     });
 

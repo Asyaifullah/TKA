@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Approval extends CI_Controller {
+class Approval extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -19,16 +19,16 @@ class Approval extends CI_Controller {
         $this->role = $this->session->userdata('role');
         $allowed = ['kasi', 'kabid', 'sekdis', 'kadis'];
         if(!in_array($this->role, $allowed)) {
-            show_error('Akses ditolak. Anda tidak memiliki hak untuk halaman ini.');
+            show_error($this->lang->line('approval_access_denied'));
         }
     }
 
     private function get_role_display() {
         $role_names = [
-            'kasi'   => 'Kepala Seksi',
-            'kabid'  => 'Kepala Bidang',
-            'sekdis' => 'Sekretaris Dinas',
-            'kadis'  => 'Kepala Dinas'
+            'kasi'   => $this->lang->line('role_kasi'),
+            'kabid'  => $this->lang->line('role_kabid'),
+            'sekdis' => $this->lang->line('role_sekdis'),
+            'kadis'  => $this->lang->line('role_kadis')
         ];
         return $role_names[$this->role] ?? ucfirst($this->role);
     }
@@ -85,6 +85,7 @@ class Approval extends CI_Controller {
                     'tka_id'       => $t->id,
                     'level'        => $level,
                     'status'       => $status,
+                    'user_id'      => null,
                     'sla_deadline' => $deadline,
                     'catatan'      => 'Auto-created by fallback',
                     'created_at'   => $t->created_at
@@ -113,7 +114,7 @@ class Approval extends CI_Controller {
             'kadis'  => 'MENUNGGU_KADIS'
         ];
         if($tka->status != $allowed_status[$this->role]) {
-            show_error('Status tidak sesuai untuk role ini.');
+            show_error($this->lang->line('approval_status_invalid'));
         }
         $data['tka'] = $tka;
         $data['berkas'] = $this->Berkas_model->get_by_tka($id);
@@ -130,7 +131,7 @@ class Approval extends CI_Controller {
         $catatan = $this->input->post('catatan');
 
         if(!in_array($action, ['approve', 'reject'])) {
-            show_error('Aksi tidak valid.');
+            show_error($this->lang->line('approval_action_invalid'));
         }
 
         $tka = $this->Tka_model->get_by_id($id);
@@ -144,7 +145,7 @@ class Approval extends CI_Controller {
         ];
 
         if($tka->status != $status_map[$this->role]) {
-            $this->session->set_flashdata('error', 'Status TKA sudah berubah, tidak dapat diproses.');
+            $this->session->set_flashdata('error', $this->lang->line('approval_flash_status_changed'));
             redirect('approval/index');
         }
 
@@ -162,7 +163,7 @@ class Approval extends CI_Controller {
 
             $update = $this->Tka_model->update_status($id, $next_status);
             if(!$update) {
-                $this->session->set_flashdata('error', 'Gagal mengupdate status TKA (approve). Silakan coba lagi.');
+                $this->session->set_flashdata('error', $this->lang->line('approval_flash_approve_failed'));
                 redirect('approval/detail/'.$id);
             }
 
@@ -175,12 +176,12 @@ class Approval extends CI_Controller {
                 'tka_id'  => $id,
                 'role'    => $this->role,
                 'status'  => 'approve',
-                'catatan' => $catatan ?: null
+                'catatan' => $catatan ?: '-'
             ];
             $insert_log = $this->Approval_log_model->insert($log_data);
             if(!$insert_log) {
                 log_message('error', 'Gagal insert approval_log untuk TKA ID: '.$id);
-                $this->session->set_flashdata('warning', 'Status berhasil diubah, tetapi gagal mencatat log approval.');
+                $this->session->set_flashdata('warning', $this->lang->line('approval_flash_log_failed'));
             }
 
             // Buat log untuk level selanjutnya (jika belum selesai)
@@ -207,17 +208,17 @@ class Approval extends CI_Controller {
                 }
             }
 
-            $msg = 'Berhasil approve pengajuan TKA.';
+            $msg = $this->lang->line('approval_flash_approve_success');
 
         } else { // REJECT
             if(trim($catatan) == '') {
-                $this->session->set_flashdata('error', 'Catatan penolakan wajib diisi.');
+                $this->session->set_flashdata('error', $this->lang->line('approval_flash_reject_note_empty'));
                 redirect('approval/detail/'.$id);
             }
 
             $update = $this->Tka_model->update_status($id, 'DITOLAK');
             if(!$update) {
-                $this->session->set_flashdata('error', 'Gagal mengupdate status TKA (reject). Silakan coba lagi.');
+                $this->session->set_flashdata('error', $this->lang->line('approval_flash_reject_failed'));
                 redirect('approval/detail/'.$id);
             }
 
@@ -232,7 +233,7 @@ class Approval extends CI_Controller {
             $insert_log = $this->Approval_log_model->insert($log_data);
             if(!$insert_log) {
                 log_message('error', 'Gagal insert approval_log untuk TKA ID: '.$id);
-                $this->session->set_flashdata('warning', 'Pemberkasan ditolak, tetapi gagal mencatat log approval.');
+                $this->session->set_flashdata('warning', $this->lang->line('approval_flash_log_failed_reject'));
             }
 
             $pesan_user = "Pengajuan TKA Anda (ID: {$id}) telah ditolak oleh {$this->get_role_display()}.\n"
@@ -240,7 +241,7 @@ class Approval extends CI_Controller {
                         . "Silakan perbaiki dan kirim ulang pengajuan revisi.";
             $this->kirim_notifikasi($tka->user_id, $pesan_user, 'reject');
 
-            $msg = 'Pengajuan TKA ditolak.';
+            $msg = $this->lang->line('approval_flash_reject_success');
         }
 
         // Catat ke admin_log
@@ -287,7 +288,7 @@ class Approval extends CI_Controller {
             $bulan = date('n', strtotime($t->created_at));
             $monthly_all[$bulan]++;
         }
-        $chart_labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        $chart_labels = [$this->lang->line('month_jan'), $this->lang->line('month_feb'), $this->lang->line('month_mar'), $this->lang->line('month_apr'), $this->lang->line('month_mei'), $this->lang->line('month_jun'), $this->lang->line('month_jul'), $this->lang->line('month_agu'), $this->lang->line('month_sep'), $this->lang->line('month_okt'), $this->lang->line('month_nov'), $this->lang->line('month_des')];
         $chart_data = array_values($monthly_all);
 
         $pie_data = [$total_approved, $total_rejected];
@@ -378,7 +379,7 @@ public function notifications() {
 public function mark_all_read() {
     $user_id = $this->session->userdata('user_id');
     $this->Notification_model->mark_all_read($user_id);
-    $this->session->set_flashdata('success', 'Semua notifikasi telah ditandai sudah dibaca.');
+    $this->session->set_flashdata('success', $this->lang->line('approval_flash_notif_read'));
     redirect('approval/notifications');
 }
 }

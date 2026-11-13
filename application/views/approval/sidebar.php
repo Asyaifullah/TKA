@@ -298,7 +298,7 @@ function appr_active($uri) {
         <img src="<?= base_url('assets/images/logo_bekasi.png') ?>" alt="Logo Bekasi">
         <div class="sb-brand-text">
             <span class="sb-brand-name">SITLAKEB TKA</span>
-            <span class="sb-brand-sub">KOTA BEKASI</span>
+            <span class="sb-brand-sub"><?= lang_line('sidebar_disnaker') ?></span>
         </div>
     </a>
 
@@ -314,15 +314,15 @@ function appr_active($uri) {
 
         <a class="sb-link <?= appr_active('approval/dashboard') ?>" href="<?= base_url('approval/dashboard') ?>">
             <span class="sb-icon"><i class="fas fa-tachometer-alt"></i></span>
-            <span class="sb-label">Dashboard</span>
+            <span class="sb-label"><?= lang_line('sidebar_dashboard') ?></span>
         </a>
 
         <div class="sb-divider"></div>
-        <div class="sb-section">Approval</div>
+        <div class="sb-section"><?= lang_line('sidebar_approval') ?></div>
 
         <a class="sb-link <?= appr_active('approval/index') ?>" href="<?= base_url('approval/index') ?>">
             <span class="sb-icon"><i class="fas fa-tasks"></i></span>
-            <span class="sb-label">Daftar Pengajuan</span>
+            <span class="sb-label"><?= lang_line('sidebar_pending_list') ?></span>
         </a>
 
         <div class="sb-divider"></div>
@@ -330,26 +330,37 @@ function appr_active($uri) {
 
         <a class="sb-link <?= appr_active('approval/logs') ?>" href="<?= base_url('approval/logs') ?>">
             <span class="sb-icon"><i class="fas fa-history"></i></span>
-            <span class="sb-label">Log Aktivitas</span>
+            <span class="sb-label"><?= lang_line('sidebar_approval_log') ?></span>
         </a>
 
         <div class="sb-divider"></div>
 
         <a href="<?= base_url('auth/logout') ?>"
         class="sb-link sb-logout"
-        data-tooltip="Logout"
-        onclick="return confirm('Yakin ingin keluar?')">
+        data-tooltip="<?= lang_line('sidebar_logout') ?>"
+        onclick="return confirm('<?= lang_line('common_confirm_logout') ?? 'Yakin ingin keluar?' ?>')">
             <div class="sb-icon"><i class="fas fa-right-from-bracket"></i></div>
-            <span class="sb-label">Logout</span>
+            <span class="sb-label"><?= lang_line('sidebar_logout') ?></span>
         </a>
 
     </div><div class="sb-toggle">
         <button class="sb-toggle-btn" id="approvalSidebarToggle">
             <span class="sb-toggle-icon"><i class="fas fa-chevron-left"></i></span>
-            <span class="sb-toggle-label">Tutup Sidebar</span>
+            <span class="sb-toggle-label"><?= lang_line('sidebar_close') ?></span>
         </button>
     </div>
 
+    <!-- Language Switcher -->
+    <div style="padding: 12px 18px; border-top: 1px solid rgba(255,255,255,0.08); margin-top: auto;">
+        <div style="display:flex; gap:4px; background:rgba(255,255,255,0.06); border-radius:8px; padding:3px;">
+            <a href="<?= lang_url('indonesian') ?>" style="flex:1; text-align:center; padding:6px 0; border-radius:6px; font-size:11px; font-weight:600; text-decoration:none; transition:all 0.2s; <?= current_lang() == 'indonesian' ? 'background:rgba(0,0,0,0.05); color:#000;' : 'color:rgba(0,0,0,0.5);' ?>">
+                🇮🇩 ID
+            </a>
+            <a href="<?= lang_url('english') ?>" style="flex:1; text-align:center; padding:6px 0; border-radius:6px; font-size:11px; font-weight:600; text-decoration:none; transition:all 0.2s; <?= current_lang() == 'english' ? 'background:rgba(0,0,0,0.05); color:#000;' : 'color:rgba(0,0,0,0.5);' ?>">
+                🇬🇧 EN
+            </a>
+        </div>
+    </div>
 </nav>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -365,7 +376,7 @@ $(document).ready(function() {
 
     function applyCollapse(isCollapsed) {
         $sidebar.toggleClass('collapsed', isCollapsed);
-        $toggleLabel.text(isCollapsed ? 'Buka Sidebar' : 'Tutup Sidebar');
+        $toggleLabel.text(isCollapsed ? '<?= lang_line('sidebar_open') ?>' : '<?= lang_line('sidebar_close') ?>');
         localStorage.setItem('approvalSidebarCollapsed', isCollapsed ? '1' : '0');
     }
 
@@ -443,10 +454,10 @@ $(document).ready(function() {
                 var saved = localStorage.getItem('approvalSidebarCollapsed');
                 if (saved === '1') {
                     $sidebar.addClass('collapsed');
-                    $toggleLabel.text('Buka Sidebar');
+                    $toggleLabel.text('<?= lang_line('sidebar_open') ?>');
                 } else {
                     $sidebar.removeClass('collapsed');
-                    $toggleLabel.text('Tutup Sidebar');
+                    $toggleLabel.text('<?= lang_line('sidebar_close') ?>');
                 }
             } else {
                 ensureMobileElements();

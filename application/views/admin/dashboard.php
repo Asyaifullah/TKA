@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="<?= current_lang() == 'indonesian' ? 'id' : 'en' ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin — SITLAKEB TKA</title>
+    <title><?= $this->lang->line('dash_admin_title') ?></title>
     <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -451,12 +451,12 @@
     <div class="topnav">
         <div class="topnav-breadcrumb">
             <!-- Burger terintegrasi di dalam topnav, mobile only -->
-            <button class="topnav-burger" id="adminBurger" aria-label="Buka Menu">
+            <button class="topnav-burger" id="adminBurger" aria-label="<?= $this->lang->line('layout_open_menu') ?>">
                 <i class="fas fa-bars"></i>
             </button>
             <i class="fas fa-home"></i>
             <i class="fas fa-chevron-right sep"></i>
-            <strong>Dashboard</strong>
+            <strong><?= $this->lang->line('sidebar_dashboard') ?></strong>
         </div>
         <div class="topnav-right">
 
@@ -466,8 +466,8 @@
             </div>
 
             <!-- Notification Bell -->
-            <!--<div style="position:relative;" id="notifWrapper">
-                <button class="notif-btn" id="notifBell" title="Notifikasi" type="button">
+            <div style="position:relative;" id="notifWrapper">
+                <button class="notif-btn" id="notifBell" title="<?= $this->lang->line('dash_notification') ?>" type="button">
                     <i class="fas fa-bell"></i>
                     <span class="notif-badge" id="notifBadge"></span>
                 </button>
@@ -475,22 +475,22 @@
                     <div class="nd-header">
                         <div class="nd-header-left">
                             <div class="nd-icon"><i class="fas fa-bell"></i></div>
-                            Notifikasi
+                            <?= $this->lang->line('dash_notification') ?>
                         </div>
                         <a href="<?= base_url('admin/mark_all_notif_read') ?>" class="nd-mark-all" id="markAllBtn">
-                            <i class="fas fa-check-double" style="font-size:9px;"></i> Tandai Semua
+                            <i class="fas fa-check-double" style="font-size:9px;"></i> <?= $this->lang->line('dash_mark_all') ?>
                         </a>
                     </div>
                     <div class="nd-tabs">
-                        <div class="nd-tab active" data-tab="all">Semua <span class="nd-tab-badge" id="tabBadgeAll"></span></div>
-                        <div class="nd-tab" data-tab="chat"><i class="fas fa-comment-dots" style="font-size:9px;margin-right:3px;"></i>Chat <span class="nd-tab-badge" id="tabBadgeChat"></span></div>
-                        <div class="nd-tab" data-tab="system"><i class="fas fa-cog" style="font-size:9px;margin-right:3px;"></i>Sistem <span class="nd-tab-badge" id="tabBadgeSystem"></span></div>
+                        <div class="nd-tab active" data-tab="all"><?= $this->lang->line('dash_all') ?> <span class="nd-tab-badge" id="tabBadgeAll"></span></div>
+                        <div class="nd-tab" data-tab="chat"><i class="fas fa-comment-dots" style="font-size:9px;margin-right:3px;"></i><?= $this->lang->line('dash_chat') ?> <span class="nd-tab-badge" id="tabBadgeChat"></span></div>
+                        <div class="nd-tab" data-tab="system"><i class="fas fa-cog" style="font-size:9px;margin-right:3px;"></i><?= $this->lang->line('dash_system') ?> <span class="nd-tab-badge" id="tabBadgeSystem"></span></div>
                     </div>
                     <div class="nd-list" id="notifList">
-                        <div class="nd-empty"><i class="fas fa-bell-slash"></i><p>Belum ada notifikasi</p></div>
+                        <div class="nd-empty"><i class="fas fa-bell-slash"></i><p><?= $this->lang->line('dash_no_notif') ?></p></div>
                     </div>
                     <div class="nd-footer">
-                        <a href="<?= base_url('admin/notifications') ?>">Lihat Semua <i class="fas fa-arrow-right" style="font-size:9px;"></i></a>
+                        <a href="<?= base_url('admin/notifications') ?>"><?= $this->lang->line('dash_view_all_notif') ?> <i class="fas fa-arrow-right" style="font-size:9px;"></i></a>
                     </div>
                 </div>
             </div>
@@ -508,11 +508,11 @@
 
         <div class="page-head">
             <div>
-                <div class="page-head-title">Dashboard Admin</div>
-                <div class="page-head-sub">Monitoring pengajuan notifikasi TKA secara real-time</div>
+                <div class="page-head-title"><?= $this->lang->line('dash_admin_title') ?></div>
+                <div class="page-head-sub"><?= $this->lang->line('dash_admin_subtitle') ?></div>
             </div>
             <div class="page-head-meta">
-                Total aktif: <span><?= ($total_tka_all ?? 0) - ($stage_counts['DITOLAK'] ?? 0) ?></span> pengajuan berjalan
+                <?= $this->lang->line('dash_total_active') ?> <span><?= ($total_tka_all ?? 0) - ($stage_counts['DITOLAK'] ?? 0) ?></span> <?= $this->lang->line('dash_running_submissions') ?>
             </div>
         </div>
 
@@ -520,32 +520,32 @@
         <div class="stat-grid">
             <div class="stat-card c-total">
                 <div class="stat-icon total"><i class="fas fa-layer-group"></i></div>
-                <div class="stat-label">Total Pengajuan</div>
+                <div class="stat-label"><?= $this->lang->line('dash_total_submissions') ?></div>
                 <div class="stat-value total"><?= $total_tka_all ?? 0 ?></div>
-                <div class="stat-footer"><i class="fas fa-database"></i> Semua periode</div>
+                <div class="stat-footer"><i class="fas fa-database"></i> <?= $this->lang->line('dash_all_period') ?></div>
             </div>
             <div class="stat-card c-proses">
                 <div class="stat-icon proses"><i class="fas fa-spinner"></i></div>
-                <div class="stat-label">Sedang Diproses</div>
+                <div class="stat-label"><?= $this->lang->line('dash_in_process') ?></div>
                 <div class="stat-value proses"><?=
                     ($stage_counts['MENUNGGU_KASI']   ?? 0) +
                     ($stage_counts['MENUNGGU_KABID']  ?? 0) +
                     ($stage_counts['MENUNGGU_SEKDIS'] ?? 0) +
                     ($stage_counts['MENUNGGU_KADIS']  ?? 0)
                 ?></div>
-                <div class="stat-footer"><i class="fas fa-hourglass-half"></i> Menunggu verifikasi</div>
+                <div class="stat-footer"><i class="fas fa-hourglass-half"></i> <?= $this->lang->line('dash_waiting_verification') ?></div>
             </div>
             <div class="stat-card c-selesai">
                 <div class="stat-icon selesai"><i class="fas fa-check-circle"></i></div>
-                <div class="stat-label">Selesai</div>
+                <div class="stat-label"><?= $this->lang->line('dash_completed') ?></div>
                 <div class="stat-value selesai"><?= $stage_counts['SELESAI'] ?? 0 ?></div>
-                <div class="stat-footer"><i class="fas fa-file-alt"></i> Surat terbit</div>
+                <div class="stat-footer"><i class="fas fa-file-alt"></i> <?= $this->lang->line('dash_letter_issued') ?></div>
             </div>
             <div class="stat-card c-ditolak">
                 <div class="stat-icon ditolak"><i class="fas fa-times-circle"></i></div>
-                <div class="stat-label">Ditolak</div>
+                <div class="stat-label"><?= $this->lang->line('dash_rejected') ?></div>
                 <div class="stat-value ditolak"><?= $stage_counts['DITOLAK'] ?? 0 ?></div>
-                <div class="stat-footer"><i class="fas fa-ban"></i> Perlu tindak lanjut</div>
+                <div class="stat-footer"><i class="fas fa-ban"></i> <?= $this->lang->line('dash_need_action') ?></div>
             </div>
         </div>
 
@@ -556,25 +556,25 @@
                     <div class="surface-head">
                         <div class="surface-title">
                             <div class="surface-title-icon"><i class="fas fa-filter"></i></div>
-                            Tahapan Approval
+                            <?= $this->lang->line('dash_approval_stages') ?>
                         </div>
-                        <div class="surface-badge">Pipeline Aktif</div>
+                        <div class="surface-badge"><?= $this->lang->line('dash_active_pipeline') ?></div>
                     </div>
                     <table class="funnel-table">
                         <thead>
                             <tr>
-                                <th>Tahap</th><th>Jumlah</th><th>Avg. Waktu</th><th>Proporsi</th>
+                                <th><?= $this->lang->line('dash_stage') ?></th><th><?= $this->lang->line('dash_count') ?></th><th><?= $this->lang->line('dash_avg_time') ?></th><th><?= $this->lang->line('dash_proportion') ?></th>
                             </tr>
                         </thead>
                         <tbody>
                         <?php
                         $stages_order = [
-                            'MENUNGGU_KASI'   => ['label'=>'Menunggu Kasi',   'color'=>'#f97316'],
-                            'MENUNGGU_KABID'  => ['label'=>'Menunggu Kabid',  'color'=>'#3b82f6'],
-                            'MENUNGGU_SEKDIS' => ['label'=>'Menunggu Sekdis', 'color'=>'#8b5cf6'],
-                            'MENUNGGU_KADIS'  => ['label'=>'Menunggu Kadis',  'color'=>'#10b981'],
-                            'SELESAI'         => ['label'=>'Selesai',         'color'=>'#16a34a'],
-                            'DITOLAK'         => ['label'=>'Ditolak',         'color'=>'#f43f5e'],
+                            'MENUNGGU_KASI'   => ['label'=>$this->lang->line('status_menunggu_kasi'),   'color'=>'#f97316'],
+                            'MENUNGGU_KABID'  => ['label'=>$this->lang->line('status_menunggu_kabid'),  'color'=>'#3b82f6'],
+                            'MENUNGGU_SEKDIS' => ['label'=>$this->lang->line('status_menunggu_sekdis'), 'color'=>'#8b5cf6'],
+                            'MENUNGGU_KADIS'  => ['label'=>$this->lang->line('status_menunggu_kadis'),  'color'=>'#10b981'],
+                            'SELESAI'         => ['label'=>$this->lang->line('status_selesai'),         'color'=>'#16a34a'],
+                            'DITOLAK'         => ['label'=>$this->lang->line('status_ditolak'),         'color'=>'#f43f5e'],
                         ];
                         $max_count = !empty($stage_counts) ? max(array_values($stage_counts) ?: [1]) : 1;
                         if ($max_count == 0) $max_count = 1;
@@ -589,8 +589,8 @@
                                     <?= $s['label'] ?>
                                 </span>
                             </td>
-                            <td><span class="count-chip"><?= $count ?></span><span class="count-unit">pengajuan</span></td>
-                            <td><span class="avg-time"><i class="far fa-clock"></i> <?= $avg_time_stage[$key] ?? 0 ?> hari</span></td>
+                            <td><span class="count-chip"><?= $count ?></span><span class="count-unit"><?= $this->lang->line('dash_submissions') ?></span></td>
+                            <td><span class="avg-time"><i class="far fa-clock"></i> <?= $avg_time_stage[$key] ?? 0 ?> <?= $this->lang->line('dash_days_unit') ?></span></td>
                             <td style="width:38%;">
                                 <div class="funnel-bar-wrap">
                                     <div class="funnel-bar" style="width:<?= $percent ?>%; background:<?= $s['color'] ?>;"></div>
@@ -609,7 +609,7 @@
                     <div class="surface-head">
                         <div class="surface-title">
                             <div class="surface-title-icon"><i class="fas fa-chart-pie"></i></div>
-                            Metrik Utama
+                            <?= $this->lang->line('dash_key_metrics') ?>
                         </div>
                     </div>
                     <?php
@@ -621,28 +621,28 @@
                         <div class="kpi-item">
                             <div class="kpi-left">
                                 <div class="kpi-icon-wrap" style="background:var(--green-light); color:var(--green);"><i class="fas fa-layer-group"></i></div>
-                                <div class="kpi-text"><span class="kpi-label">Total leads count</span><span class="kpi-sub">Semua periode pengajuan</span></div>
+                                <div class="kpi-text"><span class="kpi-label"><?= $this->lang->line('dash_total_leads') ?></span><span class="kpi-sub"><?= $this->lang->line('dash_all_period_sub') ?></span></div>
                             </div>
                             <div class="kpi-value green"><?= $total_tka_all ?? 0 ?></div>
                         </div>
                         <div class="kpi-item">
                             <div class="kpi-left">
                                 <div class="kpi-icon-wrap" style="background:var(--amber-light); color:var(--amber);"><i class="fas fa-clock"></i></div>
-                                <div class="kpi-text"><span class="kpi-label">Rata-rata konversi</span><span class="kpi-sub">Hari rata-rata hingga selesai</span></div>
+                                <div class="kpi-text"><span class="kpi-label"><?= $this->lang->line('dash_avg_conversion') ?></span><span class="kpi-sub"><?= $this->lang->line('dash_avg_conversion_sub') ?></span></div>
                             </div>
-                            <div class="kpi-value amber"><?= $avg_convert_days ?? 0 ?> hr</div>
+                            <div class="kpi-value amber"><?= $avg_convert_days ?? 0 ?> <?= $this->lang->line('dash_hrs_unit') ?></div>
                         </div>
                         <div class="kpi-item">
                             <div class="kpi-left">
                                 <div class="kpi-icon-wrap" style="background:var(--red-light); color:var(--red);"><i class="fas fa-ban"></i></div>
-                                <div class="kpi-text"><span class="kpi-label">Inactive leads</span><span class="kpi-sub">Pengajuan tidak dilanjut</span></div>
+                                <div class="kpi-text"><span class="kpi-label"><?= $this->lang->line('dash_inactive_leads') ?></span><span class="kpi-sub"><?= $this->lang->line('dash_inactive_sub') ?></span></div>
                             </div>
                             <div class="kpi-value red"><?= $inactive_leads ?? 0 ?></div>
                         </div>
                         <div class="kpi-item">
                             <div class="kpi-left">
                                 <div class="kpi-icon-wrap" style="background:var(--blue-light); color:var(--blue);"><i class="fas fa-percentage"></i></div>
-                                <div class="kpi-text"><span class="kpi-label">Conversion rate</span><span class="kpi-sub">Persentase pengajuan selesai</span></div>
+                                <div class="kpi-text"><span class="kpi-label"><?= $this->lang->line('dash_conversion_rate') ?></span><span class="kpi-sub"><?= $this->lang->line('dash_conversion_sub') ?></span></div>
                             </div>
                             <div class="kpi-value blue"><?= $conv_rate ?>%</div>
                         </div>
@@ -656,17 +656,17 @@
             <div class="surface-head">
                 <div class="surface-title">
                     <div class="surface-title-icon"><i class="fas fa-chart-line"></i></div>
-                    Leads Tracking — 6 Bulan Terakhir
+                    <?= $this->lang->line('dash_leads_tracking') ?>
                 </div>
-                <div class="surface-badge">Tren</div>
+                <div class="surface-badge"><?= $this->lang->line('dash_trend') ?></div>
             </div>
             <div class="chart-wrap" style="height:240px;">
                 <canvas id="leadsChart"></canvas>
             </div>
             <div class="chart-legend">
-                <div class="legend-item"><span class="legend-dot" style="background:#16a34a;"></span> Selesai</div>
-                <div class="legend-item"><span class="legend-dot" style="background:#f43f5e;"></span> Ditolak</div>
-                <div class="legend-item"><span class="legend-dot" style="background:#3b82f6;"></span> Dalam Proses</div>
+                <div class="legend-item"><span class="legend-dot" style="background:#16a34a;"></span> <?= $this->lang->line('dash_completed') ?></div>
+                <div class="legend-item"><span class="legend-dot" style="background:#f43f5e;"></span> <?= $this->lang->line('dash_rejected') ?></div>
+                <div class="legend-item"><span class="legend-dot" style="background:#3b82f6;"></span> <?= $this->lang->line('dash_in_progress') ?></div>
             </div>
         </div>
 
@@ -677,11 +677,11 @@
                     <div class="surface-head">
                         <div class="surface-title">
                             <div class="surface-title-icon" style="background:var(--red-light); color:var(--red);"><i class="fas fa-comment-slash"></i></div>
-                            Reasons of Leads Lost
+                            <?= $this->lang->line('dash_reasons_lost') ?>
                         </div>
                     </div>
                     <?php if(empty($recent_rejects)): ?>
-                        <div class="empty-state"><i class="fas fa-inbox"></i><p>Belum ada data penolakan.</p></div>
+                        <div class="empty-state"><i class="fas fa-inbox"></i><p><?= $this->lang->line('dash_no_rejection_data') ?></p></div>
                     <?php else: ?>
                     <div style="max-height:300px; overflow-y:auto;">
                         <?php foreach($recent_rejects as $reject): ?>
@@ -703,44 +703,45 @@
                     <div class="surface-head">
                         <div class="surface-title">
                             <div class="surface-title-icon"><i class="fas fa-history"></i></div>
-                            Pengajuan Terbaru
+                            <?= $this->lang->line('dash_recent_submissions') ?>
                         </div>
                         <a href="<?= base_url('admin/semua_tka') ?>" style="font-size:0.71rem; color:var(--green); font-weight:600; text-decoration:none; white-space:nowrap;">
-                            Lihat Semua <i class="fas fa-arrow-right" style="font-size:9px; margin-left:3px;"></i>
+                            <?= $this->lang->line('dash_view_all') ?> <i class="fas fa-arrow-right" style="font-size:9px; margin-left:3px;"></i>
                         </a>
                     </div>
                     <?php
-                    function getProgressPill($status) {
+                    $ci =& get_instance();
+                    function getProgressPill($status, $ci) {
                         $map = [
-                            'DRAFT'           => ['Belum Lengkap', 'ppill-draft'],
-                            'MENUNGGU_KASI'   => ['Verif. Kasi',   'ppill-kasi'],
-                            'MENUNGGU_KABID'  => ['Verif. Kabid',  'ppill-kabid'],
-                            'MENUNGGU_SEKDIS' => ['Verif. Sekdis', 'ppill-sekdis'],
-                            'MENUNGGU_KADIS'  => ['Verif. Kadis',  'ppill-kadis'],
-                            'SELESAI'         => ['Surat Terbit',  'ppill-selesai'],
-                            'DITOLAK'         => ['Ditolak',       'ppill-ditolak'],
+                            'DRAFT'           => [$ci->lang->line('dash_incomplete'), 'ppill-draft'],
+                            'MENUNGGU_KASI'   => [$ci->lang->line('dash_verif_kasi'),   'ppill-kasi'],
+                            'MENUNGGU_KABID'  => [$ci->lang->line('dash_verif_kabid'),  'ppill-kabid'],
+                            'MENUNGGU_SEKDIS' => [$ci->lang->line('dash_verif_sekdis'), 'ppill-sekdis'],
+                            'MENUNGGU_KADIS'  => [$ci->lang->line('dash_verif_kadis'),  'ppill-kadis'],
+                            'SELESAI'         => [$ci->lang->line('dash_letter_publish'),  'ppill-selesai'],
+                            'DITOLAK'         => [$ci->lang->line('dash_rejected'),       'ppill-ditolak'],
                         ];
                         return isset($map[$status]) ? $map[$status] : [$status, 'ppill-draft'];
                     }
                     $recent = !empty($all_tka) ? array_slice($all_tka, 0, 6) : [];
                     ?>
                     <?php if(empty($recent)): ?>
-                        <div class="empty-state"><i class="fas fa-inbox"></i><p>Belum ada pengajuan.</p></div>
+                        <div class="empty-state"><i class="fas fa-inbox"></i><p><?= $this->lang->line('dash_no_submissions') ?></p></div>
                     <?php else: ?>
                     <div class="data-table-wrap" style="overflow-x:auto;">
                         <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th>Perusahaan</th>
-                                    <th class="col-tka">Nama TKA</th>
-                                    <th>Progress</th>
-                                    <th class="col-date">Tanggal</th>
+                                    <th><?= $this->lang->line('dash_company') ?></th>
+                                    <th class="col-tka"><?= $this->lang->line('dash_tka_name') ?></th>
+                                    <th><?= $this->lang->line('dash_progress') ?></th>
+                                    <th class="col-date"><?= $this->lang->line('dash_date') ?></th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                             <?php foreach($recent as $r):
-                                list($pillLabel, $pillClass) = getProgressPill($r->status);
+                                list($pillLabel, $pillClass) = getProgressPill($r->status, $ci);
                                 $initials = strtoupper(substr($r->perusahaan, 0, 2));
                             ?>
                             <tr>
@@ -753,7 +754,7 @@
                                 <td class="col-tka" style="font-weight:500; color:var(--ink);"><?= htmlspecialchars($r->nama_tka) ?></td>
                                 <td><span class="ppill <?= $pillClass ?>"><?= $pillLabel ?></span></td>
                                 <td class="col-date"><span class="date-cell"><?= date('d/m/y', strtotime($r->created_at)) ?></span></td>
-                                <td><a href="<?= base_url('admin/semua_tka/'.$r->id) ?>" class="btn-view"><i class="fas fa-eye"></i> Detail</a></td>
+                                <td><a href="<?= base_url('admin/semua_tka/'.$r->id) ?>" class="btn-view"><i class="fas fa-eye"></i> <?= $this->lang->line('common_detail') ?></a></td>
                             </tr>
                             <?php endforeach; ?>
                             </tbody>
@@ -810,9 +811,9 @@
         data: {
             labels: <?= $months ?? '[]' ?>,
             datasets: [
-                { label:'Selesai', data: <?= $closed_won ?? '[]' ?>, borderColor:'#16a34a', backgroundColor:'rgba(22,163,74,0.07)', fill:true, tension:0.4, borderWidth:2, pointRadius:4, pointBackgroundColor:'#16a34a', pointBorderColor:'#fff', pointBorderWidth:2 },
-                { label:'Ditolak', data: <?= $closed_lost ?? '[]' ?>, borderColor:'#f43f5e', backgroundColor:'rgba(244,63,94,0.06)', fill:true, tension:0.4, borderWidth:2, pointRadius:4, pointBackgroundColor:'#f43f5e', pointBorderColor:'#fff', pointBorderWidth:2 },
-                { label:'Dalam Proses', data: <?= $in_progress ?? '[]' ?>, borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,0.06)', fill:true, tension:0.4, borderWidth:2, pointRadius:4, pointBackgroundColor:'#3b82f6', pointBorderColor:'#fff', pointBorderWidth:2 }
+                { label:'<?= $this->lang->line('dash_completed') ?>', data: <?= $closed_won ?? '[]' ?>, borderColor:'#16a34a', backgroundColor:'rgba(22,163,74,0.07)', fill:true, tension:0.4, borderWidth:2, pointRadius:4, pointBackgroundColor:'#16a34a', pointBorderColor:'#fff', pointBorderWidth:2 },
+                { label:'<?= $this->lang->line('dash_rejected') ?>', data: <?= $closed_lost ?? '[]' ?>, borderColor:'#f43f5e', backgroundColor:'rgba(244,63,94,0.06)', fill:true, tension:0.4, borderWidth:2, pointRadius:4, pointBackgroundColor:'#f43f5e', pointBorderColor:'#fff', pointBorderWidth:2 },
+                { label:'<?= $this->lang->line('dash_in_progress') ?>', data: <?= $in_progress ?? '[]' ?>, borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,0.06)', fill:true, tension:0.4, borderWidth:2, pointRadius:4, pointBackgroundColor:'#3b82f6', pointBorderColor:'#fff', pointBorderWidth:2 }
             ]
         },
         options: {

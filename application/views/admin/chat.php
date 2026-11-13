@@ -470,195 +470,207 @@
     <?php if(isset($selected_user)): ?>
 
     var partnerId = <?= (int)$selected_user->id ?>;
-    var lastId    = <?= !empty($messages) ? (int)end($messages)->id : 0 ?>;
-    var myId      = <?= (int)$this->session->userdata('user_id') ?>;
-    var sending   = false;
+var lastId    = <?= !empty($messages) ? (int)end($messages)->id : 0 ?>;
+var myId      = <?= (int)$this->session->userdata('user_id') ?>;
+var sending   = false;   // true saat proses kirim pesan (untuk UI)
+var busy      = false;   // true saat ADA request AJAX apa pun sedang in-flight
 
-    function getCsrf() {
-        return {
-            name:  document.querySelector('meta[name="csrf-name"]').content,
-            token: document.querySelector('meta[name="csrf-token"]').content
-        };
-    }
-    function updateCsrf(xhr) {
-        var t = xhr.getResponseHeader('X-CSRF-Token');
-        if (t) document.querySelector('meta[name="csrf-token"]').content = t;
-    }
-    function encode(obj) {
-        return Object.keys(obj).map(function(k) {
-            return encodeURIComponent(k) + '=' + encodeURIComponent(obj[k]);
-        }).join('&');
-    }
-    function esc(str) {
-        return String(str)
-            .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-            .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    }
+function getCsrf() {
+    return {
+        name:  document.querySelector('meta[name="csrf-name"]').content,
+        token: document.querySelector('meta[name="csrf-token"]').content
+    };
+}
+function updateCsrf(xhr) {
+    var t = xhr.getResponseHeader('X-CSRF-Token');
+    if (t) document.querySelector('meta[name="csrf-token"]').content = t;
+}
+function encode(obj) {
+    return Object.keys(obj).map(function(k) {
+        return encodeURIComponent(k) + '=' + encodeURIComponent(obj[k]);
+    }).join('&');
+}
+function esc(str) {
+    return String(str)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
-    function scrollBottom() {
-        if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
+function scrollBottom() {
+    if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+}
 
-    function makeBubble(msg) {
-        var isOut = (msg.from_user_id == myId);
-        var d     = new Date(msg.created_at.replace(' ', 'T'));
-        var time  = d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-        var wrap  = document.createElement('div');
-        wrap.className = 'message ' + (isOut ? 'outgoing' : 'incoming');
-        var ava   = document.createElement('div');
-        ava.className = 'msg-avatar';
-        ava.innerHTML = '<i class="fas ' + (isOut ? 'fa-user-tie' : 'fa-user') + '"></i>';
-        var bubble = document.createElement('div');
-        bubble.className = 'msg-bubble';
-        var text   = document.createElement('div');
-        text.className = 'msg-text';
-        text.innerHTML = esc(msg.message).replace(/\n/g, '<br>');
-        var meta   = document.createElement('div');
-        meta.className = 'msg-meta';
-        var timeEl = document.createElement('span');
-        timeEl.className = 'msg-time';
-        timeEl.textContent = time;
-        meta.appendChild(timeEl);
-        if (isOut) {
-            var ick = document.createElement('i');
-            ick.className = msg.is_read_user == 1 ? 'fas fa-check-double' : 'fas fa-check';
-            ick.style.cssText = msg.is_read_user == 1 ? 'font-size:9px;color:#10b981;' : 'font-size:9px;color:var(--ink-4);';
-            meta.appendChild(ick);
+function makeBubble(msg) {
+    var isOut = (msg.from_user_id == myId);
+    var d     = new Date(msg.created_at.replace(' ', 'T'));
+    var time  = d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    var wrap  = document.createElement('div');
+    wrap.className = 'message ' + (isOut ? 'outgoing' : 'incoming');
+    var ava   = document.createElement('div');
+    ava.className = 'msg-avatar';
+    ava.innerHTML = '<i class="fas ' + (isOut ? 'fa-user-tie' : 'fa-user') + '"></i>';
+    var bubble = document.createElement('div');
+    bubble.className = 'msg-bubble';
+    var text   = document.createElement('div');
+    text.className = 'msg-text';
+    text.innerHTML = esc(msg.message).replace(/\n/g, '<br>');
+    var meta   = document.createElement('div');
+    meta.className = 'msg-meta';
+    var timeEl = document.createElement('span');
+    timeEl.className = 'msg-time';
+    timeEl.textContent = time;
+    meta.appendChild(timeEl);
+    if (isOut) {
+        var ick = document.createElement('i');
+        ick.className = msg.is_read_user == 1 ? 'fas fa-check-double' : 'fas fa-check';
+        ick.style.cssText = msg.is_read_user == 1 ? 'font-size:9px;color:#10b981;' : 'font-size:9px;color:var(--ink-4);';
+        meta.appendChild(ick);
+    }
+    bubble.appendChild(text);
+    bubble.appendChild(meta);
+    wrap.appendChild(ava);
+    wrap.appendChild(bubble);
+    return wrap;
+}
+
+/* ── Satu antrean AJAX global: hanya 1 request in-flight di seluruh halaman ── */
+
+function pollSequence() {
+    if (busy) { setTimeout(pollSequence, 500); return; }
+    busy = true;
+
+    var c = getCsrf();
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '<?= base_url("chat/get_new") ?>', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.onload = function () {
+        updateCsrf(xhr);
+        if (xhr.status === 200) {
+            try {
+                var msgs = JSON.parse(xhr.responseText);
+                if (msgs && msgs.length) {
+                    var emptyEl = chatMessages.querySelector('.chat-empty');
+                    if (emptyEl) emptyEl.remove();
+                    msgs.forEach(function(m) {
+                        chatMessages.appendChild(makeBubble(m));
+                        if (parseInt(m.id) > parseInt(lastId)) lastId = m.id;
+                    });
+                    scrollBottom();
+                }
+            } catch(e) {}
         }
-        bubble.appendChild(text);
-        bubble.appendChild(meta);
-        wrap.appendChild(ava);
-        wrap.appendChild(bubble);
-        return wrap;
-    }
+        busy = false;
+        refreshUserList();
+    };
+    xhr.onerror = function() { busy = false; refreshUserList(); };
+    xhr.send(encode({ last_id: lastId, partner_id: partnerId, [c.name]: c.token }));
+}
 
-    // --- PERBAIKAN: Gunakan sistem antrean (Sequence) agar token CSRF tidak tabrakan ---
-    function pollSequence() {
-        // Jika sedang kirim pesan, tunda sebentar penarikan datanya
-        if (sending) {
-            setTimeout(pollSequence, 1000);
+function refreshUserList() {
+    if (busy) { setTimeout(refreshUserList, 500); return; }
+    busy = true;
+
+    var c = getCsrf();
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '<?= base_url("chat/get_user_list") ?>', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.onload = function () {
+        updateCsrf(xhr);
+        if (xhr.status === 200) {
+            try {
+                var users = JSON.parse(xhr.responseText);
+                var container = document.getElementById('userListItems');
+                container.innerHTML = '';
+                users.forEach(function(u) {
+                    var lastMsg = u.last_message ? (u.last_message.length > 52 ? u.last_message.substr(0,52)+'…' : u.last_message) : 'Belum ada pesan';
+                    if (u.last_message_from_me) lastMsg = 'Anda: ' + lastMsg;
+                    var d = u.last_message_time ? new Date(u.last_message_time.replace(' ','T')) : null;
+                    var time = d ? d.toLocaleString('id-ID', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '';
+                    var item = document.createElement('div');
+                    item.className = 'user-item' + (u.id == partnerId ? ' active' : '');
+                    item.dataset.userId = u.id;
+                    item.dataset.name   = (u.perusahaan||'').toLowerCase();
+                    item.innerHTML =
+                        '<div class="user-avatar">' + esc(u.initials||u.perusahaan.charAt(0).toUpperCase()) + '</div>'
+                        + '<div class="user-info">'
+                        +   '<div class="user-info-name">' + esc(u.perusahaan) + '</div>'
+                        +   '<div class="user-info-preview">' + esc(lastMsg) + '</div>'
+                        +   (time ? '<div class="user-info-time">'+time+'</div>' : '')
+                        + '</div>'
+                        + (u.unread_count > 0 ? '<div class="unread-badge">'+u.unread_count+'</div>' : '');
+                    item.addEventListener('click', function() {
+                        window.location.href = '<?= base_url("chat") ?>?user_id=' + this.dataset.userId;
+                    });
+                    container.appendChild(item);
+                });
+                document.getElementById('userCount').textContent = users.length;
+                var q = userSearch ? userSearch.value.toLowerCase().trim() : '';
+                if (q) container.querySelectorAll('.user-item').forEach(function(it) {
+                    it.style.display = (it.dataset.name.indexOf(q) !== -1) ? '' : 'none';
+                });
+            } catch(e) {}
+        }
+        busy = false;
+        setTimeout(pollSequence, 3000);
+    };
+    xhr.onerror = function() { busy = false; setTimeout(pollSequence, 3000); };
+    xhr.send(encode({ [c.name]: c.token }));
+}
+
+function sendMessage() {
+    var msg = msgInput.value.trim();
+    if (!msg || sending) return;
+
+    // Kalau ada request lain sedang jalan (poll/refresh), tunggu giliran, jangan kirim dengan token basi
+    if (busy) { setTimeout(sendMessage, 200); return; }
+
+    sending = true; busy = true;
+    sendBtn.disabled = true; msgInput.disabled = true;
+
+    var c = getCsrf();
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '<?= base_url("chat/send") ?>', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.onload = function () {
+        updateCsrf(xhr);
+        if (xhr.status === 403) {
+            busy = false; sending = false;
+            location.reload();
             return;
         }
+        var res; try { res = JSON.parse(xhr.responseText); } catch(e) {}
+        if (res && res.status === 'success') {
+            msgInput.value = '';
+            sendBtn.disabled = true;
+        } else {
+            alert(res && res.message ? res.message : 'Gagal mengirim pesan.');
+        }
+        sending = false; busy = false;
+        msgInput.disabled = false; msgInput.focus();
+    };
+    xhr.onerror = function () {
+        alert('Tidak ada koneksi.');
+        sending = false; busy = false;
+        msgInput.disabled = false;
+        sendBtn.disabled = !msgInput.value.trim();
+    };
+    xhr.send(encode({ to: partnerId, message: msg, [c.name]: c.token }));
+}
 
-        var c = getCsrf();
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '<?= base_url("chat/get_new") ?>', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.onload = function () {
-            updateCsrf(xhr);
-            if (xhr.status === 200) {
-                try {
-                    var msgs = JSON.parse(xhr.responseText);
-                    if (msgs && msgs.length) {
-                        var emptyEl = chatMessages.querySelector('.chat-empty');
-                        if (emptyEl) emptyEl.remove();
-                        msgs.forEach(function(m) { 
-                            chatMessages.appendChild(makeBubble(m)); 
-                            // PERBAIKAN: pastikan diproses sebagai angka (integer)
-                            if (parseInt(m.id) > parseInt(lastId)) lastId = m.id; 
-                        });
-                        scrollBottom();
-                    }
-                } catch(e) {}
-            }
-            // Setelah selesai tarik pesan baru, barulah lanjut tarik list perusahaan
-            refreshUserList();
-        };
-        xhr.onerror = function() { refreshUserList(); };
-        xhr.send(encode({ last_id: lastId, partner_id: partnerId, [c.name]: c.token }));
-    }
+if (sendBtn) sendBtn.addEventListener('click', sendMessage);
+if (msgInput) {
+    msgInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    });
+    msgInput.addEventListener('input', function() { sendBtn.disabled = !this.value.trim(); });
+}
+if (window.visualViewport) window.visualViewport.addEventListener('resize', scrollBottom);
 
-    function refreshUserList() {
-        var c = getCsrf();
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '<?= base_url("chat/get_user_list") ?>', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.onload = function () {
-            updateCsrf(xhr);
-            if (xhr.status === 200) {
-                try {
-                    var users = JSON.parse(xhr.responseText);
-                    var container = document.getElementById('userListItems');
-                    container.innerHTML = '';
-                    users.forEach(function(u) {
-                        var lastMsg = u.last_message ? (u.last_message.length > 52 ? u.last_message.substr(0,52)+'…' : u.last_message) : 'Belum ada pesan';
-                        if (u.last_message_from_me) lastMsg = 'Anda: ' + lastMsg;
-                        var d = u.last_message_time ? new Date(u.last_message_time.replace(' ','T')) : null;
-                        var time = d ? d.toLocaleString('id-ID', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '';
-                        var item = document.createElement('div');
-                        item.className = 'user-item' + (u.id == partnerId ? ' active' : '');
-                        item.dataset.userId = u.id;
-                        item.dataset.name   = (u.perusahaan||'').toLowerCase();
-                        item.innerHTML =
-                            '<div class="user-avatar">' + esc(u.initials||u.perusahaan.charAt(0).toUpperCase()) + '</div>'
-                            + '<div class="user-info">'
-                            +   '<div class="user-info-name">' + esc(u.perusahaan) + '</div>'
-                            +   '<div class="user-info-preview">' + esc(lastMsg) + '</div>'
-                            +   (time ? '<div class="user-info-time">'+time+'</div>' : '')
-                            + '</div>'
-                            + (u.unread_count > 0 ? '<div class="unread-badge">'+u.unread_count+'</div>' : '');
-                        item.addEventListener('click', function() {
-                            window.location.href = '<?= base_url("chat") ?>?user_id=' + this.dataset.userId;
-                        });
-                        container.appendChild(item);
-                    });
-                    document.getElementById('userCount').textContent = users.length;
-                    var q = userSearch ? userSearch.value.toLowerCase().trim() : '';
-                    if (q) container.querySelectorAll('.user-item').forEach(function(it) {
-                        it.style.display = (it.dataset.name.indexOf(q) !== -1) ? '' : 'none';
-                    });
-                } catch(e) {}
-            }
-            // Jadwalkan ulang putaran berikutnya (jeda 3 detik)
-            setTimeout(pollSequence, 3000);
-        };
-        xhr.onerror = function() { setTimeout(pollSequence, 3000); };
-        xhr.send(encode({ [c.name]: c.token }));
-    }
-
-    function sendMessage() {
-        var msg = msgInput.value.trim();
-        if (!msg || sending) return;
-        sending = true; sendBtn.disabled = true; msgInput.disabled = true;
-        
-        var c = getCsrf();
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '<?= base_url("chat/send") ?>', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.onload = function () {
-            updateCsrf(xhr);
-            if (xhr.status === 403) { location.reload(); return; }
-            var res; try { res = JSON.parse(xhr.responseText); } catch(e) {}
-            if (res && res.status === 'success') {
-                msgInput.value = ''; 
-                sendBtn.disabled = true;
-            } else { 
-                alert(res && res.message ? res.message : 'Gagal mengirim pesan.'); 
-            }
-            sending = false; msgInput.disabled = false; msgInput.focus();
-        };
-        xhr.onerror = function () {
-            alert('Tidak ada koneksi.'); sending = false; msgInput.disabled = false;
-            sendBtn.disabled = !msgInput.value.trim();
-        };
-        xhr.send(encode({ to: partnerId, message: msg, [c.name]: c.token }));
-    }
-
-    if (sendBtn) sendBtn.addEventListener('click', sendMessage);
-    if (msgInput) {
-        msgInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-        });
-        msgInput.addEventListener('input', function() { sendBtn.disabled = !this.value.trim(); });
-    }
-    if (window.visualViewport) window.visualViewport.addEventListener('resize', scrollBottom);
-
-    scrollBottom();
-    // Mulai siklus antrean AJAX (Tidak pakai setInterval lagi)
-    setTimeout(pollSequence, 1000);
+scrollBottom();
+setTimeout(pollSequence, 1000);
 
     <?php endif; ?>
 

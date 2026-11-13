@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="<?= current_lang() == 'indonesian' ? 'id' : 'en' ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lupa Password - SITLAKEB TKA</title>
+    <title><?= $this->lang->line('auth_forgot_title') ?></title>
 
     <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -281,6 +281,17 @@
 <body>
 
 <div class="forgot-page">
+    <div style="display:flex; flex-direction:column; gap:20px; align-items:center; z-index:2;">
+        <!-- Language Switcher -->
+        <div class="lang-switcher" style="display: flex; align-items: center; background: rgba(255,255,255,0.85); backdrop-filter: blur(8px); border-radius: 12px; padding: 4px; border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+            <a href="<?= lang_url('indonesian') ?>" class="<?= current_lang() == 'indonesian' ? 'active' : '' ?>" style="display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9px; font-size: 12px; font-weight: 700; text-decoration: none; color: <?= current_lang() == 'indonesian' ? '#ffffff' : '#64748b' ?>; background: <?= current_lang() == 'indonesian' ? '#087456' : 'transparent' ?>;">
+                <i class="fas fa-globe"></i> <?= $this->lang->line('lang_indonesian') ?>
+            </a>
+            <a href="<?= lang_url('english') ?>" class="<?= current_lang() == 'english' ? 'active' : '' ?>" style="display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9px; font-size: 12px; font-weight: 700; text-decoration: none; color: <?= current_lang() == 'english' ? '#ffffff' : '#64748b' ?>; background: <?= current_lang() == 'english' ? '#087456' : 'transparent' ?>;">
+                <i class="fas fa-globe"></i> <?= $this->lang->line('lang_english') ?>
+            </a>
+        </div>
+
     <div class="forgot-card">
 
         <div class="forgot-icon">
@@ -288,11 +299,8 @@
         </div>
 
         <div class="forgot-title">
-            <h2>Lupa Password?</h2>
-            <p>
-                Masukkan email perusahaan yang terdaftar<br>
-                untuk memulai proses reset password
-            </p>
+            <h2><?= $this->lang->line('auth_forgot_heading') ?></h2>
+            <p><?= $this->lang->line('auth_forgot_subtitle') ?></p>
         </div>
 
         <?php if($this->session->flashdata('error')): ?>
@@ -314,7 +322,7 @@
                    value="<?= $this->security->get_csrf_hash(); ?>">
 
             <div class="field">
-                <label for="email">Email Perusahaan</label>
+                <label for="email"><?= $this->lang->line('auth_forgot_email_label') ?></label>
                 <div class="input-wrap">
                     <i class="fas fa-envelope input-icon"></i>
                     <input
@@ -322,7 +330,7 @@
                         id="email"
                         name="email"
                         class="form-input"
-                        placeholder="contoh@perusahaan.com"
+                        placeholder="<?= $this->lang->line('auth_forgot_email_placeholder') ?>"
                         required
                         autocomplete="email">
                 </div>
@@ -330,17 +338,18 @@
 
             <button type="submit" class="btn-submit">
                 <i class="fas fa-paper-plane" style="font-size:12px; margin-right:7px;"></i>
-                Verifikasi Email
+                <?= $this->lang->line('auth_forgot_btn') ?>
             </button>
         </form>
 
         <div class="back-link">
             <a href="<?= base_url('auth/login') ?>">
                 <i class="fas fa-arrow-left" style="font-size:10px; margin-right:4px;"></i>
-                Kembali ke Login
+                <?= $this->lang->line('auth_back_login') ?>
             </a>
         </div>
 
+    </div>
     </div>
 </div>
 
