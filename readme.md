@@ -7,7 +7,7 @@ Aplikasi web untuk pelaporan keberadaan Tenaga Kerja Asing (TKA) oleh perusahaan
 
 **Demo:** [sitlakeb-project.vercel.app](https://sitlakeb-project.vercel.app)
 
-![Home](https://img.shields.io/badge/PHP-777BB4?logo=php&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-777BB4?logo=php&logoColor=white)
 ![CodeIgniter](https://img.shields.io/badge/CodeIgniter_3-EF4223?logo=codeigniter&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white)
@@ -48,23 +48,26 @@ Coba Demo
 
 Buka [sitlakeb-project.vercel.app](https://sitlakeb-project.vercel.app) dan masuk dengan akun demo berikut. Seluruh akun dan data adalah data contoh (dummy).
 
-| Peran | Email | Password |
-| kepala Seksi | [kepalaseksi@kasi.com] | [Admin@1234] |
-| kepala Seksi | [kepalabidang@kabid.com] | [Admin@1234] |
-| kepala Seksi | [sekretarisdinas@sekdis.com] | [Admin@1234] |
-| kepala Seksi | [kepaladinas@kadis.com] | [Admin@1234] |
-| Perusahaan | [ratonik883@afronewz.com] | [@Iones2026] |
-| Admin | [admin@operator.com] | [Admin@1234] |
+| Peran            | Email                                                          | Password   |
+| ---------------- | -------------------------------------------------------------- | ---------- |
+| Kepala Dinas     | [kepaladinas@kadis.com](mailto:kepaladinas@kadis.com)           | Admin@1234 |
+| Kepala Seksi     | [kepalaseksi@kasi.com](mailto:kepalaseksi@kasi.com)             | Admin@1234 |
+| Kepala Bidang    | [kepalabidang@kabid.com](mailto:kepalabidang@kabid.com)         | Admin@1234 |
+| Sekretaris Dinas | [sekretarisdinas@sekdis.com](mailto:sekretarisdinas@sekdis.com) | Admin@1234 |
+| Admin Operator   | [admin@operator.com](mailto:admin@operator.com)                 | Admin@1234 |
+| Perusahaan       | [ratonik883@afronewz.com](mailto:ratonik883@afronewz.com)       | @Iones2026 |
+
+
 
 Peran Pengguna
 --------------
 
-| Peran | Keterangan |
-| --- | --- |
-| Perusahaan | Registrasi, mengajukan pelaporan TKA, mengunggah dokumen, memantau status pengajuan |
-| Admin Operator | Mengelola data operasional dan mengirim notifikasi |
-| Approval (Kasi, Kabid, Sekdis, Kadis) | Meninjau dan menyetujui pengajuan secara berjenjang |
-| Admin Sistem | Mengelola sistem dan pengguna secara keseluruhan |
+| Peran                                 | Keterangan                                                                          |
+| ------------------------------------- | ----------------------------------------------------------------------------------- |
+| Perusahaan                            | Registrasi, mengajukan pelaporan TKA, mengunggah dokumen, memantau status pengajuan |
+| Admin Operator                        | Mengelola data operasional dan mengirim notifikasi                                  |
+| Approval (Kasi, Kabid, Sekdis, Kadis) | Meninjau dan menyetujui pengajuan secara berjenjang                                 |
+| Admin Sistem                          | Mengelola sistem dan pengguna secara keseluruhan                                    |
 
 Fitur
 -----
@@ -95,13 +98,13 @@ Alur Pengajuan
 Teknologi
 ---------
 
-| Komponen | Teknologi |
-| --- | --- |
-| Bahasa | PHP 8.4 |
-| Framework | CodeIgniter 3 (arsitektur MVC) |
-| Database | MySQL (lokal), TiDB Cloud Starter (demo, kompatibel MySQL) |
-| Penyimpanan berkas | Folder `uploads/` (lokal), Supabase Storage dengan bucket privat (demo) |
-| Hosting demo | Vercel dengan runtime komunitas `vercel-php`, region Singapura |
+| Komponen            | Teknologi                                                                          |
+| ------------------- | ---------------------------------------------------------------------------------- |
+| Bahasa              | PHP 8.4                                                                            |
+| Framework           | CodeIgniter 3 (arsitektur MVC)                                                     |
+| Database            | MySQL (lokal), TiDB Cloud Starter (demo, kompatibel MySQL)                         |
+| Penyimpanan berkas  | Folder `uploads/` (lokal), Supabase Storage dengan bucket privat (demo)          |
+| Hosting demo        | Vercel dengan runtime komunitas `vercel-php`, region Singapura                   |
 | Metode pengembangan | Waterfall (analisis kebutuhan, perancangan, pengembangan, pengujian, serah terima) |
 
 Arsitektur dan Catatan Teknis
@@ -143,13 +146,13 @@ Database
 
 Database terdiri dari 12 tabel:
 
-| Kelompok | Tabel |
-| --- | --- |
-| Pengguna dan sesi | `users`, `ci_sessions` |
-| Pengajuan | `tka`, `berkas`, `surat_template` |
-| Persetujuan | `approval_log`, `approval_sla`, `escalation_log` |
-| Komunikasi | `chat_messages`, `notifications` |
-| Log dan keamanan | `admin_logs`, `security_attempts` |
+| Kelompok          | Tabel                                                  |
+| ----------------- | ------------------------------------------------------ |
+| Pengguna dan sesi | `users`, `ci_sessions`                             |
+| Pengajuan         | `tka`, `berkas`, `surat_template`                |
+| Persetujuan       | `approval_log`, `approval_sla`, `escalation_log` |
+| Komunikasi        | `chat_messages`, `notifications`                   |
+| Log dan keamanan  | `admin_logs`, `security_attempts`                  |
 
 Struktur Proyek
 ---------------
@@ -178,7 +181,6 @@ Prasyarat: PHP 8.x, MySQL, dan web server lokal (Laragon atau XAMPP).
    ```
    git clone https://github.com/Asyaifullah/TKA.git
    ```
-
 2. Letakkan folder proyek di direktori web server lokal (misalnya `www` pada Laragon atau `htdocs` pada XAMPP).
 3. Buat database MySQL bernama `experimen_tka`, lalu import file `database.sql`.
 4. Jika kredensial lokalmu berbeda, ubah nilai bawaan di `application/config/database.php`.
@@ -193,18 +195,16 @@ Deploy ke Vercel
 2. Buat project Supabase dan satu bucket **privat** bernama `berkas`.
 3. Impor repository ke Vercel (Framework Preset: Other).
 4. Tambahkan environment variable berikut di Settings, Environment Variables:
-
-   | Variabel | Keterangan |
-   | --- | --- |
-   | `DB_HOST` | Host database |
-   | `DB_PORT` | Port database (4000 untuk TiDB) |
-   | `DB_USER` | Username database |
-   | `DB_PASS` | Password database |
-   | `DB_NAME` | Nama database |
-   | `SUPABASE_URL` | URL project Supabase |
-   | `SUPABASE_KEY` | Secret key Supabase (hanya di server) |
-   | `SUPABASE_BUCKET` | Nama bucket (`berkas`) |
-
+   | Variabel            | Keterangan                            |
+   | ------------------- | ------------------------------------- |
+   | `DB_HOST`         | Host database                         |
+   | `DB_PORT`         | Port database (4000 untuk TiDB)       |
+   | `DB_USER`         | Username database                     |
+   | `DB_PASS`         | Password database                     |
+   | `DB_NAME`         | Nama database                         |
+   | `SUPABASE_URL`    | URL project Supabase                  |
+   | `SUPABASE_KEY`    | Secret key Supabase (hanya di server) |
+   | `SUPABASE_BUCKET` | Nama bucket (`berkas`)              |
 5. Deploy. Region fungsi diatur ke Singapura (`sin1`) di `vercel.json` agar dekat dengan database.
 
 Kredensial tidak disimpan di repository. Koneksi TLS ke database memakai sertifikat CA publik `isrgrootx1.pem`.
