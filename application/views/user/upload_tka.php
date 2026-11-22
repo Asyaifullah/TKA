@@ -445,10 +445,10 @@
         <div class="topnav-breadcrumb">
             <a href="<?= base_url('dashboard') ?>" style="color:var(--c-text-muted); text-decoration:none;"><i class="fas fa-home"></i></a>
             <i class="fas fa-chevron-right" style="font-size:8px;"></i>
-            <strong><?= $this->lang->line('tka_upload_breadcrumb') ?? 'Upload TKA Baru' ?></strong>
+            <strong><?= $this->lang->line('tka_upload_breadcrumb') ?: 'Upload TKA Baru' ?></strong>
         </div>
         <div class="topnav-actions">
-            <a href="<?= base_url('user/data_tka') ?>" class="topnav-btn" title="<?= $this->lang->line('tka_breadcrumb') ?? 'Data TKA' ?>">
+            <a href="<?= base_url('user/data_tka') ?>" class="topnav-btn" title="<?= $this->lang->line('tka_breadcrumb') ?: 'Data TKA' ?>">
                 <i class="fas fa-arrow-left"></i>
             </a>
         </div>
@@ -457,8 +457,8 @@
     <main class="page-content">
 
         <div class="page-header" style="margin-bottom:20px;">
-            <div class="page-title"><?= $this->lang->line('tka_upload_heading') ?? 'Upload Data TKA' ?></div>
-            <div class="page-subtitle"><?= $this->lang->line('tka_upload_subtitle') ?? 'Lengkapi nama TKA dan unggah seluruh dokumen yang diperlukan' ?></div>
+            <div class="page-title"><?= $this->lang->line('tka_upload_heading') ?: 'Upload Data TKA' ?></div>
+            <div class="page-subtitle"><?= $this->lang->line('tka_upload_subtitle') ?: 'Lengkapi nama TKA dan unggah seluruh dokumen yang diperlukan' ?></div>
         </div>
 
         <div class="surface" style="max-width:900px;">
@@ -468,24 +468,24 @@
                 <div class="ups-step">
                     <div class="ups-dot active">1</div>
                     <div class="ups-label">
-                        <div class="ups-num"><?= $this->lang->line('tka_step_1') ?? 'Langkah 1' ?></div>
-                        <div class="ups-text"><?= $this->lang->line('tka_step_1_text') ?? 'Data & Dokumen' ?></div>
+                        <div class="ups-num"><?= $this->lang->line('tka_step_1') ?: 'Langkah 1' ?></div>
+                        <div class="ups-text"><?= $this->lang->line('tka_step_1_text') ?: 'Data & Dokumen' ?></div>
                     </div>
                 </div>
                 <div class="ups-line"></div>
                 <div class="ups-step">
                     <div class="ups-dot idle">2</div>
                     <div class="ups-label">
-                        <div class="ups-num"><?= $this->lang->line('tka_step_2') ?? 'Langkah 2' ?></div>
-                        <div class="ups-text"><?= $this->lang->line('tka_step_2_text') ?? 'Detail TKA' ?></div>
+                        <div class="ups-num"><?= $this->lang->line('tka_step_2') ?: 'Langkah 2' ?></div>
+                        <div class="ups-text"><?= $this->lang->line('tka_step_2_text') ?: 'Detail TKA' ?></div>
                     </div>
                 </div>
                 <div class="ups-line"></div>
                 <div class="ups-step">
                     <div class="ups-dot idle">3</div>
                     <div class="ups-label">
-                        <div class="ups-num"><?= $this->lang->line('tka_step_3') ?? 'Langkah 3' ?></div>
-                        <div class="ups-text"><?= $this->lang->line('tka_step_3_text') ?? 'Verifikasi' ?></div>
+                        <div class="ups-num"><?= $this->lang->line('tka_step_3') ?: 'Langkah 3' ?></div>
+                        <div class="ups-text"><?= $this->lang->line('tka_step_3_text') ?: 'Verifikasi' ?></div>
                     </div>
                 </div>
             </div>
@@ -508,38 +508,38 @@
 
                     <!-- Nama TKA -->
                     <div style="margin-bottom:24px;">
-                        <label class="form-label required"><?= $this->lang->line('tka_name_label') ?? 'Nama Tenaga Kerja Asing' ?></label>
+                        <label class="form-label required"><?= $this->lang->line('tka_name_label') ?: 'Nama Tenaga Kerja Asing' ?></label>
                         <div class="name-input-wrap">
                             <i class="fas fa-user-tie name-icon"></i>
                             <input type="text" name="nama_tka" class="form-input" required
-                                   placeholder="<?= $this->lang->line('tka_name_placeholder') ?? 'Contoh: JOHN SMITH' ?>"
+                                   placeholder="<?= $this->lang->line('tka_name_placeholder') ?: 'Contoh: JOHN SMITH' ?>"
                                    style="text-transform:uppercase;"
                                    oninput="this.value=this.value.toUpperCase()"
                                    value="<?= set_value('nama_tka') ?>">
                         </div>
                         <div class="field-hint">
                             <i class="fas fa-circle-info"></i>
-                            <?= $this->lang->line('tka_name_hint') ?? 'Nama lengkap sesuai paspor, otomatis huruf kapital.' ?>
+                            <?= $this->lang->line('tka_name_hint') ?: 'Nama lengkap sesuai paspor, otomatis huruf kapital.' ?>
                         </div>
                     </div>
 
                     <div class="doc-section-title">
                         <div class="sec-icon sec-icon-pdf"><i class="fas fa-file-pdf"></i></div>
-                        <?= $this->lang->line('tka_section_pdf') ?? 'Dokumen PDF' ?>
-                        <span class="sec-note"><?= $this->lang->line('tka_section_pdf_note') ?? 'PDF · Maks. 2 MB per file' ?></span>
+                        <?= $this->lang->line('tka_section_pdf') ?: 'Dokumen PDF' ?>
+                        <span class="sec-note"><?= $this->lang->line('tka_section_pdf_note') ?: 'PDF · Maks. 2 MB per file' ?></span>
                     </div>
 
                     <?php
                     $pdf_fields = [
-                        'surat_permohonan'  => ['label' => $this->lang->line('tka_doc_surat_permohonan') ?? 'Surat Permohonan',                              'icon' => 'fa-envelope-open-text','required' => true],
-                        'passport'          => ['label' => $this->lang->line('tka_doc_passport') ?? 'Paspor (Halaman Identitas)',                    'icon' => 'fa-passport',          'required' => true],
-                        'kitas'             => ['label' => $this->lang->line('tka_doc_kitas') ?? 'Kartu Izin Tempat Tinggal (KITAS)',             'icon' => 'fa-id-card',           'required' => false],
-                        'stm'               => ['label' => $this->lang->line('tka_doc_stm') ?? 'Surat Tanda Melapor (STM)',                     'icon' => 'fa-file-signature',    'required' => false],
-                        'rptka'             => ['label' => $this->lang->line('tka_doc_rptka') ?? 'Rencana Penggunaan Tenaga Kerja Asing (RPTKA)', 'icon' => 'fa-file-contract',     'required' => true],
-                        'notifikasi'        => ['label' => $this->lang->line('tka_doc_notifikasi') ?? 'Surat Notifikasi',                              'icon' => 'fa-bell',              'required' => true],
-                        'bukti_bayar'       => ['label' => $this->lang->line('tka_doc_bukti_bayar') ?? 'Bukti Bayar (PNBP)',                            'icon' => 'fa-receipt',           'required' => true],
-                        'surat_kuasa'       => ['label' => $this->lang->line('tka_doc_surat_kuasa') ?? 'Surat Kuasa',                                   'icon' => 'fa-file-contract',     'required' => true],
-                        'surat_wajib_lapor' => ['label' => $this->lang->line('tka_doc_surat_wajib_lapor') ?? 'Surat Wajib Lapor Ketenagakerjaan',             'icon' => 'fa-file-alt',          'required' => true],
+                        'surat_permohonan'  => ['label' => $this->lang->line('tka_doc_surat_permohonan') ?: 'Surat Permohonan',                              'icon' => 'fa-envelope-open-text','required' => true],
+                        'passport'          => ['label' => $this->lang->line('tka_doc_passport') ?: 'Paspor (Halaman Identitas)',                    'icon' => 'fa-passport',          'required' => true],
+                        'kitas'             => ['label' => $this->lang->line('tka_doc_kitas') ?: 'Kartu Izin Tempat Tinggal (KITAS)',             'icon' => 'fa-id-card',           'required' => false],
+                        'stm'               => ['label' => $this->lang->line('tka_doc_stm') ?: 'Surat Tanda Melapor (STM)',                     'icon' => 'fa-file-signature',    'required' => false],
+                        'rptka'             => ['label' => $this->lang->line('tka_doc_rptka') ?: 'Rencana Penggunaan Tenaga Kerja Asing (RPTKA)', 'icon' => 'fa-file-contract',     'required' => true],
+                        'notifikasi'        => ['label' => $this->lang->line('tka_doc_notifikasi') ?: 'Surat Notifikasi',                              'icon' => 'fa-bell',              'required' => true],
+                        'bukti_bayar'       => ['label' => $this->lang->line('tka_doc_bukti_bayar') ?: 'Bukti Bayar (PNBP)',                            'icon' => 'fa-receipt',           'required' => true],
+                        'surat_kuasa'       => ['label' => $this->lang->line('tka_doc_surat_kuasa') ?: 'Surat Kuasa',                                   'icon' => 'fa-file-contract',     'required' => true],
+                        'surat_wajib_lapor' => ['label' => $this->lang->line('tka_doc_surat_wajib_lapor') ?: 'Surat Wajib Lapor Ketenagakerjaan',             'icon' => 'fa-file-alt',          'required' => true],
                     ];
                     ?>
 
@@ -549,7 +549,7 @@
                             <label class="form-label <?= $fdata['required'] ? 'required' : '' ?>">
                                 <?= $fdata['label'] ?>
                                 <?php if( ! $fdata['required']): ?>
-                                    <span class="opt"><?= $this->lang->line('tka_optional') ?? '(Opsional)' ?></span>
+                                    <span class="opt"><?= $this->lang->line('tka_optional') ?: '(Opsional)' ?></span>
                                 <?php endif; ?>
                             </label>
                             <div class="file-zone" id="zone_<?= $fname ?>">
@@ -561,8 +561,8 @@
                                         <i class="fas <?= $fdata['icon'] ?>"></i>
                                     </div>
                                     <div class="fz-body">
-                                        <div class="fz-name" id="fzname_<?= $fname ?>"><?= $this->lang->line('tka_choose_pdf') ?? 'Pilih file PDF' ?></div>
-                                        <div class="fz-sub" id="fzsub_<?= $fname ?>"><?= $this->lang->line('tka_drag_here') ?? 'Klik atau seret ke sini' ?></div>
+                                        <div class="fz-name" id="fzname_<?= $fname ?>"><?= $this->lang->line('tka_choose_pdf') ?: 'Pilih file PDF' ?></div>
+                                        <div class="fz-sub" id="fzsub_<?= $fname ?>"><?= $this->lang->line('tka_drag_here') ?: 'Klik atau seret ke sini' ?></div>
                                     </div>
                                     <div class="fz-check" id="fzcheck_<?= $fname ?>">
                                         <i class="fas fa-check"></i>
@@ -579,19 +579,19 @@
                     <!-- ── Dokumen Gambar ── -->
                     <div class="doc-section-title">
                         <div class="sec-icon sec-icon-img"><i class="fas fa-image"></i></div>
-                        <?= $this->lang->line('tka_section_image') ?? 'Dokumen Gambar' ?>
-                        <span class="sec-note"><?= $this->lang->line('tka_section_image_note') ?? 'JPG/PNG · Maks. 2 MB per file' ?></span>
+                        <?= $this->lang->line('tka_section_image') ?: 'Dokumen Gambar' ?>
+                        <span class="sec-note"><?= $this->lang->line('tka_section_image_note') ?: 'JPG/PNG · Maks. 2 MB per file' ?></span>
                     </div>
 
                     <div class="docs-grid-img" style="margin-bottom:8px;">
 
                         <!-- KTP -->
                         <div class="img-upload-card">
-                            <label class="form-label required"><?= $this->lang->line('tka_ktp_label') ?? 'KTP Penanggung Jawab' ?></label>
+                            <label class="form-label required"><?= $this->lang->line('tka_ktp_label') ?: 'KTP Penanggung Jawab' ?></label>
                             <div class="img-preview-wrap" id="wrap_ktp">
                                 <div class="img-preview-placeholder" id="ph_ktp">
                                     <i class="fas fa-id-card"></i>
-                                    <span><?= $this->lang->line('tka_ktp_preview') ?? 'Pratinjau KTP' ?></span>
+                                    <span><?= $this->lang->line('tka_ktp_preview') ?: 'Pratinjau KTP' ?></span>
                                 </div>
                                 <img class="img-preview-el" id="prev_ktp" alt="Preview KTP">
                             </div>
@@ -603,8 +603,8 @@
                                         <i class="fas fa-id-card"></i>
                                     </div>
                                     <div class="fz-body">
-                                        <div class="fz-name" id="fzname_ktp"><?= $this->lang->line('tka_choose_image') ?? 'Pilih file gambar' ?></div>
-                                        <div class="fz-sub"><?= $this->lang->line('tka_drag_here') ?? 'Klik atau seret ke sini' ?></div>
+                                        <div class="fz-name" id="fzname_ktp"><?= $this->lang->line('tka_choose_image') ?: 'Pilih file gambar' ?></div>
+                                        <div class="fz-sub"><?= $this->lang->line('tka_drag_here') ?: 'Klik atau seret ke sini' ?></div>
                                     </div>
                                     <div class="fz-check" id="fzcheck_ktp"><i class="fas fa-check"></i></div>
                                 </div>
@@ -614,16 +614,16 @@
                             </div>
                             <div class="photo-guide">
                                 <i class="fas fa-info-circle"></i>
-                                <?= $this->lang->line('tka_ktp_hint') ?? 'KTP harus terbaca jelas, scan/foto langsung (JPG/PNG)' ?>
+                                <?= $this->lang->line('tka_ktp_hint') ?: 'KTP harus terbaca jelas, scan/foto langsung (JPG/PNG)' ?>
                             </div>
                         </div>
 
                         <div class="img-upload-card">
-                            <label class="form-label required"><?= $this->lang->line('tka_photo_label') ?? 'Foto TKA' ?></label>
+                            <label class="form-label required"><?= $this->lang->line('tka_photo_label') ?: 'Foto TKA' ?></label>
                             <div class="img-preview-wrap" id="wrap_foto">
                                 <div class="img-preview-placeholder" id="ph_foto">
                                     <i class="fas fa-user-circle"></i>
-                                    <span><?= $this->lang->line('tka_photo_preview') ?? 'Pratinjau Foto' ?></span>
+                                    <span><?= $this->lang->line('tka_photo_preview') ?: 'Pratinjau Foto' ?></span>
                                 </div>
                                 <img class="img-preview-el" id="prev_foto" alt="Preview Foto TKA">
                             </div>
@@ -635,8 +635,8 @@
                                         <i class="fas fa-user-circle"></i>
                                     </div>
                                     <div class="fz-body">
-                                        <div class="fz-name" id="fzname_foto"><?= $this->lang->line('tka_choose_image') ?? 'Pilih file gambar' ?></div>
-                                        <div class="fz-sub"><?= $this->lang->line('tka_drag_here') ?? 'Klik atau seret ke sini' ?></div>
+                                        <div class="fz-name" id="fzname_foto"><?= $this->lang->line('tka_choose_image') ?: 'Pilih file gambar' ?></div>
+                                        <div class="fz-sub"><?= $this->lang->line('tka_drag_here') ?: 'Klik atau seret ke sini' ?></div>
                                     </div>
                                     <div class="fz-check" id="fzcheck_foto"><i class="fas fa-check"></i></div>
                                 </div>
@@ -646,7 +646,7 @@
                             </div>
                             <div class="photo-guide">
                                 <i class="fas fa-info-circle"></i>
-                                <?= $this->lang->line('tka_photo_hint') ?? 'Foto TKA, JPG/PNG, akan ditampilkan dengan fokus tengah' ?>
+                                <?= $this->lang->line('tka_photo_hint') ?: 'Foto TKA, JPG/PNG, akan ditampilkan dengan fokus tengah' ?>
                             </div>
                         </div>
 
@@ -656,14 +656,14 @@
 
                 <div class="form-action-bar" style="margin-top:24px;">
                     <div class="upload-counter">
-                        <?= $this->lang->line('tka_files_selected') ?? 'File terpilih:' ?> <strong id="fileCount">0</strong> / 11
+                        <?= $this->lang->line('tka_files_selected') ?: 'File terpilih:' ?> <strong id="fileCount">0</strong> / 11
                     </div>
                     <div style="display:flex; gap:10px; align-items:center;">
                         <a href="<?= base_url('user/data_tka') ?>" class="btn-cancel">
-                            <i class="fas fa-times"></i> <?= $this->lang->line('tka_btn_cancel') ?? 'Batal' ?>
+                            <i class="fas fa-times"></i> <?= $this->lang->line('tka_btn_cancel') ?: 'Batal' ?>
                         </a>
                         <button type="submit" class="btn-submit" id="submitBtn">
-                            <i class="fas fa-cloud-upload-alt"></i> <?= $this->lang->line('tka_btn_save_upload') ?? 'Simpan & Upload' ?>
+                            <i class="fas fa-cloud-upload-alt"></i> <?= $this->lang->line('tka_btn_save_upload') ?: 'Simpan & Upload' ?>
                         </button>
                     </div>
                 </div>
@@ -676,9 +676,9 @@
 <?php $this->load->view('footer'); ?>
 
 <script>
-    var lang_invalid_pdf = "<?= $this->lang->line('tka_js_invalid_pdf') ?? 'Tipe file tidak diizinkan. Harap unggah file PDF (.pdf)' ?>";
-    var lang_invalid_image = "<?= $this->lang->line('tka_js_invalid_image') ?? 'Tipe file tidak diizinkan. Harap unggah gambar JPG/JPEG/PNG' ?>";
-    var lang_file_too_large = "<?= $this->lang->line('tka_js_file_too_large') ?? 'Ukuran file melebihi batas maksimum 2 MB' ?>";
+    var lang_invalid_pdf = "<?= $this->lang->line('tka_js_invalid_pdf') ?: 'Tipe file tidak diizinkan. Harap unggah file PDF (.pdf)' ?>";
+    var lang_invalid_image = "<?= $this->lang->line('tka_js_invalid_image') ?: 'Tipe file tidak diizinkan. Harap unggah gambar JPG/JPEG/PNG' ?>";
+    var lang_file_too_large = "<?= $this->lang->line('tka_js_file_too_large') ?: 'Ukuran file melebihi batas maksimum 2 MB' ?>";
 
 /* ── Sidebar toggle ── */
 (function(){
@@ -741,8 +741,8 @@ function validateAndSetFile(fieldName, inputElement, typeCategory) {
             // Show error message
             showFieldError(fieldName, errorMsg);
             // Reset zone UI to empty state
-            labelSpan.textContent = (typeCategory === 'pdf') ? '<?= $this->lang->line('tka_choose_pdf') ?? 'Pilih file PDF' ?>' : '<?= $this->lang->line('tka_choose_image') ?? 'Pilih file gambar' ?>';
-            if (subSpan) subSpan.textContent = '<?= $this->lang->line('tka_drag_here') ?? 'Klik atau seret ke sini' ?>';
+            labelSpan.textContent = (typeCategory === 'pdf') ? '<?= $this->lang->line('tka_choose_pdf') ?: 'Pilih file PDF' ?>' : '<?= $this->lang->line('tka_choose_image') ?: 'Pilih file gambar' ?>';
+            if (subSpan) subSpan.textContent = '<?= $this->lang->line('tka_drag_here') ?: 'Klik atau seret ke sini' ?>';
             zone.classList.remove('has-file');
             zone.classList.add('error-zone');
             // For images, also reset preview
@@ -762,8 +762,8 @@ function validateAndSetFile(fieldName, inputElement, typeCategory) {
         zone.classList.add('has-file');
     } else {
         // No file selected
-        labelSpan.textContent = (typeCategory === 'pdf') ? '<?= $this->lang->line('tka_choose_pdf') ?? 'Pilih file PDF' ?>' : '<?= $this->lang->line('tka_choose_image') ?? 'Pilih file gambar' ?>';
-        if (subSpan) subSpan.textContent = '<?= $this->lang->line('tka_drag_here') ?? 'Klik atau seret ke sini' ?>';
+        labelSpan.textContent = (typeCategory === 'pdf') ? '<?= $this->lang->line('tka_choose_pdf') ?: 'Pilih file PDF' ?>' : '<?= $this->lang->line('tka_choose_image') ?: 'Pilih file gambar' ?>';
+        if (subSpan) subSpan.textContent = '<?= $this->lang->line('tka_drag_here') ?: 'Klik atau seret ke sini' ?>';
         zone.classList.remove('has-file');
         zone.classList.remove('error-zone');
         if (typeCategory === 'image') {

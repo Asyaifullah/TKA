@@ -279,7 +279,7 @@
                                 </td>
                                 <td data-label="<?= $this->lang->line('tka_col_date') ?>">
                                     <div class="cell-date-main"><?= date('d M Y', strtotime($t->created_at)) ?></div>
-                                    <div class="cell-date-sub"><?= date('H:i', strtotime($t->created_at)) ?> <?= $this->lang->line('auth_wib') ?? 'WIB' ?></div>
+                                    <div class="cell-date-sub"><?= date('H:i', strtotime($t->created_at)) ?> <?= $this->lang->line('auth_wib') ?: 'WIB' ?></div>
                                 </td>
                                 <td class="cell-action" data-label="<?= $this->lang->line('tka_col_action') ?>">
                                     <div class="btn-row">

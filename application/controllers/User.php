@@ -58,7 +58,7 @@ class User extends MY_Controller {
             $config['allowed_types'] = 'pdf';
             $config['file_name'] = $tka_id.'_'.$field.'_'.time();
             $this->upload->initialize($config);
-            if($$this->store_upload($field)) {
+            if($this->store_upload($field)) {
                 $upload_data[$field] = $this->upload->data('file_name');
             } else {
                 $this->Tka_model->delete($tka_id);
@@ -73,7 +73,7 @@ class User extends MY_Controller {
                 $config['allowed_types'] = 'pdf';
                 $config['file_name'] = $tka_id.'_'.$field.'_'.time();
                 $this->upload->initialize($config);
-                if($$this->store_upload($field)) {
+                if($this->store_upload($field)) {
                     $upload_data[$field] = $this->upload->data('file_name');
                 } else {
                     $this->session->set_flashdata('warning', sprintf($this->lang->line('user_flash_upload_failed_msg'), $field . ' (opsional)', $this->upload->display_errors('', '')));
@@ -91,7 +91,7 @@ class User extends MY_Controller {
             $config['allowed_types'] = 'jpg|jpeg|png';
             $config['file_name'] = $tka_id.'_'.$field.'_'.time();
             $this->upload->initialize($config);
-            if($$this->store_upload($field)) {
+            if($this->store_upload($field)) {
                 $upload_data[$field] = $this->upload->data('file_name');
             } else {
                 $this->Tka_model->delete($tka_id);
@@ -127,7 +127,7 @@ class User extends MY_Controller {
         $list = $this->Tka_model->get_by_user($user_id);
         foreach($list as $t) {
             if ($t->status == 'DRAFT') {
-                $t->stage_label = $this->lang->line('tka_data_incomplete') ?? 'Data Belum Lengkap';
+                $t->stage_label = $this->lang->line('tka_data_incomplete') ?: 'Data Belum Lengkap';
                 $t->stage_color = 'secondary';
             } else {
                 $stage = $this->Tka_model->get_approval_stage($t->status);
@@ -173,16 +173,16 @@ class User extends MY_Controller {
             redirect('user/data_tka');
         }
 
-        $this->form_validation->set_rules('passport_no', $this->lang->line('tka_passport_no') ?? 'Nomor Passport', 'required');
-        $this->form_validation->set_rules('kitas_no', $this->lang->line('tka_kitas_no') ?? 'Nomor KITAS', 'required');
-        $this->form_validation->set_rules('negara_asal', $this->lang->line('tka_negara_asal') ?? 'Kebangsaan', 'required');
-        $this->form_validation->set_rules('jabatan', $this->lang->line('tka_jabatan') ?? 'Jabatan', 'required');
-        $this->form_validation->set_rules('tempat_lahir', $this->lang->line('tka_tempat_lahir') ?? 'Tempat Lahir', 'required');
-        $this->form_validation->set_rules('tanggal_lahir', $this->lang->line('tka_tanggal_lahir') ?? 'Tanggal Lahir', 'required');
-        $this->form_validation->set_rules('jenis_kelamin', $this->lang->line('tka_jenis_kelamin') ?? 'Jenis Kelamin', 'required');
-        $this->form_validation->set_rules('jenis_notifikasi', $this->lang->line('tka_jenis_notifikasi') ?? 'Jenis Notifikasi', 'required');
-        $this->form_validation->set_rules('lunas_dkp', $this->lang->line('tka_lunas_dkp') ?? 'Lunas DKP', 'required');
-        $this->form_validation->set_rules('bidang_usaha', $this->lang->line('tka_bidang_usaha') ?? 'Bidang Usaha', 'required');
+        $this->form_validation->set_rules('passport_no', $this->lang->line('tka_passport_no') ?: 'Nomor Passport', 'required');
+        $this->form_validation->set_rules('kitas_no', $this->lang->line('tka_kitas_no') ?: 'Nomor KITAS', 'required');
+        $this->form_validation->set_rules('negara_asal', $this->lang->line('tka_negara_asal') ?: 'Kebangsaan', 'required');
+        $this->form_validation->set_rules('jabatan', $this->lang->line('tka_jabatan') ?: 'Jabatan', 'required');
+        $this->form_validation->set_rules('tempat_lahir', $this->lang->line('tka_tempat_lahir') ?: 'Tempat Lahir', 'required');
+        $this->form_validation->set_rules('tanggal_lahir', $this->lang->line('tka_tanggal_lahir') ?: 'Tanggal Lahir', 'required');
+        $this->form_validation->set_rules('jenis_kelamin', $this->lang->line('tka_jenis_kelamin') ?: 'Jenis Kelamin', 'required');
+        $this->form_validation->set_rules('jenis_notifikasi', $this->lang->line('tka_jenis_notifikasi') ?: 'Jenis Notifikasi', 'required');
+        $this->form_validation->set_rules('lunas_dkp', $this->lang->line('tka_lunas_dkp') ?: 'Lunas DKP', 'required');
+        $this->form_validation->set_rules('bidang_usaha', $this->lang->line('tka_bidang_usaha') ?: 'Bidang Usaha', 'required');
 
         if($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', validation_errors());
@@ -214,7 +214,7 @@ class User extends MY_Controller {
         if($this->Tka_model->update_detail($id, $data)) {
             $this->Tka_model->update_status($id, 'MENUNGGU_KASI');
             $this->Approval_log_model->insert_with_sla(
-                $id, 1, 'MENUNGGU_KASI', null, $this->lang->line('tka_log_new_submission') ?? 'Pengajuan baru oleh perusahaan'
+                $id, 1, 'MENUNGGU_KASI', null, $this->lang->line('tka_log_new_submission') ?: 'Pengajuan baru oleh perusahaan'
             );
             $this->session->set_flashdata('success', $this->lang->line('user_flash_detail_saved'));
         } else {
@@ -289,7 +289,7 @@ class User extends MY_Controller {
         if($last_reject && $tka->status == 'DRAFT') {
             $this->Tka_model->update_status($id, 'MENUNGGU_KASI');
             $this->Approval_log_model->insert_with_sla(
-                $id, 1, 'MENUNGGU_KASI', null, ($this->lang->line('tka_log_revision') ?? 'Perbaikan setelah penolakan oleh ') . $last_reject->role
+                $id, 1, 'MENUNGGU_KASI', null, ($this->lang->line('tka_log_revision') ?: 'Perbaikan setelah penolakan oleh ') . $last_reject->role
             );
             $this->session->set_flashdata('success', $this->lang->line('user_flash_repaired'));
         } else {
@@ -352,7 +352,7 @@ class User extends MY_Controller {
                 }
                 $config['file_name'] = $id.'_'.$field.'_'.time();
                 $this->upload->initialize($config);
-                if($$this->store_upload($field)) {
+                if($this->store_upload($field)) {
                     $file_name = $this->upload->data('file_name');
                     $old_file = $this->Berkas_model->get_field($id, $field);
                     if($old_file && file_exists($upload_path.$old_file)) {
@@ -512,9 +512,9 @@ class User extends MY_Controller {
     }
 
     public function change_password() {
-        $this->form_validation->set_rules('current_password', $this->lang->line('user_current_pw') ?? 'Password Saat Ini', 'required');
-        $this->form_validation->set_rules('new_password', $this->lang->line('user_new_pw') ?? 'Password Baru', 'required|min_length[6]');
-        $this->form_validation->set_rules('confirm_password', $this->lang->line('user_confirm_pw') ?? 'Konfirmasi Password', 'required|matches[new_password]');
+        $this->form_validation->set_rules('current_password', $this->lang->line('user_current_pw') ?: 'Password Saat Ini', 'required');
+        $this->form_validation->set_rules('new_password', $this->lang->line('user_new_pw') ?: 'Password Baru', 'required|min_length[6]');
+        $this->form_validation->set_rules('confirm_password', $this->lang->line('user_confirm_pw') ?: 'Konfirmasi Password', 'required|matches[new_password]');
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('error', validation_errors());

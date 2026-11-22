@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $this->lang->line('notif_page_title') ?? 'Notifikasi — SITLAKEB TKA' ?></title>
+    <title><?= $this->lang->line('notif_page_title') ?: 'Notifikasi — SITLAKEB TKA' ?></title>
     <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -352,16 +352,16 @@
                 <i class="fas fa-home"></i>
             </a>
             <i class="fas fa-chevron-right" style="font-size:8px;"></i>
-            <strong><?= $this->lang->line('notif_breadcrumb') ?? 'Notifikasi' ?></strong>
+            <strong><?= $this->lang->line('notif_breadcrumb') ?: 'Notifikasi' ?></strong>
         </div>
         <div class="topnav-actions">
             <?php if($unread_count > 0): ?>
                 <a href="<?= base_url('user/mark_all_read') ?>"
                    class="btn-primary"
                    style="height:36px;padding:0 14px;"
-                   onclick="return confirm('<?= $this->lang->line('notif_mark_all_confirm') ?? 'Tandai semua notifikasi sudah dibaca?' ?>')">
+                   onclick="return confirm('<?= $this->lang->line('notif_mark_all_confirm') ?: 'Tandai semua notifikasi sudah dibaca?' ?>')">
                     <i class="fas fa-check-double"></i>
-                    <span class="btn-label"><?= $this->lang->line('notif_mark_all') ?? 'Tandai Semua Dibaca' ?></span>
+                    <span class="btn-label"><?= $this->lang->line('notif_mark_all') ?: 'Tandai Semua Dibaca' ?></span>
                 </a>
             <?php endif; ?>
         </div>
@@ -370,8 +370,8 @@
     <main class="page-content">
 
         <div class="page-header">
-            <div class="page-title"><?= $this->lang->line('notif_heading') ?? 'Notifikasi Saya' ?></div>
-            <div class="page-subtitle"><?= $this->lang->line('notif_subtitle') ?? 'Riwayat seluruh notifikasi pada akun Anda' ?></div>
+            <div class="page-title"><?= $this->lang->line('notif_heading') ?: 'Notifikasi Saya' ?></div>
+            <div class="page-subtitle"><?= $this->lang->line('notif_subtitle') ?: 'Riwayat seluruh notifikasi pada akun Anda' ?></div>
         </div>
 
         <!-- Flash -->
@@ -388,7 +388,7 @@
             <div class="surface-header">
                 <div class="surface-title">
                     <i class="fas fa-bell"></i>
-                    <?= $this->lang->line('notif_history') ?? 'Riwayat Notifikasi' ?>
+                    <?= $this->lang->line('notif_history') ?: 'Riwayat Notifikasi' ?>
                     <?php if(!empty($notifications)): ?>
                         <span style="background:var(--c-primary-light);color:var(--c-primary);padding:2px 8px;border-radius:20px;font-size:0.68rem;">
                             <?= count($notifications) ?>
@@ -396,7 +396,7 @@
                     <?php endif; ?>
                     <?php if($unread_count > 0): ?>
                         <span style="background:#fef2f2;color:#dc2626;padding:2px 8px;border-radius:20px;font-size:0.68rem;">
-                            <?= $unread_count ?> <?= $this->lang->line('notif_unread_count') ?? 'Belum Dibaca' ?>
+                            <?= $unread_count ?> <?= $this->lang->line('notif_unread_count') ?: 'Belum Dibaca' ?>
                         </span>
                     <?php endif; ?>
                 </div>
@@ -407,8 +407,8 @@
                 <!-- Empty state -->
                 <div class="empty-state">
                     <div class="empty-state-icon"><i class="fas fa-bell-slash"></i></div>
-                    <h4><?= $this->lang->line('notif_empty_title') ?? 'Belum Ada Notifikasi' ?></h4>
-                    <p><?= $this->lang->line('notif_empty_message') ?? 'Anda belum memiliki notifikasi apapun.' ?></p>
+                    <h4><?= $this->lang->line('notif_empty_title') ?: 'Belum Ada Notifikasi' ?></h4>
+                    <p><?= $this->lang->line('notif_empty_message') ?: 'Anda belum memiliki notifikasi apapun.' ?></p>
                 </div>
 
             <?php else: ?>
@@ -416,13 +416,13 @@
                 <!-- Filter bar: chips + search -->
                 <div class="filter-bar">
                     <div class="filter-chips">
-                        <div class="chip active" data-filter="all"><?= $this->lang->line('notif_filter_all') ?? 'Semua' ?></div>
-                        <div class="chip" data-filter="unread"><?= $this->lang->line('notif_filter_unread') ?? 'Belum Dibaca' ?></div>
-                        <div class="chip" data-filter="read"><?= $this->lang->line('notif_filter_read') ?? 'Sudah Dibaca' ?></div>
+                        <div class="chip active" data-filter="all"><?= $this->lang->line('notif_filter_all') ?: 'Semua' ?></div>
+                        <div class="chip" data-filter="unread"><?= $this->lang->line('notif_filter_unread') ?: 'Belum Dibaca' ?></div>
+                        <div class="chip" data-filter="read"><?= $this->lang->line('notif_filter_read') ?: 'Sudah Dibaca' ?></div>
                     </div>
                     <div class="search-wrap">
                         <i class="fas fa-search search-icon"></i>
-                        <input type="text" class="search-input" id="searchInput" placeholder="<?= $this->lang->line('notif_search_placeholder') ?? 'Cari notifikasi…' ?>">
+                        <input type="text" class="search-input" id="searchInput" placeholder="<?= $this->lang->line('notif_search_placeholder') ?: 'Cari notifikasi…' ?>">
                     </div>
                 </div>
 
@@ -434,12 +434,12 @@
                         <table class="data-table" id="notifTable">
                             <thead>
                                 <tr>
-                                    <th class="cell-no"><?= $this->lang->line('notif_col_number') ?? '#' ?></th>
-                                    <th style="width:120px;"><?= $this->lang->line('notif_col_status') ?? 'Status' ?></th>
-                                    <th><?= $this->lang->line('notif_col_title') ?? 'Judul' ?></th>
-                                    <th><?= $this->lang->line('notif_col_message') ?? 'Pesan' ?></th>
-                                    <th style="width:130px;"><?= $this->lang->line('notif_col_time') ?? 'Waktu' ?></th>
-                                    <th class="cell-action"><?= $this->lang->line('notif_col_action') ?? 'Aksi' ?></th>
+                                    <th class="cell-no"><?= $this->lang->line('notif_col_number') ?: '#' ?></th>
+                                    <th style="width:120px;"><?= $this->lang->line('notif_col_status') ?: 'Status' ?></th>
+                                    <th><?= $this->lang->line('notif_col_title') ?: 'Judul' ?></th>
+                                    <th><?= $this->lang->line('notif_col_message') ?: 'Pesan' ?></th>
+                                    <th style="width:130px;"><?= $this->lang->line('notif_col_time') ?: 'Waktu' ?></th>
+                                    <th class="cell-action"><?= $this->lang->line('notif_col_action') ?: 'Aksi' ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -453,11 +453,11 @@
                                     <td>
                                         <?php if($n->is_read == 0): ?>
                                             <span class="badge-unread">
-                                                <span class="notif-dot"></span> <?= $this->lang->line('notif_status_unread') ?? 'Belum Dibaca' ?>
+                                                <span class="notif-dot"></span> <?= $this->lang->line('notif_status_unread') ?: 'Belum Dibaca' ?>
                                             </span>
                                         <?php else: ?>
                                             <span class="badge-read">
-                                                <i class="fas fa-check-circle" style="font-size:0.65rem;"></i> <?= $this->lang->line('notif_status_read') ?? 'Sudah Dibaca' ?>
+                                                <i class="fas fa-check-circle" style="font-size:0.65rem;"></i> <?= $this->lang->line('notif_status_read') ?: 'Sudah Dibaca' ?>
                                             </span>
                                         <?php endif; ?>
                                     </td>
@@ -474,14 +474,14 @@
 
                                     <td>
                                         <div class="cell-date-main"><?= date('d M Y', strtotime($n->created_at)) ?></div>
-                                        <div class="cell-date-sub"><?= date('H:i', strtotime($n->created_at)) ?> <?= $this->lang->line('auth_wib') ?? 'WIB' ?></div>
+                                        <div class="cell-date-sub"><?= date('H:i', strtotime($n->created_at)) ?> <?= $this->lang->line('auth_wib') ?: 'WIB' ?></div>
                                     </td>
 
                                     <td class="cell-action">
                                         <?php if($n->is_read == 0): ?>
                                             <a href="<?= base_url('user/mark_notification_read/'.$n->id) ?>"
                                                class="btn-xs bx-lengkapi">
-                                                <i class="fas fa-check"></i> <?= $this->lang->line('notif_mark_read') ?? 'Tandai Dibaca' ?>
+                                                <i class="fas fa-check"></i> <?= $this->lang->line('notif_mark_read') ?: 'Tandai Dibaca' ?>
                                             </a>
                                         <?php else: ?>
                                             <span style="color:var(--c-text-muted);font-size:0.8rem;">—</span>
@@ -508,11 +508,11 @@
                             <div class="notif-card-title"><?= htmlspecialchars($n->title) ?></div>
                             <?php if($n->is_read == 0): ?>
                                 <span class="badge-unread" style="flex-shrink:0;">
-                                    <span class="notif-dot"></span> <?= $this->lang->line('notif_badge_new') ?? 'Baru' ?>
+                                    <span class="notif-dot"></span> <?= $this->lang->line('notif_badge_new') ?: 'Baru' ?>
                                 </span>
                             <?php else: ?>
                                 <span class="badge-read" style="flex-shrink:0;">
-                                    <i class="fas fa-check-circle" style="font-size:0.65rem;"></i> <?= $this->lang->line('notif_badge_read') ?? 'Dibaca' ?>
+                                    <i class="fas fa-check-circle" style="font-size:0.65rem;"></i> <?= $this->lang->line('notif_badge_read') ?: 'Dibaca' ?>
                                 </span>
                             <?php endif; ?>
                         </div>
@@ -522,12 +522,12 @@
                         <div class="notif-card-meta">
                             <div class="notif-card-time">
                                 <i class="fas fa-clock" style="font-size:0.65rem;margin-right:3px;"></i>
-                                <?= date('d M Y, H:i', strtotime($n->created_at)) ?> <?= $this->lang->line('auth_wib') ?? 'WIB' ?>
+                                <?= date('d M Y, H:i', strtotime($n->created_at)) ?> <?= $this->lang->line('auth_wib') ?: 'WIB' ?>
                             </div>
                             <?php if($n->is_read == 0): ?>
                                 <a href="<?= base_url('user/mark_notification_read/'.$n->id) ?>"
                                    class="btn-xs bx-lengkapi">
-                                    <i class="fas fa-check"></i> <?= $this->lang->line('notif_mark_read') ?? 'Tandai Dibaca' ?>
+                                    <i class="fas fa-check"></i> <?= $this->lang->line('notif_mark_read') ?: 'Tandai Dibaca' ?>
                                 </a>
                             <?php endif; ?>
                         </div>
@@ -540,14 +540,14 @@
                     <div class="paging-info" id="pagingInfo">—</div>
                     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
                         <div class="per-page-wrap">
-                            <span><?= $this->lang->line('notif_show') ?? 'Tampilkan' ?></span>
+                            <span><?= $this->lang->line('notif_show') ?: 'Tampilkan' ?></span>
                             <select class="per-page-select" id="perPageSelect">
                                 <option value="10" selected>10</option>
                                 <option value="25">25</option>
                                 <option value="50">50</option>
                                 <option value="100">100</option>
                             </select>
-                            <span><?= $this->lang->line('notif_per_page') ?? 'per halaman' ?></span>
+                            <span><?= $this->lang->line('notif_per_page') ?: 'per halaman' ?></span>
                         </div>
                         <div class="paging-controls" id="pagingControls"></div>
                     </div>
@@ -556,7 +556,7 @@
                 <!-- Tidak ada hasil -->
                 <div class="no-result" id="noResult">
                     <i class="fas fa-search"></i>
-                    <?= $this->lang->line('notif_no_match') ?? 'Tidak ada notifikasi yang cocok dengan pencarian.' ?>
+                    <?= $this->lang->line('notif_no_match') ?: 'Tidak ada notifikasi yang cocok dengan pencarian.' ?>
                 </div>
 
             <?php endif; ?>
@@ -664,9 +664,9 @@
 
         /* Info teks */
         if (pagingInfo) {
-            var lang_showing = "<?= $this->lang->line('notif_showing') ?? 'Menampilkan' ?>";
-            var lang_of = "<?= $this->lang->line('notif_of_notifs') ?? 'notifikasi' ?>";
-            var lang_zero = "<?= $this->lang->line('notif_zero') ?? '0 notifikasi' ?>";
+            var lang_showing = "<?= $this->lang->line('notif_showing') ?: 'Menampilkan' ?>";
+            var lang_of = "<?= $this->lang->line('notif_of_notifs') ?: 'notifikasi' ?>";
+            var lang_zero = "<?= $this->lang->line('notif_zero') ?: '0 notifikasi' ?>";
             pagingInfo.innerHTML = total > 0
                 ? lang_showing + ' <strong>' + (start + 1) + '–' + end + '</strong> dari <strong>' + total + '</strong> ' + lang_of
                 : lang_zero;

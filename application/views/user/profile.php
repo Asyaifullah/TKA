@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $this->lang->line('user_profile_title') ?? 'Profil Saya' ?> — SITLAKEB TKA</title>
+    <title><?= $this->lang->line('user_profile_title') ?: 'Profil Saya' ?> — SITLAKEB TKA</title>
     <link rel="icon" type="image/x-icon" href="<?= base_url('favicon.ico') ?>">
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -209,15 +209,15 @@
                 <i class="fas fa-home"></i>
             </a>
             <i class="fas fa-chevron-right" style="font-size:8px;"></i>
-            <strong><?= $this->lang->line('user_profile_title') ?? 'Profil Saya' ?></strong>
+            <strong><?= $this->lang->line('user_profile_title') ?: 'Profil Saya' ?></strong>
         </div>
     </header>
 
     <main class="page-content">
 
         <div class="page-header">
-            <div class="page-title"><?= $this->lang->line('user_profile_title') ?? 'Profil Saya' ?></div>
-            <div class="page-subtitle"><?= $this->lang->line('user_profile_subtitle') ?? 'Kelola informasi akun dan keamanan' ?></div>
+            <div class="page-title"><?= $this->lang->line('user_profile_title') ?: 'Profil Saya' ?></div>
+            <div class="page-subtitle"><?= $this->lang->line('user_profile_subtitle') ?: 'Kelola informasi akun dan keamanan' ?></div>
         </div>
 
         <!-- Flash Messages -->
@@ -243,7 +243,7 @@
 
                 <div class="surface-header">
                     <div class="surface-title">
-                        <i class="fas fa-user-circle"></i> <?= $this->lang->line('user_info_profile') ?? 'Informasi Profile' ?>
+                        <i class="fas fa-user-circle"></i> <?= $this->lang->line('user_info_profile') ?: 'Informasi Profile' ?>
                     </div>
                 </div>
 
@@ -273,15 +273,15 @@
                         <!-- Nama PIC + Nomor HP dalam satu baris -->
                         <div class="field-row">
                             <div class="field-group">
-                                <label class="f-label" for="nama"><?= $this->lang->line('user_pic_name') ?? 'Nama PIC' ?></label>
+                                <label class="f-label" for="nama"><?= $this->lang->line('user_pic_name') ?: 'Nama PIC' ?></label>
                                 <input type="text" name="nama" id="nama" class="f-input"
                                        value="<?= htmlspecialchars($user->nama) ?>"
-                                       placeholder="<?= $this->lang->line('user_pic_placeholder') ?? 'Nama penanggung jawab' ?>"
+                                       placeholder="<?= $this->lang->line('user_pic_placeholder') ?: 'Nama penanggung jawab' ?>"
                                        required
                                        oninput="document.getElementById('display-nama').textContent = this.value || '—'">
                             </div>
                             <div class="field-group">
-                                <label class="f-label" for="no_hp"><?= $this->lang->line('user_phone') ?? 'Nomor HP' ?></label>
+                                <label class="f-label" for="no_hp"><?= $this->lang->line('user_phone') ?: 'Nomor HP' ?></label>
                                 <input type="tel" name="no_hp" id="no_hp" class="f-input"
                                        value="<?= htmlspecialchars($user->no_hp ?? '') ?>"
                                        placeholder="08xxxxxxxxxx">
@@ -290,23 +290,23 @@
 
                         <!-- Nama perusahaan -->
                         <div class="field-group">
-                            <label class="f-label" for="perusahaan"><?= $this->lang->line('user_company') ?? 'Nama Perusahaan' ?></label>
+                            <label class="f-label" for="perusahaan"><?= $this->lang->line('user_company') ?: 'Nama Perusahaan' ?></label>
                             <input type="text" name="perusahaan" id="perusahaan" class="f-input"
                                    value="<?= htmlspecialchars($user->perusahaan) ?>"
-                                   placeholder="<?= $this->lang->line('user_company_placeholder') ?? 'PT. / CV. ...' ?>"
+                                   placeholder="<?= $this->lang->line('user_company_placeholder') ?: 'PT. / CV. ...' ?>"
                                    required>
                         </div>
 
                         <!-- Alamat -->
                         <div class="field-group" style="margin-bottom:18px;">
-                            <label class="f-label" for="alamat"><?= $this->lang->line('user_address') ?? 'Alamat Perusahaan' ?></label>
+                            <label class="f-label" for="alamat"><?= $this->lang->line('user_address') ?: 'Alamat Perusahaan' ?></label>
                             <textarea name="alamat" id="alamat" class="f-input"
                                       rows="3"
-                                      placeholder="<?= $this->lang->line('user_address_placeholder') ?? 'Alamat lengkap perusahaan' ?>"><?= htmlspecialchars($user->alamat ?? '') ?></textarea>
+                                      placeholder="<?= $this->lang->line('user_address_placeholder') ?: 'Alamat lengkap perusahaan' ?>"><?= htmlspecialchars($user->alamat ?? '') ?></textarea>
                         </div>
 
                         <button type="submit" class="btn-save">
-                            <i class="fas fa-floppy-disk"></i> <?= $this->lang->line('user_btn_save') ?? 'Simpan Perubahan' ?>
+                            <i class="fas fa-floppy-disk"></i> <?= $this->lang->line('user_btn_save') ?: 'Simpan Perubahan' ?>
                         </button>
 
                     </form>
@@ -320,7 +320,7 @@
 
                 <div class="surface-header">
                     <div class="surface-title">
-                        <i class="fas fa-key"></i> <?= $this->lang->line('user_change_password') ?? 'Ganti Password' ?>
+                        <i class="fas fa-key"></i> <?= $this->lang->line('user_change_password') ?: 'Ganti Password' ?>
                     </div>
                 </div>
 
@@ -330,7 +330,7 @@
                     <div style="display:flex;gap:9px;align-items:flex-start;padding:10px 12px;background:var(--c-surface-2);border-radius:var(--r-md);margin-bottom:18px;">
                         <i class="fas fa-shield-halved" style="color:var(--c-primary);font-size:0.85rem;margin-top:2px;flex-shrink:0;"></i>
                         <p style="font-size:0.76rem;color:var(--c-text-muted);margin:0;line-height:1.6;">
-                            <?= $this->lang->line('user_pw_hint') ?? 'Gunakan kombinasi huruf besar, angka, dan simbol. Minimal' ?> <strong><?= $this->lang->line('user_pw_hint_strong') ?? '8 karakter' ?></strong>.
+                            <?= $this->lang->line('user_pw_hint') ?: 'Gunakan kombinasi huruf besar, angka, dan simbol. Minimal' ?> <strong><?= $this->lang->line('user_pw_hint_strong') ?: '8 karakter' ?></strong>.
                         </p>
                     </div>
 
@@ -341,7 +341,7 @@
 
                         <!-- Password saat ini -->
                         <div class="field-group">
-                            <label class="f-label" for="current_password"><?= $this->lang->line('user_current_pw') ?? 'Password Saat Ini' ?></label>
+                            <label class="f-label" for="current_password"><?= $this->lang->line('user_current_pw') ?: 'Password Saat Ini' ?></label>
                             <div class="pw-wrap">
                                 <input type="password" name="current_password" id="current_password"
                                        class="f-input"
@@ -356,8 +356,8 @@
                         <!-- Password baru -->
                         <div class="field-group">
                             <label class="f-label" for="new_password">
-                                <?= $this->lang->line('user_new_pw') ?? 'Password Baru' ?>
-                                <span class="f-hint"><?= $this->lang->line('user_pw_min') ?? '(min. 8 karakter)' ?></span>
+                                <?= $this->lang->line('user_new_pw') ?: 'Password Baru' ?>
+                                <span class="f-hint"><?= $this->lang->line('user_pw_min') ?: '(min. 8 karakter)' ?></span>
                             </label>
                             <div class="pw-wrap">
                                 <input type="password" name="new_password" id="new_password"
@@ -379,7 +379,7 @@
 
                         <!-- Konfirmasi password -->
                         <div class="field-group" style="margin-bottom:18px;">
-                            <label class="f-label" for="confirm_password"><?= $this->lang->line('user_confirm_pw') ?? 'Konfirmasi Password Baru' ?></label>
+                            <label class="f-label" for="confirm_password"><?= $this->lang->line('user_confirm_pw') ?: 'Konfirmasi Password Baru' ?></label>
                             <div class="pw-wrap">
                                 <input type="password" name="confirm_password" id="confirm_password"
                                        class="f-input"
@@ -394,7 +394,7 @@
                         </div>
 
                         <button type="submit" class="btn-save">
-                            <i class="fas fa-floppy-disk"></i> <?= $this->lang->line('user_btn_update_pw') ?? 'Update Password' ?>
+                            <i class="fas fa-floppy-disk"></i> <?= $this->lang->line('user_btn_update_pw') ?: 'Update Password' ?>
                         </button>
 
                     </form>
@@ -409,15 +409,15 @@
 <?php $this->load->view('footer'); ?>
 
 <script>
-    var lang_pw_weak = "<?= $this->lang->line('user_js_weak') ?? 'Lemah' ?>";
-    var lang_pw_fair = "<?= $this->lang->line('user_js_fair') ?? 'Cukup' ?>";
-    var lang_pw_good = "<?= $this->lang->line('user_js_good') ?? 'Sedang' ?>";
-    var lang_pw_strong = "<?= $this->lang->line('user_js_strong') ?? 'Kuat' ?>";
-    var lang_pw_strength = "<?= $this->lang->line('user_js_strength') ?? 'Kekuatan:' ?>";
-    var lang_pw_match = "<?= $this->lang->line('user_js_match') ?? 'Password cocok' ?>";
-    var lang_pw_no_match = "<?= $this->lang->line('user_js_no_match') ?? 'Password tidak cocok' ?>";
-    var lang_pw_alert_min = "<?= $this->lang->line('user_js_alert_min') ?? 'Password baru minimal 8 karakter.' ?>";
-    var lang_pw_alert_match = "<?= $this->lang->line('user_js_alert_match') ?? 'Konfirmasi password tidak cocok.' ?>";
+    var lang_pw_weak = "<?= $this->lang->line('user_js_weak') ?: 'Lemah' ?>";
+    var lang_pw_fair = "<?= $this->lang->line('user_js_fair') ?: 'Cukup' ?>";
+    var lang_pw_good = "<?= $this->lang->line('user_js_good') ?: 'Sedang' ?>";
+    var lang_pw_strong = "<?= $this->lang->line('user_js_strong') ?: 'Kuat' ?>";
+    var lang_pw_strength = "<?= $this->lang->line('user_js_strength') ?: 'Kekuatan:' ?>";
+    var lang_pw_match = "<?= $this->lang->line('user_js_match') ?: 'Password cocok' ?>";
+    var lang_pw_no_match = "<?= $this->lang->line('user_js_no_match') ?: 'Password tidak cocok' ?>";
+    var lang_pw_alert_min = "<?= $this->lang->line('user_js_alert_min') ?: 'Password baru minimal 8 karakter.' ?>";
+    var lang_pw_alert_match = "<?= $this->lang->line('user_js_alert_match') ?: 'Konfirmasi password tidak cocok.' ?>";
 
 /* ── Toggle show/hide password ───────────────────────────── */
 document.querySelectorAll('.pw-eye').forEach(function(btn) {

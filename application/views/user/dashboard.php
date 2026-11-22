@@ -437,7 +437,7 @@
                                 <?php if($t->status=='DRAFT'): ?>
                                     <a href="<?= base_url('user/detail_form/'.$t->id) ?>" class="btn-xs bx-lengkapi" title="<?= $this->lang->line('dash_btn_complete') ?>"><i class="fas fa-pen-fancy"></i></a>
                                     <a href="<?= base_url('user/edit_tka/'.$t->id) ?>" class="btn-xs bx-ganti" title="<?= $this->lang->line('dash_btn_replace') ?>"><i class="fas fa-file-upload"></i></a>
-                                    <a href="<?= base_url('user/delete_tka/'.$t->id) ?>" class="btn-xs bx-delete" title="<?= $this->lang->line('common_delete') ?? 'Hapus' ?>" onclick="return confirm('<?= $this->lang->line('dash_confirm_delete') ?>')"><i class="fas fa-trash-alt"></i></a>
+                                    <a href="<?= base_url('user/delete_tka/'.$t->id) ?>" class="btn-xs bx-delete" title="<?= $this->lang->line('common_delete') ?: 'Hapus' ?>" onclick="return confirm('<?= $this->lang->line('dash_confirm_delete') ?>')"><i class="fas fa-trash-alt"></i></a>
                                 <?php elseif($t->status=='DITOLAK'): ?>
                                     <a href="<?= base_url('user/perbaiki_tka/'.$t->id) ?>" class="btn-xs bx-edit" title="<?= $this->lang->line('dash_btn_fix') ?>"><i class="fas fa-wrench"></i></a>
                                 <?php elseif($t->status=='SELESAI'): ?>
