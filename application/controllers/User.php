@@ -58,7 +58,7 @@ class User extends MY_Controller {
             $config['allowed_types'] = 'pdf';
             $config['file_name'] = $tka_id.'_'.$field.'_'.time();
             $this->upload->initialize($config);
-            if($this->upload->do_upload($field)) {
+            if($$this->store_upload($field)) {
                 $upload_data[$field] = $this->upload->data('file_name');
             } else {
                 $this->Tka_model->delete($tka_id);
@@ -73,7 +73,7 @@ class User extends MY_Controller {
                 $config['allowed_types'] = 'pdf';
                 $config['file_name'] = $tka_id.'_'.$field.'_'.time();
                 $this->upload->initialize($config);
-                if($this->upload->do_upload($field)) {
+                if($$this->store_upload($field)) {
                     $upload_data[$field] = $this->upload->data('file_name');
                 } else {
                     $this->session->set_flashdata('warning', sprintf($this->lang->line('user_flash_upload_failed_msg'), $field . ' (opsional)', $this->upload->display_errors('', '')));
@@ -91,7 +91,7 @@ class User extends MY_Controller {
             $config['allowed_types'] = 'jpg|jpeg|png';
             $config['file_name'] = $tka_id.'_'.$field.'_'.time();
             $this->upload->initialize($config);
-            if($this->upload->do_upload($field)) {
+            if($$this->store_upload($field)) {
                 $upload_data[$field] = $this->upload->data('file_name');
             } else {
                 $this->Tka_model->delete($tka_id);
@@ -100,10 +100,26 @@ class User extends MY_Controller {
             }
         }
 
+        
         $this->Berkas_model->insert($upload_data);
         $this->session->set_flashdata('success', $this->lang->line('user_flash_upload_success'));
-        redirect('user/detail_form/'.$tka_id);
+        redirect('user/detail_form/'.$tka_id);    
     }
+        // Unggah file, lalu di Vercel teruskan ke Supabase Storage
+        private function store_upload($field) {
+            if (!$this->upload->do_upload($field)) return FALSE;
+            $this->load->library('supabase_storage');
+            if (!$this->supabase_storage->enabled()) return TRUE;
+
+            $d = $this->upload->data();
+            $remote = 'uploads/' . basename(dirname($d['full_path'])) . '/' . $d['file_name'];
+            $ok = $this->supabase_storage->upload($d['full_path'], $remote, $d['file_type']);
+            @unlink($d['full_path']);
+            if (!$ok) {
+                $this->upload->set_error('Gagal menyimpan berkas ke penyimpanan.', 'error');
+            }
+            return $ok;
+        }
 
     // ========== DATA TKA (LIST) ==========
     public function data_tka() {
@@ -336,7 +352,7 @@ class User extends MY_Controller {
                 }
                 $config['file_name'] = $id.'_'.$field.'_'.time();
                 $this->upload->initialize($config);
-                if($this->upload->do_upload($field)) {
+                if($$this->store_upload($field)) {
                     $file_name = $this->upload->data('file_name');
                     $old_file = $this->Berkas_model->get_field($id, $field);
                     if($old_file && file_exists($upload_path.$old_file)) {
