@@ -1,6 +1,9 @@
-# SITLAKEB TKA: Sistem Pelaporan dan Monitoring Tenaga Kerja Asing
+SITLAKEB TKA
+============
 
-SITLAKEB TKA (Sistem Informasi Tenaga Kerja Asing) adalah aplikasi web untuk pelaporan keberadaan Tenaga Kerja Asing (TKA) oleh perusahaan dan monitoring terpusat oleh Dinas Tenaga Kerja (Disnaker) Kota Bekasi. Dikembangkan sebagai proyek skripsi S1 Sistem Informasi dan meraih penghargaan dari Disnaker Kota Bekasi (Juni 2026).
+**Sistem Informasi Pelaporan dan Monitoring Tenaga Kerja Asing (TKA)**
+
+Aplikasi web untuk pelaporan keberadaan Tenaga Kerja Asing (TKA) oleh perusahaan dan monitoring terpusat oleh Dinas Tenaga Kerja (Disnaker) Kota Bekasi. Dikembangkan sebagai proyek skripsi S1 Sistem Informasi dan meraih penghargaan dari Disnaker Kota Bekasi (Juni 2026).
 
 **Demo:** [sitlakeb-project.vercel.app](https://sitlakeb-project.vercel.app)
 
@@ -8,8 +11,10 @@ SITLAKEB TKA (Sistem Informasi Tenaga Kerja Asing) adalah aplikasi web untuk pel
 ![CodeIgniter](https://img.shields.io/badge/CodeIgniter_3-EF4223?logo=codeigniter&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white)
 
-## Daftar Isi
+Daftar Isi
+----------
 
 - [Latar Belakang](#latar-belakang)
 - [Solusi](#solusi)
@@ -18,25 +23,28 @@ SITLAKEB TKA (Sistem Informasi Tenaga Kerja Asing) adalah aplikasi web untuk pel
 - [Fitur](#fitur)
 - [Alur Pengajuan](#alur-pengajuan)
 - [Teknologi](#teknologi)
+- [Arsitektur dan Catatan Teknis](#arsitektur-dan-catatan-teknis)
 - [Tampilan Aplikasi](#tampilan-aplikasi)
 - [Database](#database)
 - [Struktur Proyek](#struktur-proyek)
-- [Cara Menjalankan (Lokal)](#cara-menjalankan-lokal)
+- [Menjalankan Secara Lokal](#menjalankan-secara-lokal)
 - [Deploy ke Vercel](#deploy-ke-vercel)
 - [Batasan Demo](#batasan-demo)
-- [Catatan](#catatan)
 - [Lisensi](#lisensi)
 - [Pengembang](#pengembang)
 
-## Latar Belakang
+Latar Belakang
+--------------
 
 Berdasarkan wawancara langsung dengan pihak Disnaker Kota Bekasi, pelaporan keberadaan TKA masih dilakukan dengan datang langsung ke dinas. Proses ini menyulitkan perusahaan dan membuat pemantauan data TKA tidak terpusat.
 
-## Solusi
+Solusi
+------
 
-Sistem ini memungkinkan perusahaan melapor secara online, sementara Disnaker memantau dan memproses data TKA dalam satu sistem terpusat, lengkap dengan alur persetujuan berjenjang.
+Sistem ini memungkinkan perusahaan melapor dan mengunggah dokumen secara online, sementara Disnaker memantau dan memproses data TKA dalam satu sistem terpusat, lengkap dengan alur persetujuan berjenjang yang tercatat.
 
-## Coba Demo
+Coba Demo
+---------
 
 Buka [sitlakeb-project.vercel.app](https://sitlakeb-project.vercel.app) dan masuk dengan akun demo berikut. Seluruh akun dan data adalah data contoh (dummy).
 
@@ -45,23 +53,25 @@ Buka [sitlakeb-project.vercel.app](https://sitlakeb-project.vercel.app) dan masu
 | Perusahaan | [isi email akun demo] | [isi password akun demo] |
 | Admin | [isi email akun demo] | [isi password akun demo] |
 
-## Peran Pengguna
+Peran Pengguna
+--------------
 
 | Peran | Keterangan |
 | --- | --- |
-| Perusahaan | Registrasi, mengajukan pelaporan TKA, memantau status pengajuan |
+| Perusahaan | Registrasi, mengajukan pelaporan TKA, mengunggah dokumen, memantau status pengajuan |
 | Admin Operator | Mengelola data operasional dan mengirim notifikasi |
 | Approval (Kasi, Kabid, Sekdis, Kadis) | Meninjau dan menyetujui pengajuan secara berjenjang |
 | Admin Sistem | Mengelola sistem dan pengguna secara keseluruhan |
 
-## Fitur
+Fitur
+-----
 
 - Registrasi dan login pengguna
 - Pengajuan pelaporan TKA oleh perusahaan
-- Unggah dokumen (PDF dan gambar, maksimal 2 MB) dengan panduan pengisian
+- Unggah dokumen (PDF dan gambar, maksimal 2 MB per berkas) dengan panduan pengisian
 - Daftar dan status pengajuan
 - Pengelolaan data TKA
-- Persetujuan (approval) TKA secara berjenjang
+- Persetujuan (approval) berjenjang
 - Unduh surat keterangan digital setelah pengajuan selesai
 - Dashboard perusahaan: ringkasan pengajuan (total, diproses, selesai, ditolak)
 - Dashboard admin: tahapan approval, rata-rata waktu proses, dan tren pengajuan
@@ -70,7 +80,8 @@ Buka [sitlakeb-project.vercel.app](https://sitlakeb-project.vercel.app) dan masu
 - Notifikasi, termasuk pengiriman oleh admin atau admin operator
 - Pilihan bahasa (Indonesia dan English)
 
-## Alur Pengajuan
+Alur Pengajuan
+--------------
 
 1. Perusahaan melakukan registrasi dan login.
 2. Perusahaan mengajukan pelaporan TKA dan mengunggah dokumen.
@@ -78,37 +89,54 @@ Buka [sitlakeb-project.vercel.app](https://sitlakeb-project.vercel.app) dan masu
 4. Perusahaan memantau status pengajuan dan menerima notifikasi.
 5. Setelah selesai, surat keterangan dapat diunduh dan Disnaker memantau seluruh data TKA secara terpusat.
 
-## Teknologi
+Teknologi
+---------
 
 | Komponen | Teknologi |
 | --- | --- |
 | Bahasa | PHP 8.4 |
 | Framework | CodeIgniter 3 (arsitektur MVC) |
 | Database | MySQL (lokal), TiDB Cloud Starter (demo, kompatibel MySQL) |
-| Hosting demo | Vercel dengan runtime `vercel-php`, region Singapura |
+| Penyimpanan berkas | Folder `uploads/` (lokal), Supabase Storage dengan bucket privat (demo) |
+| Hosting demo | Vercel dengan runtime komunitas `vercel-php`, region Singapura |
 | Metode pengembangan | Waterfall (analisis kebutuhan, perancangan, pengembangan, pengujian, serah terima) |
 
-## Tampilan Aplikasi
+Arsitektur dan Catatan Teknis
+-----------------------------
 
-### Halaman Login
+Aplikasi berjalan di dua lingkungan dengan kode yang sama. Lingkungan lokal memakai MySQL dan folder `uploads/`. Lingkungan demo di Vercel berjalan sebagai fungsi serverless, sehingga beberapa bagian dipisahkan:
+
+- **Database terpisah.** Vercel tidak menyediakan database, jadi demo memakai TiDB Cloud Starter (kompatibel MySQL) dengan koneksi TLS. Kredensial dibaca dari environment variable, dan tanpa variabel itu aplikasi memakai database lokal.
+- **Penyimpanan berkas terpisah.** Filesystem Vercel hanya bisa dibaca, sehingga berkas unggahan dikirim ke bucket privat Supabase Storage lewat library `Supabase_storage`. Berkas disajikan kembali oleh controller `Files`, yang memeriksa status login dan memastikan perusahaan hanya dapat membuka berkas pengajuannya sendiri.
+- **Titik masuk serverless.** `api/index.php` meneruskan semua permintaan ke `index.php` CodeIgniter dan menormalkan `SCRIPT_NAME` agar routing URL berjalan benar di Vercel.
+- **Perbedaan Windows dan Linux.** Nama file bersifat case-sensitive di Linux, sehingga seluruh nama file controller, model, dan library memakai huruf awal kapital sesuai konvensi CodeIgniter 3.
+- **Zona waktu.** Sesi database diatur ke WIB (+07:00) agar waktu pengajuan tampil benar.
+
+Tampilan Aplikasi
+-----------------
+
+**Halaman Login**
 
 Perusahaan masuk atau mendaftar akun, dengan pilihan bahasa Indonesia dan English.
 
 ![Halaman Login](docs/login.png)
 
-### Dashboard Perusahaan
+**Dashboard Perusahaan**
 
 Perusahaan memantau jumlah pengajuan (total, diproses, selesai, ditolak), membaca panduan sebelum unggah data, dan mengelola daftar pengajuan TKA.
 
 ![Dashboard Perusahaan](docs/dashboard-perusahaan.png)
 
-### Dashboard Admin
+**Dashboard Admin**
 
 Admin memantau tahapan approval (Kasi, Kabid, Sekdis, Kadis), rata-rata waktu proses, tren pengajuan, dan pengajuan terbaru.
 
 ![Dashboard Admin](docs/dashboard-admin.png)
 
-## Database
+> Seluruh data pada tampilan di atas adalah data contoh (dummy).
+
+Database
+--------
 
 Database terdiri dari 12 tabel:
 
@@ -120,23 +148,25 @@ Database terdiri dari 12 tabel:
 | Komunikasi | `chat_messages`, `notifications` |
 | Log dan keamanan | `admin_logs`, `security_attempts` |
 
-## Struktur Proyek
+Struktur Proyek
+---------------
 
 ```
 TKA/
 ├── api/            # Titik masuk untuk Vercel (meneruskan ke index.php)
-├── application/    # Controller, model, view, dan konfigurasi (CodeIgniter 3)
+├── application/    # Controller, model, view, library, dan konfigurasi (CodeIgniter 3)
 ├── assets/         # CSS, JavaScript, dan gambar
 ├── docs/           # Screenshot untuk README
 ├── system/         # Inti framework CodeIgniter
-├── uploads/        # Berkas unggahan pengguna
-├── data kosongan.sql   # Struktur database
+├── uploads/        # Berkas unggahan lokal (tidak ikut repository)
+├── database.sql    # Struktur database
 ├── isrgrootx1.pem  # Sertifikat CA publik untuk koneksi TLS ke database cloud
 ├── vercel.json     # Konfigurasi deploy Vercel
 └── index.php       # Titik masuk aplikasi
 ```
 
-## Cara Menjalankan (Lokal)
+Menjalankan Secara Lokal
+------------------------
 
 Prasyarat: PHP 8.x, MySQL, dan web server lokal (Laragon atau XAMPP).
 
@@ -147,19 +177,19 @@ Prasyarat: PHP 8.x, MySQL, dan web server lokal (Laragon atau XAMPP).
    ```
 
 2. Letakkan folder proyek di direktori web server lokal (misalnya `www` pada Laragon atau `htdocs` pada XAMPP).
-3. Buat database MySQL bernama `experimen_tka`, lalu import file `data kosongan.sql`.
+3. Buat database MySQL bernama `experimen_tka`, lalu import file `database.sql`.
 4. Jika kredensial lokalmu berbeda, ubah nilai bawaan di `application/config/database.php`.
 5. Jalankan Apache dan MySQL, lalu buka proyek di browser.
 
-Tanpa environment variable, aplikasi memakai database lokal (`localhost`, user `root`, database `experimen_tka`).
+Tanpa environment variable, aplikasi memakai database lokal (`localhost`, user `root`, database `experimen_tka`) dan menyimpan berkas di folder `uploads/`.
 
-## Deploy ke Vercel
+Deploy ke Vercel
+----------------
 
-Demo dijalankan di Vercel dengan runtime komunitas `vercel-php`, dan database di TiDB Cloud Starter.
-
-1. Buat database MySQL-compatible di TiDB Cloud Starter, lalu import struktur database.
-2. Impor repository ke Vercel (Framework Preset: Other).
-3. Tambahkan environment variable berikut di **Settings, Environment Variables**:
+1. Buat database MySQL-compatible di TiDB Cloud Starter, lalu import `database.sql`.
+2. Buat project Supabase dan satu bucket **privat** bernama `berkas`.
+3. Impor repository ke Vercel (Framework Preset: Other).
+4. Tambahkan environment variable berikut di Settings, Environment Variables:
 
    | Variabel | Keterangan |
    | --- | --- |
@@ -168,26 +198,30 @@ Demo dijalankan di Vercel dengan runtime komunitas `vercel-php`, dan database di
    | `DB_USER` | Username database |
    | `DB_PASS` | Password database |
    | `DB_NAME` | Nama database |
+   | `SUPABASE_URL` | URL project Supabase |
+   | `SUPABASE_KEY` | Secret key Supabase (hanya di server) |
+   | `SUPABASE_BUCKET` | Nama bucket (`berkas`) |
 
-4. Deploy. Region fungsi diatur ke Singapura (`sin1`) di `vercel.json` agar dekat dengan database.
+5. Deploy. Region fungsi diatur ke Singapura (`sin1`) di `vercel.json` agar dekat dengan database.
 
 Kredensial tidak disimpan di repository. Koneksi TLS ke database memakai sertifikat CA publik `isrgrootx1.pem`.
 
-## Batasan Demo
+Batasan Demo
+------------
 
-- Filesystem Vercel bersifat sementara, sehingga berkas yang diunggah pada demo tidak tersimpan permanen. Penyimpanan permanen membutuhkan layanan eksternal seperti Vercel Blob atau Cloudinary.
+- Demo ini untuk menunjukkan alur aplikasi, bukan untuk produksi. Sistem dengan data sungguhan sebaiknya berjalan di hosting PHP konvensional dengan database dan penyimpanan yang dikelola sendiri.
+- Project Supabase paket gratis dapat tidur setelah sekitar seminggu tanpa aktivitas, sehingga unggahan gagal sampai project diaktifkan kembali.
+- Vercel membatasi ukuran satu permintaan (sekitar 4,5 MB), sehingga total berkas dalam satu pengajuan harus kecil.
 - Akses pertama setelah lama tidak dipakai bisa lebih lambat karena cold start serverless.
+- Seluruh data pada repository dan demo ini adalah data contoh (dummy).
 
-## Catatan
-
-- Data pada repository dan demo ini adalah data contoh (dummy), bukan data asli.
-- Repository ini dibuat untuk keperluan portofolio dan pembelajaran.
-
-## Lisensi
+Lisensi
+-------
 
 Dirilis di bawah lisensi MIT. Lihat berkas `license.txt` untuk detailnya.
 
-## Pengembang
+Pengembang
+----------
 
 **Agun Syaifullah**
 S1 Sistem Informasi, Universitas Bina Sarana Informatika
