@@ -525,6 +525,22 @@ class Admin extends MY_Controller
         $this->db->insert('notifications', $data);
     }
 
+     // Unggah file, lalu di Vercel teruskan ke Supabase Storage
+    private function store_upload($field) {
+        if (!$this->upload->do_upload($field)) return FALSE;
+        $this->load->library('supabase_storage');
+        if (!$this->supabase_storage->enabled()) return TRUE;
+
+        $d = $this->upload->data();
+        $remote = 'uploads/' . basename(dirname($d['full_path'])) . '/' . $d['file_name'];
+        $ok = $this->supabase_storage->upload($d['full_path'], $remote, $d['file_type']);
+        @unlink($d['full_path']);
+        if (!$ok) {
+            $this->upload->set_error('Gagal menyimpan berkas ke penyimpanan.', 'error');
+        }
+        return $ok;
+    }
+
     // =========================================================================
     // PENGATURAN SURAT & TANDA TANGAN
     // =========================================================================
@@ -548,7 +564,7 @@ class Admin extends MY_Controller
 
     public function do_upload_ttd(): void
     {
-        $upload_path = './uploads/ttd/';
+        $upload_path = (getenv('VERCEL') ? '/tmp/uploads/' : './uploads/') . 'ttd/';
         $this->_ensure_dir($upload_path);
         $this->load->library('upload', [
             'upload_path'   => $upload_path,
@@ -556,10 +572,10 @@ class Admin extends MY_Controller
             'max_size'      => 1024,
             'file_name'     => 'ttd_kepala_dinas_' . time(),
         ]);
-        if ($this->upload->do_upload('ttd_file')) {
+        if ($this->store_upload('ttd_file')) {
             $file_path = 'uploads/ttd/' . $this->upload->data('file_name');
             $old_ttd = $this->Surat_template_model->get_ttd_path();
-            if ($old_ttd && file_exists($old_ttd)) unlink($old_ttd);
+            if ($old_ttd) { $this->load->library('supabase_storage'); $this->supabase_storage->delete($old_ttd); if (file_exists($old_ttd)) unlink($old_ttd); }
             $this->Surat_template_model->update_ttd($file_path);
             $this->session->set_flashdata('success', $this->lang->line('admin_flash_ttd_uploaded'));
         } else {
