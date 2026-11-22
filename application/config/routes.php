@@ -46,7 +46,7 @@ $route['do-register'] = 'auth/do_register';
 
 $route['logout'] = 'auth/logout';
 
-$route['uploads/(:any)'] = 'files/serve';
+$route['uploads/(.+)'] = 'files/serve';
 
 // Language switch
 $route['lang/switch/(:any)'] = 'language/switch_lang/$1';
