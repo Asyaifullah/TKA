@@ -35,7 +35,7 @@ class User extends MY_Controller {
             redirect('user/upload');
         }
 
-        $upload_path = './uploads/'.$tka_id.'/';
+        $upload_path = (getenv('VERCEL') ? '/tmp/uploads/' : './uploads/').$tka_id.'/';
         if(!is_dir($upload_path)) mkdir($upload_path, 0777, true);
 
         $config['upload_path'] = $upload_path;
@@ -316,7 +316,7 @@ class User extends MY_Controller {
             redirect('user/edit_tka/'.$id);
         }
 
-        $upload_path = './uploads/'.$id.'/';
+        $upload_path = (getenv('VERCEL') ? '/tmp/uploads/' : './uploads/').$id.'/';
         if(!is_dir($upload_path)) mkdir($upload_path, 0777, true);
 
         $config['upload_path'] = $upload_path;
