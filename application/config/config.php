@@ -15,7 +15,7 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROT
     $protocol = 'https';
 }
 $host = $_SERVER['HTTP_HOST'];
-$path = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\') . '/';
+$path = getenv('VERCEL') ? '/' : rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\') . '/';
 $config['base_url'] = $protocol . '://' . $host . $path;
 // ------------------------------------------------------------------------
 // INDEX PAGE
