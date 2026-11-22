@@ -49,9 +49,12 @@ Coba Demo
 Buka [sitlakeb-project.vercel.app](https://sitlakeb-project.vercel.app) dan masuk dengan akun demo berikut. Seluruh akun dan data adalah data contoh (dummy).
 
 | Peran | Email | Password |
-| --- | --- | --- |
-| Perusahaan | [isi email akun demo] | [isi password akun demo] |
-| Admin | [isi email akun demo] | [isi password akun demo] |
+| kepala Seksi | [kepalaseksi@kasi.com] | [Admin@1234] |
+| kepala Seksi | [kepalabidang@kabid.com] | [Admin@1234] |
+| kepala Seksi | [sekretarisdinas@sekdis.com] | [Admin@1234] |
+| kepala Seksi | [kepaladinas@kadis.com] | [Admin@1234] |
+| Perusahaan | [ratonik883@afronewz.com] | [@Iones2026] |
+| Admin | [admin@operator.com] | [Admin@1234] |
 
 Peran Pengguna
 --------------
