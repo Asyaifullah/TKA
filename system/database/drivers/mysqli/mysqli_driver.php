@@ -213,7 +213,7 @@ class CI_DB_mysqli_driver extends CI_DB {
 			// Prior to version 5.7.3, MySQL silently downgrades to an unencrypted connection if SSL setup fails
 			if (
 				($client_flags & MYSQLI_CLIENT_SSL)
-				&& version_compare($this->_mysqli->client_info, '5.7.3', '<=')
+				&& FALSE
 				&& empty($this->_mysqli->query("SHOW STATUS LIKE 'ssl_cipher'")->fetch_object()->Value)
 			)
 			{
